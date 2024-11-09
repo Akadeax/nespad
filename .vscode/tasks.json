@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks":
+	[
+		{
+			"label": "Make NES file",
+			"type": "shell",
+			"command": "./build.bat",
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
