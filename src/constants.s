@@ -27,6 +27,10 @@ PAD_DOWN   = $20
 PAD_LEFT   = $40
 PAD_RIGHT  = $80
 
+; name tables
+NAME_TABLE_1 = $2000
+NAME_TABLE_2 = $2400
+
 ; text encoding values
 LETTER_NORMAL_START = 0
 CAPITAL_OFFSET      = 26

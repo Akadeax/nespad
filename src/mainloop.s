@@ -50,7 +50,6 @@
 
 	NOT_PAD_A:
 
-
  	lda current_input
     sta last_frame_input
 

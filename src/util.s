@@ -60,7 +60,7 @@ poll_loop:
  	sta PPU_ADDR
 
  	; empty nametable
- 	lda #1
+ 	lda #255
  	ldy #30 ; clear 30 rows
  	rowloop:
  		ldx #32 ; 32 columns
