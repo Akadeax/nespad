@@ -79,7 +79,9 @@ irq:
 .segment "CODE"
 .proc main
  	; main application - rendering is currently off
-
+ 	; clear 1st name table
+ 	jsr clear_nametable
+	
  	; initialize palette table
  	ldx #0
 paletteloop:
@@ -89,8 +91,7 @@ paletteloop:
 	cpx #32
 	bcc paletteloop
 
- 	; clear 1st name table
- 	jsr clear_nametable
+
 
  	; get the screen to render
  	jsr ppu_update

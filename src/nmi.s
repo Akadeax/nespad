@@ -108,6 +108,9 @@ update_text:
 
 update_text_finished:
 
+	lda #%10001000
+	sta PPU_CONTROL
+
 	lda PPU_STATUS
 	lda #0
 	sta PPU_SCROLL
