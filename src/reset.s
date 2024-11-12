@@ -21,7 +21,7 @@
 wait_vblank:
 	bit PPU_STATUS
 	bpl wait_vblank
-	
+
 		lda PPU_STATUS
 	lda #0
 	sta PPU_SCROLL

@@ -16,7 +16,7 @@
 	and #PAD_UP
 	beq NOT_PAD_UP
 		; up pressed
-		
+
 	NOT_PAD_UP:
 
 	lda input_pressed_this_frame
@@ -59,77 +59,49 @@
  	jmp mainloop
 
 
-.macro increment_text_ptr
-	inc wram_text_ptr_lo
-	bne no_hi_increment
 
-	inc wram_text_ptr_hi
-	
-	no_hi_increment:
-.endmacro
 
 .proc on_a_pressed
 	ldx 0 ; x is treated as 'offset' off of screen_keyboard_index (for caps, bold, etc.)
-	
+
 	lda screen_keyboard_index
 	cmp #KEYBOARD_CHARACTER_KEY_AMOUNT
 	bpl NOT_CHARACTER_KEY
 		; keyboard is on character key (non-control key)
 
 		lda screen_keyboard_index
-		; store
-		ldy #0
-		sta (wram_text_ptr_lo), y
 
-		increment_text_ptr
+		; ldy #0
+		; sta (wram_text_ptr_lo), y
+
+		; increment_zp_16 1, wram_text_ptr_lo, wram_text_ptr_hi
 
 	NOT_CHARACTER_KEY:
 	rts
 .endproc
 
-; TODO figure out how to do nametable calculations in this format:
 
-; CURRENT_CHARACTER_WIDTH = 0
-; CURRENT_LINES = 0
+.proc on_page_loaded
+	;;; Step 1: setup initial variables
+	lda #<WRAM_START
+	sta current_wram_text_ptr_lo
+	lda #<WRAM_START
+	sta current_wram_text_ptr_hi
 
-; start at $2000 (base nametable)
-; add TOP_MARGIN * 32
-; add SIDE_MARGIN
+	ldx current_page
+loop: ; this loop jumps 256 bytes per page to get to start of current page
+	cpx #0
+	beq loop_end
 
-; write CHARACTER_WIDTH characters (incrementing CURRENT_CHARACTER_WIDTH)
+	dex
+	inc sixteen_bit_temp_hi ; jump 256, 1 page
+	jmp loop
 
-; if (CURRENT_LINES < LINE_AMOUNT)
-;     add SIDE_MARGIN * 2
-;     write CHARACTER_WIDTH characters (incrementing CURRENT_CHARACTER_WIDTH)
+loop_end:
+	; current_wram_text_ptr now holds the start of the current page in WRAM
 
-; .proc display_reset_nametable_ptr
-; 	lda #0
-; 	sta display_current_character_width
-; 	sta display_current_line_count
+	;;; Step 2: find last non-space character, or 0 otherwise; set that to text_index
+	; TODO IMPLEMENT
 
-; 	lda #<DISPLAY_NAMETABLE_BASE_OFFSET
-; 	sta display_nametable_ptr_lo
-; 	lda #>DISPLAY_NAMETABLE_BASE_OFFSET
-; 	sta display_nametable_ptr_lo
-; 	rts
-; .endproc
-
-; ; input int16 text_index; output int16 nametable_address
-; .proc text_index_to_nametable_address
-; 	pla 
-; 	sta ret_addr_temp_lo
-; 	pla 
-; 	sta ret_addr_temp_hi
-; 	; return address stored in ret_addr_temp
-	
-; 	pla 
-; 	sta sixteen_bit_temp_hi
-; 	pla 
-; 	sta sixteen_bit_temp_lo
-; 	; temp is text_index
-
-	
-
-
-; 	rts
-; .endproc
+	rts
+.endproc

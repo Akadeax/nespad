@@ -81,3 +81,40 @@ poll_loop:
 
  	rts
  .endproc
+
+
+.macro increment_zp_16 amount, address_lo, address_hi
+	lda address_lo
+	adc #amount
+	sta address_lo
+
+	bcc no_hi_increment
+
+	inc address_hi
+
+	no_hi_increment:
+.endmacro
+
+
+.macro set_carry_if_eol text_pointer
+	lda #text_pointer
+	cmp DISPLAY_LINE1_END
+	beq found_equal
+	cmp DISPLAY_LINE2_END
+	beq found_equal
+	cmp DISPLAY_LINE3_END
+	beq found_equal
+	cmp DISPLAY_LINE4_END
+	beq found_equal
+	cmp DISPLAY_LINE5_END
+	beq found_equal
+	cmp DISPLAY_LINE6_END
+	beq found_equal
+	cmp DISPLAY_LINE7_END
+	beq found_equal
+	cmp DISPLAY_LINE8_END
+	beq found_equal
+	cmp DISPLAY_LINE9_END
+	beq found_equal
+	found_equal:
+.endmacro

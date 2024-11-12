@@ -36,15 +36,15 @@ current_input:				.res 1 ; stores the current gamepad values
 last_frame_input:			.res 1
 input_pressed_this_frame:	.res 1
 
-wram_text_ptr_lo:  		.res 1
-wram_text_ptr_hi:  		.res 1
+current_page: .res 1 ; current page in WRAM; used to calc the other vars here on page load
+current_text_index: .res 1 ; text index betewen 0-251 (252 characters; PAGE_TEXT_SIZE)
+
+current_wram_text_ptr_lo: .res 1 ; pointer keeping up with text_index, but in actual WRAM
+current_wram_text_ptr_hi: .res 1
+current_nametable_ptr_lo: .res 1 ; pointer keeping up with text_index, but in nametable memory
+current_nametable_ptr_hi: .res 1
+
 screen_keyboard_index:  .res 1
-
-display_current_character_width: .res 1
-display_current_line_count:  	 .res 1
-
-display_nametable_ptr_lo: .res 1
-display_nametable_ptr_hi: .res 1
 
 ret_addr_temp_lo: 	 .res 1
 ret_addr_temp_hi: 	 .res 1
@@ -93,7 +93,7 @@ irq:
  	; main application - rendering is currently off
  	; clear 1st name table
  	jsr clear_nametable
-	
+
  	; initialize palette table
  	ldx #0
 paletteloop:
@@ -106,11 +106,7 @@ paletteloop:
  	; get the screen to render
  	jsr ppu_update
 
-	; initialize text pointer for our stored text
-	lda #<WRAM_START
-	sta wram_text_ptr_lo
-	lda #>WRAM_START
-	sta wram_text_ptr_hi
+	jsr on_page_loaded
 
 	.include "mainloop.s"
 .endproc
