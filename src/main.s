@@ -30,17 +30,29 @@ INES_SRAM   = 1 ; 1 = battery backed SRAM at $6000-7FFF
 ; 6502 Zero Page Memory (256 bytes)
 .segment "ZEROPAGE"
 
-nmi_ready:			.res 1 ; set to 1 to push a PPU frame update, 2 to turn rendering off next NMI
-current_input:		.res 1 ; stores the current gamepad values
-last_frame_input:	.res 1
+nmi_ready: .res 1 ; set to 1 to push a PPU frame update, 2 to turn rendering off next NMI
+
+current_input:				.res 1 ; stores the current gamepad values
+last_frame_input:			.res 1
 input_pressed_this_frame:	.res 1
 
-wram_text_ptr_lo:  .res 1
-wram_text_ptr_hi:  .res 1
+wram_text_ptr_lo:  		.res 1
+wram_text_ptr_hi:  		.res 1
 screen_keyboard_index:  .res 1
 
+display_current_character_width: .res 1
+display_current_line_count:  	 .res 1
+
+display_nametable_ptr_lo: .res 1
+display_nametable_ptr_hi: .res 1
+
+ret_addr_temp_lo: 	 .res 1
+ret_addr_temp_hi: 	 .res 1
 sixteen_bit_temp_lo: .res 1
 sixteen_bit_temp_hi: .res 1
+temp_1: 			 .res 1
+
+
 
 ; Sprite OAM Data area - copied to VRAM in NMI routine
 .segment "OAM"
@@ -90,8 +102,6 @@ paletteloop:
 	inx
 	cpx #32
 	bcc paletteloop
-
-
 
  	; get the screen to render
  	jsr ppu_update

@@ -89,14 +89,7 @@ update_text:
 	lda sixteen_bit_temp_hi
 	and #%10111111
 	sta sixteen_bit_temp_hi
-
-	; lda wram_text_ptr_hi
-	; and #%10111111 ; basically subtract $4000 (text starts at $6000, nametables start at $2000)
-	; sta sixteen_bit_temp_hi
-
-	; lda wram_text_ptr_lo
-	; sta sixteen_bit_temp_lo
-	; ; now our target location in the nametable is in our 16bit temp (target is: text_ptr - $4000)
+	; now our target location in the nametable is in our 16bit temp (target is: text_ptr - $4000)
 	
 	lda PPU_STATUS
 	lda sixteen_bit_temp_hi
@@ -104,7 +97,7 @@ update_text:
 	lda sixteen_bit_temp_lo
 	sta PPU_ADDR
 
-	stx PPU_DATA ; WHAT? DON'T WORK
+	stx PPU_DATA ; put x into nametable target
 
 update_text_finished:
 

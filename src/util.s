@@ -79,24 +79,5 @@ poll_loop:
  		dex
  		bne loop
 
-	; ; empty nametable B
- 	; lda #255
- 	; ldy #30 ; clear 30 rows
- 	; rowloop2:
- 	; 	ldx #32 ; 32 columns
- 	; 	columnloop2:
- 	; 		sta PPU_DATA
- 	; 		dex
- 	; 		bne columnloop2
- 	; 	dey
- 	; 	bne rowloop2
-
- 	; ; empty attribute table
-	; lda #0
- 	; ldx #64 ; attribute table is 64 bytes
- 	; loop2:
- 	; 	sta PPU_DATA
- 	; 	dex
- 	; 	bne loop2
  	rts
  .endproc

@@ -42,7 +42,7 @@
 
 	NOT_PAD_RIGHT:
 
-	lda input_pressed_this_frame
+	lda current_input
 	and #PAD_A
 	beq NOT_PAD_A
 		; A pressed
@@ -87,3 +87,49 @@
 	rts
 .endproc
 
+; TODO figure out how to do nametable calculations in this format:
+
+; CURRENT_CHARACTER_WIDTH = 0
+; CURRENT_LINES = 0
+
+; start at $2000 (base nametable)
+; add TOP_MARGIN * 32
+; add SIDE_MARGIN
+
+; write CHARACTER_WIDTH characters (incrementing CURRENT_CHARACTER_WIDTH)
+
+; if (CURRENT_LINES < LINE_AMOUNT)
+;     add SIDE_MARGIN * 2
+;     write CHARACTER_WIDTH characters (incrementing CURRENT_CHARACTER_WIDTH)
+
+; .proc display_reset_nametable_ptr
+; 	lda #0
+; 	sta display_current_character_width
+; 	sta display_current_line_count
+
+; 	lda #<DISPLAY_NAMETABLE_BASE_OFFSET
+; 	sta display_nametable_ptr_lo
+; 	lda #>DISPLAY_NAMETABLE_BASE_OFFSET
+; 	sta display_nametable_ptr_lo
+; 	rts
+; .endproc
+
+; ; input int16 text_index; output int16 nametable_address
+; .proc text_index_to_nametable_address
+; 	pla 
+; 	sta ret_addr_temp_lo
+; 	pla 
+; 	sta ret_addr_temp_hi
+; 	; return address stored in ret_addr_temp
+	
+; 	pla 
+; 	sta sixteen_bit_temp_hi
+; 	pla 
+; 	sta sixteen_bit_temp_lo
+; 	; temp is text_index
+
+	
+
+
+; 	rts
+; .endproc
