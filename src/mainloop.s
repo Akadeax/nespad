@@ -128,6 +128,6 @@ first_empty_char_loop:
 non_empty_char_found:
 	; decremented current_text_index & wram_text_ptr until first non-space was found
 
-	get_nametable_pointer current_text_index ; fills current_nametable_ptr with correct address
+	get_nametable_pointer_T2 current_text_index ; fills current_nametable_ptr with correct address
 	rts
 .endproc

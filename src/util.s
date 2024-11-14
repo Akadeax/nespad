@@ -153,7 +153,7 @@ inc_end:
 .endmacro
 
 
-.macro get_nametable_pointer text_pointer ; dont call this often, it takes a lot of cycles (uses A,X and 16 bit temp)
+.macro get_nametable_pointer_T2 text_pointer ; dont call this often, it takes a lot of cycles (uses A,X and 16 bit temp)
     lda #<DISPLAY_NAMETABLE_BASE_OFFSET
     sta zp_temp_0
     lda #>DISPLAY_NAMETABLE_BASE_OFFSET

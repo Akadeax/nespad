@@ -1,4 +1,4 @@
-.proc nmi ;LINTEXCLUDE;
+.proc nmi ;LINTEXCLUDE
 	; save registers
 	pha
 	txa
