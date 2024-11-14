@@ -1,5 +1,5 @@
-cd %WORKSPACE_DIR%
-mkdir %BUILD_DIR%
+@cd %WORKSPACE_DIR%
+@mkdir %BUILD_DIR%
 @echo Build directory created.
 @echo Compiling...
 @ca65 %SRC_DIR%\%MAIN%.s -g -o %BUILD_DIR%\%MAIN%.o

@@ -45,13 +45,17 @@ current_nametable_ptr_lo: .res 1 ; pointer keeping up with text_index, but in na
 current_nametable_ptr_hi: .res 1
 
 screen_keyboard_index:  .res 1
-
-ret_addr_temp_lo: 	 .res 1
-ret_addr_temp_hi: 	 .res 1
-sixteen_bit_temp_lo: .res 1
-sixteen_bit_temp_hi: .res 1
-temp_1: 			 .res 1
-
+.segment "ZEROPAGE"
+zp_temp_0: .res 1
+zp_temp_1: .res 1
+zp_temp_2: .res 1
+zp_temp_3: .res 1
+zp_temp_4: .res 1
+zp_temp_5: .res 1
+zp_temp_6: .res 1
+zp_temp_7: .res 1
+zp_temp_8: .res 1
+zp_temp_9: .res 1
 
 
 ; Sprite OAM Data area - copied to VRAM in NMI routine

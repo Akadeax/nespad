@@ -1,4 +1,4 @@
-.proc nmi
+.proc nmi ;LINTEXCLUDE;
 	; save registers
 	pha
 	txa
@@ -43,63 +43,31 @@ loop:
 	bcc loop
 
 
-; 	;;; we wanna check if text_ptr is $6000 (cuz then we don't wanna draw)
-; 	;;; branch to update_text_finished if wram_text_ptr is $6000 exactly
-
-; 	ldx #0 ; if x becomes FF, text_ptr is not $6000
-
-; 	lda wram_text_ptr_hi
-; 	cmp #$60
-; 	beq is_not_equal1
-; 		ldx #$FF
-; 	is_not_equal1:
-
-; 	lda wram_text_ptr_lo
-; 	cmp #$00
-; 	beq is_not_equal2
-; 		ldx #$FF
-; 	is_not_equal2:
-
-; 	cpx #$FF
-; 	bne update_text_finished
+	; if first char, don't draw yet
+	lda current_text_index
+	beq update_text_finished
 
 
-; update_text:
-; 	; load character index we need from text_ptr
-; 	lda wram_text_ptr_hi
-; 	sta sixteen_bit_temp_hi
+	lda current_wram_text_ptr_lo
+	sta zp_temp_0
+	lda current_wram_text_ptr_hi
+	sta zp_temp_1
 
-; 	lda wram_text_ptr_lo
-; 	sec
-; 	sbc #1 ; decrement our temp lo
-; 	cmp #$FF
-; 	bne no_underflow ; if our temp lo underflowed, decrement our temp hi
-; 		dec sixteen_bit_temp_hi
+	decrement_zp_16 #1, zp_temp_0, zp_temp_1
 
-; 	no_underflow:
 
-; 	sta sixteen_bit_temp_lo
-; 	; now our target wram_text location is in 16 bit temp
+	lda PPU_STATUS
+	lda current_nametable_ptr_hi
+	sta PPU_ADDR
+	lda current_nametable_ptr_lo
+	sta PPU_ADDR
 
-; 	ldy #0
-; 	lda (sixteen_bit_temp_lo),y
-; 	tax
-; 	; now the value we wanna put into the nametable is in x
+	ldy #0
+	lda (zp_temp_0),y
 
-; 	lda sixteen_bit_temp_hi
-; 	and #%10111111
-; 	sta sixteen_bit_temp_hi
-; 	; now our target location in the nametable is in our 16bit temp (target is: text_ptr - $4000)
+	sta PPU_DATA
 
-; 	lda PPU_STATUS
-; 	lda sixteen_bit_temp_hi
-; 	sta PPU_ADDR
-; 	lda sixteen_bit_temp_lo
-; 	sta PPU_ADDR
-
-; 	stx PPU_DATA ; put x into nametable target
-
-; update_text_finished:
+update_text_finished:
 
 	lda #%10001000
 	sta PPU_CONTROL

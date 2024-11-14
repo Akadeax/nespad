@@ -4,7 +4,7 @@
 	sta PPU_SCROLL
 	sta PPU_SCROLL
 
-	sei			; mask interrupts
+	sei			; mask interrupts8257
 	lda #0
 	sta PPU_CONTROL	; disable NMI
 	sta PPU_MASK	; disable rendering
@@ -44,6 +44,16 @@ clear_ram:
 	sta $0700,x
 	inx
 	bne clear_ram
+
+
+	; clear first page of WRAM
+	lda #0
+	ldx #0
+clear_wram_p1:
+	sta $6000,x
+	inx
+	bne clear_wram_p1
+
 
 	; place all sprites offscreen at Y=255
 	lda #255
