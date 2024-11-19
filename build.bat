@@ -6,7 +6,7 @@
 @SET MAIN=main
 @SET CFG=game.cfg
 @SET CHR=game.chr
-@SET OUT_NAME=MyGame
+@SET OUT_NAME=Nespad
 
 @call scripts/cleanup.bat
 @if %errorlevel% neq 0 exit /b %errorlevel%

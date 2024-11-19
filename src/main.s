@@ -35,6 +35,7 @@ nmi_ready: .res 1 ; set to 1 to push a PPU frame update, 2 to turn rendering off
 current_input:				.res 1 ; stores the current gamepad values
 last_frame_input:			.res 1
 input_pressed_this_frame:	.res 1
+input_released_this_frame:	.res 1
 
 current_page: .res 1 ; current page in WRAM; used to calc the other vars here on page load
 current_text_index: .res 1 ; text index betewen 0-251 (252 characters; PAGE_TEXT_SIZE)
@@ -43,6 +44,9 @@ current_wram_text_ptr_lo: .res 1 ; pointer keeping up with text_index, but in ac
 current_wram_text_ptr_hi: .res 1
 current_nametable_ptr_lo: .res 1 ; pointer keeping up with text_index, but in nametable memory
 current_nametable_ptr_hi: .res 1
+
+a_held: .res 1
+a_time_held: .res 1
 
 screen_keyboard_index:  .res 1
 .segment "ZEROPAGE"
@@ -110,15 +114,7 @@ paletteloop:
  	; get the screen to render
  	jsr ppu_update
 
-	lda #<WRAM_START
-	sta current_wram_text_ptr_lo
-	lda #>WRAM_START
-	sta current_wram_text_ptr_hi
-
-	lda #<DISPLAY_NAMETABLE_BASE_OFFSET
-	sta current_nametable_ptr_lo
-	lda #>DISPLAY_NAMETABLE_BASE_OFFSET
-	sta current_nametable_ptr_hi
+	jsr redraw_current_page_T2
 
 	.include "mainloop.s"
 .endproc

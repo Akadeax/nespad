@@ -135,7 +135,7 @@ poll_loop:
 .endmacro
 
 
-.macro increment_nametable_ptr
+.proc increment_nametable_ptr
 	set_carry_if_eol current_text_index
 
 	bcc single_increase
@@ -146,7 +146,8 @@ single_increase:
     increment_zp_16 #1, current_nametable_ptr_lo, current_nametable_ptr_hi
 
 inc_end:
-.endmacro
+	rts
+.endproc
 
 
 .macro get_nametable_pointer_T2 text_pointer ; dont call this often, it takes a lot of cycles (uses A,X and 16 bit temp)

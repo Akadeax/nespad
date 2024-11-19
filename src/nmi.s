@@ -42,7 +42,6 @@ loop:
 	cpx #32
 	bcc loop
 
-	; TODO THIS IS THE CULPRIT SOMEWHERE HERE; OVERWRITES THE PAGE WRITE
 	; if first char, don't draw yet
 	lda current_text_index
 	beq update_text_finished
@@ -50,17 +49,20 @@ loop:
 
 	lda current_wram_text_ptr_lo
 	sta zp_temp_0
+	dec zp_temp_0
 	lda current_wram_text_ptr_hi
 	sta zp_temp_1
-
-	decrement_zp_16 #1, zp_temp_0, zp_temp_1
-
+	; wram_text_ptr - 1 is where we want to fetch text from;
+	; it points to the next character we want to write to, so we want to draw the one *before* that
 
 	lda PPU_STATUS
 	lda current_nametable_ptr_hi
 	sta PPU_ADDR
 	lda current_nametable_ptr_lo
+	sec
+	sbc #1
 	sta PPU_ADDR
+	; same with nametable_ptr, it points to the next one to draw to
 
 	ldy #0
 	lda (zp_temp_0),y
