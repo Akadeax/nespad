@@ -141,13 +141,9 @@ poll_loop:
 	bcc single_increase
 
     increment_zp_16 #(DISPLAY_SCREEN_WIDTH + DISPLAY_SIDE_MARGIN * 2 + 1), current_nametable_ptr_lo, current_nametable_ptr_hi
-	lda #$FF
-	sta 32
 	jmp inc_end
 single_increase:
     increment_zp_16 #1, current_nametable_ptr_lo, current_nametable_ptr_hi
-	lda #$01
-	sta 32
 
 inc_end:
 .endmacro

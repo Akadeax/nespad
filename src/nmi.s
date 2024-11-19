@@ -42,7 +42,7 @@ loop:
 	cpx #32
 	bcc loop
 
-
+	; TODO THIS IS THE CULPRIT SOMEWHERE HERE; OVERWRITES THE PAGE WRITE
 	; if first char, don't draw yet
 	lda current_text_index
 	beq update_text_finished
