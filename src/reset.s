@@ -4,7 +4,7 @@
 	sta PPU_SCROLL
 	sta PPU_SCROLL
 
-	sei			; mask interrupts8257
+	sei			; mask interrupts
 	lda #0
 	sta PPU_CONTROL	; disable NMI
 	sta PPU_MASK	; disable rendering

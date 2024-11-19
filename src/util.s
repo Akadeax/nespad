@@ -84,7 +84,7 @@ poll_loop:
 
 .macro increment_zp_16 amount, address_lo, address_hi
 	lda address_lo
-	clc 
+	clc
 	adc amount
 	sta address_lo
 
@@ -98,7 +98,7 @@ poll_loop:
 
 .macro decrement_zp_16 amount, address_lo, address_hi
 	lda address_lo
-	sec 
+	sec
 	sbc amount
 	sta address_lo
 
@@ -148,7 +148,7 @@ single_increase:
     increment_zp_16 #1, current_nametable_ptr_lo, current_nametable_ptr_hi
 	lda #$01
 	sta 32
-	
+
 inc_end:
 .endmacro
 
@@ -168,8 +168,8 @@ loop_nametable_inc:
     stx zp_temp_2
     set_carry_if_eol zp_temp_2 ; if the x register is at the end of a line, set the carry flag
     bcc skip_big_nametable_jump ;if the carry flag is not set, you dont need to go to the next line
-    increment_zp_16 #35, zp_temp_0, zp_temp_1 ;increment the 16 bit temp by 35 to indicate going to the next line 
-skip_big_nametable_jump: 
+    increment_zp_16 #35, zp_temp_0, zp_temp_1 ;increment the 16 bit temp by 35 to indicate going to the next line
+skip_big_nametable_jump:
     increment_zp_16 #1, zp_temp_0, zp_temp_1 ; increment the 16 bit temp by 1 to indicate going to the next text location
     jmp loop_nametable_inc
 end_of_nametable_loop:
@@ -177,4 +177,11 @@ end_of_nametable_loop:
     sta current_nametable_ptr_lo
     lda zp_temp_1
     sta current_nametable_ptr_hi
+.endmacro
+
+.macro reset_current_nametable_ptr
+	lda #<DISPLAY_NAMETABLE_BASE_OFFSET
+	sta current_nametable_ptr_lo
+	lda #>DISPLAY_NAMETABLE_BASE_OFFSET
+	sta current_nametable_ptr_hi
 .endmacro

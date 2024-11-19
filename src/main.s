@@ -110,7 +110,15 @@ paletteloop:
  	; get the screen to render
  	jsr ppu_update
 
-	jsr on_page_loaded
+	lda #<WRAM_START
+	sta current_wram_text_ptr_lo
+	lda #>WRAM_START
+	sta current_wram_text_ptr_hi
+
+	lda #<DISPLAY_NAMETABLE_BASE_OFFSET
+	sta current_nametable_ptr_lo
+	lda #>DISPLAY_NAMETABLE_BASE_OFFSET
+	sta current_nametable_ptr_hi
 
 	.include "mainloop.s"
 .endproc

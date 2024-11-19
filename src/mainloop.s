@@ -3,6 +3,11 @@
  	lda nmi_ready
  	cmp #0
  	bne mainloop
+
+ 	; ensure our changes are rendered
+ 	lda #1
+ 	sta nmi_ready
+
  	; read the gamepad
  	poll_gamepad current_input
 
@@ -50,15 +55,71 @@
 
 	NOT_PAD_A:
 
+	lda input_pressed_this_frame
+	and #PAD_B
+	beq NOT_PAD_B
+		; B pressed
+		jsr on_b_pressed_T2
+
+	NOT_PAD_B:
+
  	lda current_input
     sta last_frame_input
 
- 	; ensure our changes are rendered
- 	lda #1
- 	sta nmi_ready
  	jmp mainloop
 
 
+.proc on_b_pressed_T2
+	jsr ppu_off
+	; accessing VRAM is now safe
+
+	jsr clear_nametable
+
+	lda #$00
+	sta zp_temp_0
+	lda current_wram_text_ptr_hi
+	sta zp_temp_1
+	; zp_temp_0&1 hold start of current page in WRAM text
+
+	jsr set_pointers_to_last_character_of_current_page
+	; wram_text_ptr and text_index are now at the position we need to draw text until
+
+	lda current_text_index
+	sta zp_temp_2
+	inc zp_temp_2
+	; zp_temp_2 now holds our target text_index
+
+	lda #0
+	sta current_text_index
+
+	reset_current_nametable_ptr
+
+	ldx #0
+loop:
+	increment_nametable_ptr
+
+
+	lda PPU_STATUS
+	lda current_nametable_ptr_hi
+	sta PPU_ADDR
+	lda current_nametable_ptr_lo
+	sta PPU_ADDR
+
+	ldy #0
+	lda (zp_temp_0),y
+
+	sta PPU_DATA
+
+	inc current_text_index
+	increment_zp_16 #1, zp_temp_0, zp_temp_1
+	inx
+
+	cpx zp_temp_2
+	bne loop
+
+
+	rts
+.endproc
 
 
 .proc on_a_pressed
@@ -82,52 +143,44 @@
 
 	increment_zp_16 #1, current_wram_text_ptr_lo, current_wram_text_ptr_hi
 	inc current_text_index
-	
+
 	rts
 .endproc
 
 
-.proc on_page_loaded
-	;;; Step 1: setup initial variables
+.proc set_pointers_to_last_character_of_current_page
 	lda #<WRAM_START
 	sta current_wram_text_ptr_lo
 	lda #>WRAM_START
+	clc
+	adc current_page
 	sta current_wram_text_ptr_hi
-
-	ldx current_page
-loop: ; this loop jumps 256 bytes per page to get to start of the current page
-	cpx #0
-	beq loop_end
-
-	dex
-	inc current_wram_text_ptr_hi ; jump 256, 1 page
-	jmp loop
-
-loop_end:
 	; current_wram_text_ptr now holds the start of the current page in WRAM
 
 	;;; Step 2: find last non-space character, or 0 otherwise; set that to text_index
-	lda #PAGE_TEXT_SIZE
+	lda #(PAGE_TEXT_SIZE - 1)
 	sta current_text_index
 
-	increment_zp_16 current_text_index, current_wram_text_ptr_lo, current_wram_text_ptr_hi
-
+	lda current_wram_text_ptr_lo
+	clc
+	adc current_text_index
+	sta current_wram_text_ptr_lo
+	; increment wram_text_ptr by current_text_index so we can decrement it until we find something
 
 first_empty_char_loop:
 	ldx current_text_index
-	beq	non_empty_char_found ; if text_index is 0, just take it
+	beq	non_empty_char_found ; if text_index is 0, just take it; no character on thsi page
 
 	ldy #0
 	lda (current_wram_text_ptr_lo), y
 	bne non_empty_char_found ; if current_wram_text_ptr is not spacebar ($00), we found what we were looking for
 
 	dec current_text_index
-	decrement_zp_16 #1, current_wram_text_ptr_lo, current_wram_text_ptr_hi 
+	decrement_zp_16 #1, current_wram_text_ptr_lo, current_wram_text_ptr_hi
 	jmp first_empty_char_loop
 
 non_empty_char_found:
 	; decremented current_text_index & wram_text_ptr until first non-space was found
 
-	get_nametable_pointer_T2 current_text_index ; fills current_nametable_ptr with correct address
 	rts
 .endproc
