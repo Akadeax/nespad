@@ -81,6 +81,51 @@ poll_loop:
  	rts
  .endproc
 
+.proc redraw_screen
+	jsr clear_nametable
+
+	ldx #0 ; low byte idx
+	ldy #>NAME_TABLE_1  
+	sty PPU_ADDR
+	stx PPU_ADDR
+	ldx #0
+	preLoadLoop1:
+		lda preloadScreen1,x 
+		sta PPU_DATA
+		inx
+		cpx #$FF
+		BCC preLoadLoop1
+		lda preloadScreen1,x 
+		sta PPU_DATA
+	ldx #0
+	preLoadLoop2:
+		lda preloadScreen2,x 
+		sta PPU_DATA
+		inx
+		cpx #$FF
+		BCC preLoadLoop2
+		lda preloadScreen2,x 
+		sta PPU_DATA
+	ldx #0
+	preLoadLoop3:
+		lda preloadScreen3,x 
+		sta PPU_DATA
+		inx
+		cpx #$FF
+		BCC preLoadLoop3
+		lda preloadScreen3,x 
+		sta PPU_DATA
+	ldx #0
+	preLoadLoop4:
+		lda preloadScreen4,x 
+		sta PPU_DATA
+		inx
+		cpx #$C0
+		BCC preLoadLoop4
+		lda preloadScreen4,x 
+		sta PPU_DATA
+	rts
+.endproc
 
 .macro increment_zp_16 amount, address_lo, address_hi
 	lda address_lo

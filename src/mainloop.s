@@ -136,7 +136,7 @@
 	jsr ppu_off
 	; accessing VRAM is now safe
 
-	jsr clear_nametable
+	jsr redraw_screen
 
 	lda #$00
 	sta zp_temp_0
