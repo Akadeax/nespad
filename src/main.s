@@ -78,6 +78,7 @@ palette: .res 32 ; current palette buffer
 ; Some useful functions
 .segment "CODE"
 .include "util.s"
+.include "draw.s"
 
 ;***************************************
 ; starting point

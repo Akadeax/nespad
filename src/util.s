@@ -182,3 +182,49 @@ end_of_nametable_loop:
 	lda #>DISPLAY_NAMETABLE_BASE_OFFSET
 	sta current_nametable_ptr_hi
 .endmacro
+
+
+.proc set_pointers_to_last_character_of_current_page
+	lda #<WRAM_START
+	sta current_wram_text_ptr_lo
+	lda #>WRAM_START
+	clc
+	adc current_page
+	sta current_wram_text_ptr_hi
+	; current_wram_text_ptr now holds the start of the current page in WRAM
+
+	;;; Step 2: find last non-space character, or 0 otherwise; set that to text_index
+	lda #(PAGE_TEXT_SIZE - 1)
+	sta current_text_index
+
+	lda current_wram_text_ptr_lo
+	clc
+	adc current_text_index
+	sta current_wram_text_ptr_lo
+	; increment wram_text_ptr by current_text_index so we can decrement it until we find something
+
+first_empty_char_loop:
+	ldx current_text_index
+	beq	no_chars_at_all ; if text_index is 0, just take it; no characters on this page
+
+	ldy #0
+	lda (current_wram_text_ptr_lo), y
+	bne non_empty_char_found ; if current_wram_text_ptr is not spacebar ($00), we found what we were looking for
+
+	dec current_text_index
+	dec current_wram_text_ptr_lo
+	jmp first_empty_char_loop
+
+no_chars_at_all:
+	lda #0
+	sta current_text_index
+	lda #$FF
+	sta current_wram_text_ptr_lo
+
+non_empty_char_found:
+	; decremented current_text_index & wram_text_ptr until first non-space was found
+
+	inc current_wram_text_ptr_lo ; increment wram back by one so it's one ahead (-> it's the pointer to the next char)
+
+	rts
+.endproc
