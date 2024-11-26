@@ -46,6 +46,15 @@ loop:
 	lda current_text_index
 	beq update_text_finished
 
+	lda current_nametable_ptr_hi
+	cmp #>$2282 ; $2282 is the wrong last character position
+	bne not_last_char
+	lda current_nametable_ptr_lo
+	cmp #<$2282
+	bne not_last_char
+
+	jmp update_text_finished
+not_last_char:
 
 	lda current_wram_text_ptr_lo
 	sta zp_temp_0

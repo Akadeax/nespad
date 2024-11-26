@@ -2,7 +2,7 @@
 	jsr ppu_off
 	; accessing VRAM is now safe
 
-	jsr clear_nametable
+	jsr redraw_screen
 
 	lda #$00
 	sta zp_temp_0
@@ -42,13 +42,9 @@ loop:
 
 	inc current_text_index
 	jsr increment_nametable_ptr
-	inc zp_temp_0 ; only need to increment low
-	inx
-	jmp loop
 
-endloop:
-
-	; check if our nametable index was incremented once too much (happens only at the end of the page, causes incorrect drawing)
+	; if the nametable_ptr after incrementing is $2282, we are at the end of the current page.
+	; don't draw any further to not override the decoration, and correct the nametable ptr manually
 	lda current_nametable_ptr_hi
 	cmp #>$2282 ; $2282 is the wrong last character position
 	bne not_last
@@ -58,12 +54,19 @@ endloop:
 		; nametable_ptr is $2282
 		lda #$5E ; $225E is the correct last character position
 		sta current_nametable_ptr_lo
+		jmp endloop
 
 not_last:
+
+	inc zp_temp_0 ; only need to increment low
+	inx
+	jmp loop
+
+endloop:
+
 	rts
 .endproc
 
-; TODO bug: writing on a newly acquired page overrides last character (check current_text_index, why is it behaving weirdly in edgecases?)
 .proc type_current_key
 	lda current_text_index
 	cmp #PAGE_TEXT_SIZE

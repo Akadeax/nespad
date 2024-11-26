@@ -81,6 +81,51 @@ poll_loop:
  	rts
  .endproc
 
+.proc redraw_screen
+	jsr clear_nametable
+
+	ldx #0 ; low byte idx
+	ldy #>NAME_TABLE_1
+	sty PPU_ADDR
+	stx PPU_ADDR
+	ldx #0
+	preLoadLoop1:
+		lda preloadScreen1,x
+		sta PPU_DATA
+		inx
+		cpx #$FF
+		BCC preLoadLoop1
+		lda preloadScreen1,x
+		sta PPU_DATA
+	ldx #0
+	preLoadLoop2:
+		lda preloadScreen2,x
+		sta PPU_DATA
+		inx
+		cpx #$FF
+		BCC preLoadLoop2
+		lda preloadScreen2,x
+		sta PPU_DATA
+	ldx #0
+	preLoadLoop3:
+		lda preloadScreen3,x
+		sta PPU_DATA
+		inx
+		cpx #$FF
+		BCC preLoadLoop3
+		lda preloadScreen3,x
+		sta PPU_DATA
+	ldx #0
+	preLoadLoop4:
+		lda preloadScreen4,x
+		sta PPU_DATA
+		inx
+		cpx #$C0
+		BCC preLoadLoop4
+		lda preloadScreen4,x
+		sta PPU_DATA
+	rts
+.endproc
 
 .macro increment_zp_16 amount, address_lo, address_hi
 	lda address_lo
@@ -129,13 +174,20 @@ poll_loop:
 	beq :+
 	cmp #DISPLAY_LINE8_END
 	beq :+
-	cmp #DISPLAY_LINE9_END
+	cmp #DISPLAY_LINE9_END ; this is here for no reason but if it's gone it breaks
 	beq :+
 :
 .endmacro
 
 
 .proc increment_nametable_ptr
+; 	lda current_text_index
+; 	cmp #DISPLAY_LINE9_END
+; 	bne not_last_char
+; 		increment_zp_16 #3, current_nametable_ptr_lo, current_nametable_ptr_hi
+; 		jmp inc_end
+; not_last_char:
+
 	set_carry_if_eol current_text_index
 
 	bcc single_increase
@@ -234,5 +286,124 @@ not_last_char:
 
 	inc current_wram_text_ptr_lo ; increment wram back by one so it's one ahead (-> it's the pointer to the next char)
 
+	rts
+.endproc
+
+
+.proc keyboard_idx_to_nametable_offset_T1 ;takes the A register as the keyboard index and outputs to the A register as well
+	sta zp_temp_0
+;check if keyboardIdx is 11-18, 22-30, 33-41
+	ldx #10
+	cpx zp_temp_0
+	bpl betweenJmp ;check if temp_1 is smaller than 11
+	ldx #18
+	cpx zp_temp_0
+	bmi :++ ;check if temp_1 is 18 or smaller
+		clc
+		adc #7 ; add the amount of special characters left to come
+		sta zp_temp_1 ; store a in temp to do binary logic
+		lda zp_text_info
+		and #%00000100 ; check if the capitilisation bit is set
+		beq :+
+			lda zp_temp_1
+			clc
+			adc #26
+			sta zp_temp_1
+		:
+		lda zp_temp_1
+		jmp endProc
+:
+	;check if keyboardIdx = 19-21
+	ldx #21
+	cpx zp_temp_0
+	bmi :+ ;check if temp_1 is 21 or smaller
+		clc
+		sbc #8 ;remove the letters that have already been on the keyboard
+		jmp endProc
+:
+	jmp skipJmp
+betweenJmp: ;error range error mimimimimimimi
+	jmp endProc
+skipJmp:
+	;check if a = 22-30
+	ldx #30
+	cpx zp_temp_0
+	bmi :++ ;check if temp_1 is 30 or smaller
+		clc
+		adc #4 ; add the amount of special characters left to come
+		sta zp_temp_1 ; store a in temp to do binary logic
+		lda zp_text_info
+		and #%00000100 ; check if the capitilisation bit is set
+		beq :+
+			lda zp_temp_1
+			clc
+			adc #26
+			sta zp_temp_1
+		:
+		lda zp_temp_1
+		jmp endProc
+:
+	;check if keyboardIdx = 31-32
+	ldx #32
+	cpx zp_temp_0
+	bmi :+ ;check if temp_1 is 21 or smaller
+		clc
+		sbc #17 ;remove the letters that have already been on the keyboard
+		jmp endProc
+:
+	;check if a = 33-41
+	ldx #41
+	cpx zp_temp_0
+	bmi :++ ;check if temp_1 is 30 or smaller
+		clc
+		adc #2 ; add the amount of special characters left to come
+		sta zp_temp_1 ; store a in temp to do binary logic
+		lda zp_text_info
+		and #%00000100 ; check if the capitilisation bit is set
+		beq :+
+			lda zp_temp_1
+			clc
+			adc #26
+			sta zp_temp_1
+		:
+		lda zp_temp_1
+		jmp endProc
+:
+	;check if keyboardIdx = 42-43
+	ldx #43
+	cpx zp_temp_0
+	bmi :+ ;check if temp_1 is 21 or smaller
+		clc
+		sbc #26 ;remove the letters that have already been on the keyboard
+		jmp endProc
+:
+	ldx #44
+	cpx zp_temp_0
+	bne :+ ;if keyboardIdx = 44(spaceBar)
+		lda #0
+		rts
+:
+	;space for code for the special characters i guess, didnt know how to incorporate it with the current layout
+endProc:
+	adc #1 ;offset for the empty character
+	;add current text type offset(first 2 bits of TextInfo)
+	sta zp_temp_1 ;store a in zp_temp_1 for bitwise logic
+	lda zp_text_info
+	and #%00000011
+	cmp #1
+	bne :+ ; if its bold
+		lda zp_temp_1
+		clc
+		adc #70
+		rts
+:
+	cmp #2
+	bne :+ ;if its italic
+		lda zp_temp_1
+		clc
+		adc #140
+		rts
+:
+	lda zp_temp_1
 	rts
 .endproc
