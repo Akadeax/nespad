@@ -1,4 +1,9 @@
-.proc reset
+.include "tests/test_framework.s"
+
+.proc reset ;LINTEXCLUDE
+	; Disable tests here
+	.include "tests/tests.s"
+
 	lda PPU_STATUS
 	lda #0
 	sta PPU_SCROLL
