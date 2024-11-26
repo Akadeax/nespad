@@ -408,34 +408,33 @@ endProc:
 	rts
 .endproc
 
-.proc keyboard_idx_to_nametable_pos ;assumes A is keyboard index returns via lo byte zp_temp_1 and hi byte zp_temp_2
+.proc keyboard_idx_to_nametable_pos_T2 ;assumes A is keyboard index returns via lo byte zp_temp_1 and hi byte zp_temp_2
 	sta zp_temp_0
 	lda #<KEYBOARD_NAMETABLE_BEGIN_OFFSET
 	sta zp_temp_1
 	lda #>KEYBOARD_NAMETABLE_BEGIN_OFFSET
 	sta zp_temp_2
-	lda zp_temp_0
-	asl zp_temp_0
-	increment_zp_16 zp_temp_0, zp_temp_1, zp_temp_2; every standard key is offset by 2, so add the keyboard index multiplied by 2
-	sta zp_temp_0
+	; every standard key is offset by 2, so add the keyboard index multiplied by 2
+	increment_zp_16 zp_temp_0, zp_temp_1, zp_temp_2
+	increment_zp_16 zp_temp_0, zp_temp_1, zp_temp_2
 	;if zp_temp_0 is greater than 10, add offset
 	lda #10
 	cmp zp_temp_0
 	bpl endProc
-		increment_zp_16 KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
+		increment_zp_16 #KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
 		;if zp_temp_0 is greater than 21, add offset
 		lda #21
 		cmp zp_temp_0
 		bpl endProc
-			increment_zp_16 KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
+			increment_zp_16 #KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
 			;if zp_temp_0 is greater than 32, add offset
 			lda #32
 			cmp zp_temp_0
 			bpl endProc
-				increment_zp_16 KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
+				increment_zp_16 #KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
 				jmp endProc
 endProc:
-	lda KEYBOARD_IDX_SPACEBAR
+	lda #KEYBOARD_IDX_SPACEBAR
 	cmp zp_temp_0
 	bne :+
 		lda #<KEYBOARD_NAMETABLE_SPACEBAR_POS_OFFSET
@@ -444,7 +443,7 @@ endProc:
 		sta zp_temp_2
 		rts
 :
-	lda KEYBOARD_IDX_SHIFT
+	lda #KEYBOARD_IDX_SHIFT
 	cmp zp_temp_0
 	bne :+
 		lda #<KEYBOARD_NAMETABLE_SHIFT_POS_OFFSET
@@ -453,7 +452,7 @@ endProc:
 		sta zp_temp_2
 		rts
 :
-	lda KEYBOARD_IDX_BOLD
+	lda #KEYBOARD_IDX_BOLD
 	cmp zp_temp_0
 	bne :+
 		lda #<KEYBOARD_NAMETABLE_BOLD_POS_OFFSET
@@ -462,7 +461,7 @@ endProc:
 		sta zp_temp_2
 		rts
 :
-	lda KEYBOARD_IDX_ITALIC
+	lda #KEYBOARD_IDX_ITALIC
 	cmp zp_temp_0
 	bne :+
 		lda #<KEYBOARD_NAMETABLE_ITALIC_POS_OFFSET
@@ -471,7 +470,7 @@ endProc:
 		sta zp_temp_2
 		rts
 :
-	lda KEYBOARD_IDX_NEXT_PAGE
+	lda #KEYBOARD_IDX_NEXT_PAGE
 	cmp zp_temp_0
 	bne :+
 		lda #<KEYBOARD_NAMETABLE_NEXT_PAGE_POS_OFFSET
@@ -480,7 +479,7 @@ endProc:
 		sta zp_temp_2
 		rts
 :
-	lda KEYBOARD_IDX_PREV_PAGE
+	lda #KEYBOARD_IDX_PREV_PAGE
 	cmp zp_temp_0
 	bne :+
 		lda #<KEYBOARD_NAMETABLE_PREV_PAGE_POS_OFFSET
