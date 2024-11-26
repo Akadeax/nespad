@@ -43,16 +43,16 @@ loop:
 	inc current_text_index
 	jsr increment_nametable_ptr
 
-	; if the nametable_ptr after incrementing is $2282, we are at the end of the current page.
+	; if the nametable_ptr after incrementing is $2283, we are at the end of the current page.
 	; don't draw any further to not override the decoration, and correct the nametable ptr manually
 	lda current_nametable_ptr_hi
-	cmp #>$2282 ; $2282 is the wrong last character position
+	cmp #>$2282 ; $2283 is the wrong last character position
 	bne not_last
 	lda current_nametable_ptr_lo
 	cmp #<$2282
 	bne not_last
-		; nametable_ptr is $2282
-		lda #$5E ; $225E is the correct last character position
+		; nametable_ptr is $2283
+		lda #$5D ; $225E is the correct last character position
 		sta current_nametable_ptr_lo
 		jmp endloop
 
@@ -64,6 +64,13 @@ not_last:
 
 endloop:
 
+	lda current_text_index
+	beq first
+
+	inc current_text_index
+	jsr increment_nametable_ptr
+first:
+
 	rts
 .endproc
 
@@ -73,6 +80,11 @@ endloop:
 	bne :+
 	rts
 :
+	cmp #(PAGE_TEXT_SIZE + 1)
+	bne :+
+	rts
+:
+
 
 	lda screen_keyboard_index
 	cmp #(KEYBOARD_CHARACTER_KEY_AMOUNT + 1)
