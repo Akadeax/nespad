@@ -227,3 +227,121 @@ end_of_nametable_loop:
 	lda #>DISPLAY_NAMETABLE_BASE_OFFSET
 	sta current_nametable_ptr_hi
 .endmacro
+
+.proc keyboard_idx_to_nametable_offset_T1 ;takes the A register as the keyboard index and outputs to the A register as well
+	sta zp_temp_0
+;check if keyboardIdx is 11-18, 22-30, 33-41
+	ldx #10
+	cpx zp_temp_0
+	bpl betweenJmp ;check if temp_1 is smaller than 11
+	ldx #18
+	cpx zp_temp_0
+	bmi :++ ;check if temp_1 is 18 or smaller
+		clc
+		adc #7 ; add the amount of special characters left to come
+		sta zp_temp_1 ; store a in temp to do binary logic
+		lda zp_text_info
+		and #%00000100 ; check if the capitilisation bit is set
+		beq :+
+			lda zp_temp_1
+			clc
+			adc #26
+			sta zp_temp_1
+		:
+		lda zp_temp_1
+		jmp endProc
+:
+	;check if keyboardIdx = 19-21
+	ldx #21
+	cpx zp_temp_0
+	bmi :+ ;check if temp_1 is 21 or smaller
+		clc
+		sbc #8 ;remove the letters that have already been on the keyboard
+		jmp endProc
+:
+	jmp skipJmp 
+betweenJmp: ;error range error mimimimimimimi
+	jmp endProc
+skipJmp:
+	;check if a = 22-30
+	ldx #30
+	cpx zp_temp_0
+	bmi :++ ;check if temp_1 is 30 or smaller
+		clc
+		adc #4 ; add the amount of special characters left to come
+		sta zp_temp_1 ; store a in temp to do binary logic
+		lda zp_text_info
+		and #%00000100 ; check if the capitilisation bit is set
+		beq :+
+			lda zp_temp_1
+			clc
+			adc #26
+			sta zp_temp_1
+		:
+		lda zp_temp_1
+		jmp endProc
+:	
+	;check if keyboardIdx = 31-32
+	ldx #32
+	cpx zp_temp_0
+	bmi :+ ;check if temp_1 is 21 or smaller
+		clc
+		sbc #17 ;remove the letters that have already been on the keyboard
+		jmp endProc
+:
+	;check if a = 33-41
+	ldx #41
+	cpx zp_temp_0
+	bmi :++ ;check if temp_1 is 30 or smaller
+		clc
+		adc #2 ; add the amount of special characters left to come
+		sta zp_temp_1 ; store a in temp to do binary logic
+		lda zp_text_info
+		and #%00000100 ; check if the capitilisation bit is set
+		beq :+
+			lda zp_temp_1
+			clc
+			adc #26
+			sta zp_temp_1
+		:
+		lda zp_temp_1
+		jmp endProc
+:
+	;check if keyboardIdx = 42-43
+	ldx #43
+	cpx zp_temp_0
+	bmi :+ ;check if temp_1 is 21 or smaller
+		clc
+		sbc #26 ;remove the letters that have already been on the keyboard
+		jmp endProc
+:
+	ldx #44
+	cpx zp_temp_0
+	bne :+ ;if keyboardIdx = 44(spaceBar)
+		lda #0
+		rts
+:
+	;space for code for the special characters i guess, didnt know how to incorporate it with the current layout
+endProc:
+	adc #1 ;offset for the empty character
+	;add current text type offset(first 2 bits of TextInfo)
+	sta zp_temp_1 ;store a in zp_temp_1 for bitwise logic
+	lda zp_text_info
+	and #%00000011
+	cmp #1
+	bne :+ ; if its bold
+		lda zp_temp_1
+		clc
+		adc #70
+		rts
+:
+	cmp #2
+	bne :+ ;if its italic
+		lda zp_temp_1
+		clc
+		adc #140
+		rts
+:
+	lda zp_temp_1
+	rts
+.endproc

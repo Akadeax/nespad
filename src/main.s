@@ -61,6 +61,7 @@ zp_temp_7: .res 1
 zp_temp_8: .res 1
 zp_temp_9: .res 1
 
+zp_text_info: .res 1
 
 ; Sprite OAM Data area - copied to VRAM in NMI routine
 .segment "OAM"
@@ -111,6 +112,30 @@ paletteloop:
 	cpx #32
 	bcc paletteloop
 
+	lda #%00000100
+	sta zp_text_info
+	lda #11
+	jsr keyboard_idx_to_nametable_offset_T1
+	cmp #$2D
+	beq :+
+		lda #10
+	:
+	lda #%00000010
+	sta zp_text_info
+	lda #20
+	jsr keyboard_idx_to_nametable_offset_T1
+	cmp #$99
+	beq :+
+		lda #10
+	:
+	lda #%00000101
+	sta zp_text_info
+	lda #44
+	jsr keyboard_idx_to_nametable_offset_T1
+	cmp #$0
+	beq :+
+		lda #10
+	:
  	jsr ppu_update
 
 	jsr redraw_current_page_T2
