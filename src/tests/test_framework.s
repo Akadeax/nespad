@@ -30,3 +30,27 @@
 :
     bne :-
 .endmacro
+
+.macro a_eq_literal literal
+    inc $0 ; increment test index
+
+    cmp #<literal
+:
+    bne :-
+.endmacro
+
+.macro x_eq_literal literal
+    inc $0 ; increment test index
+
+    cpx #<literal
+:
+    bne :-
+.endmacro
+
+.macro y_eq_literal literal
+    inc $0 ; increment test index
+
+    cpy #<literal
+:
+    bne :-
+.endmacro
