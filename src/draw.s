@@ -102,3 +102,64 @@ first:
 
 	rts
 .endproc
+
+.proc draw_indicator_T1
+	jsr clear_indicator_T1
+	jsr keyboard_idx_to_nametable_pos_T2
+	jsr convert_nametable_index_to_XY_T2
+	lda KEYBOARD_IDX_NEXT_PAGE
+	cpx #screen_keyboard_index
+	bne :+ 
+		jsr draw_spacebar_Indicator
+		jmp endProc
+:
+	lda KEYBOARD_IDX_SPACEBAR
+	cpx #screen_keyboard_index
+	bne :+ 
+		jsr draw_arrow_indicator
+		jmp endProc
+:
+	lda KEYBOARD_IDX_PREV_PAGE
+	cpx #screen_keyboard_index
+	bne :+ 
+		jsr draw_arrow_indicator
+		jmp endProc
+:
+	lda zp_temp_0
+	sta CPU_OAM_PTR
+	ldy #1
+	lda #$08 ;basic sprite
+	sta CPU_OAM_PTR, y
+	ldy #3
+	lda zp_temp_1
+	sta CPU_OAM_PTR, y
+
+endProc:
+	rts
+.endproc
+
+.proc draw_spacebar_Indicator
+
+	rts
+.endproc
+
+.proc draw_arrow_indicator
+
+	rts
+.endproc
+
+.proc clear_indicator_T1
+	
+	ldy #0
+	lda #<CPU_OAM_PTR
+	sta zp_temp_0
+	lda #>CPU_OAM_PTR
+	sta zp_temp_1
+	lda #0
+	clear_loop:
+		sta (zp_temp_0), y
+		iny
+		cpy #20
+		bne clear_loop
+	rts
+.endproc
