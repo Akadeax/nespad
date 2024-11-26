@@ -116,7 +116,7 @@ paletteloop:
  	jsr ppu_update
 
 	jsr redraw_current_page_T2
-
+	jsr draw_indicator_T1
 	.include "mainloop.s"
 .endproc
 
@@ -130,10 +130,10 @@ default_palette:
 .byte $0f,$23,$24,$14
 .byte $0f,$23,$39,$29
 ;sprites
-.byte $0f,$00,$10,$30
-.byte $0f,$0c,$21,$32
-.byte $0f,$05,$16,$27
-.byte $0f,$0b,$1a,$29
+.byte $0f,$23,$10,$30
+.byte $0f,$23,$31,$21
+.byte $0f,$23,$24,$14
+.byte $0f,$23,$39,$29
 
 preloadScreen1:
 	.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00

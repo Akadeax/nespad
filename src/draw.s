@@ -103,13 +103,13 @@ end:
 :
 
 
-	lda screen_keyboard_index
+	jsr keyboard_idx_to_pattern_idx_T1
 	cmp #(KEYBOARD_CHARACTER_KEY_AMOUNT + 1)
 	bmi :+
 	rts
 :
 
-	lda screen_keyboard_index
+	jsr keyboard_idx_to_pattern_idx_T1
 	sta (current_wram_text_ptr_lo), y
 
 	jsr increment_nametable_ptr
@@ -142,13 +142,13 @@ end:
 		jsr draw_arrow_indicator
 		jmp endProc
 :
-	lda zp_temp_0
+	lda zp_temp_1
 	sta CPU_OAM_PTR
 	ldy #1
 	lda #$08 ;basic sprite
 	sta CPU_OAM_PTR, y
 	ldy #3
-	lda zp_temp_1
+	lda zp_temp_0
 	sta CPU_OAM_PTR, y
 
 endProc:

@@ -291,6 +291,7 @@ not_last_char:
 
 
 .proc keyboard_idx_to_pattern_idx_T1 ;takes the A register as the keyboard index and outputs to the A register as well
+	lda screen_keyboard_index
 	sta zp_temp_0
 ;check if keyboardIdx is 11-18, 22-30, 33-41
 	ldx #10
