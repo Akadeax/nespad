@@ -47,6 +47,19 @@ loop:
 	jmp loop
 
 endloop:
+
+	; check if our nametable index was incremented once too much (happens only at the end of the page, causes incorrect drawing)
+	lda current_nametable_ptr_hi
+	cmp #>$2282 ; $2282 is the wrong last character position
+	bne not_last
+	lda current_nametable_ptr_lo
+	cmp #<$2282
+	bne not_last
+		; nametable_ptr is $2282
+		lda #$5E ; $225E is the correct last character position
+		sta current_nametable_ptr_lo
+
+not_last:
 	rts
 .endproc
 

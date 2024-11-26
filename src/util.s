@@ -224,6 +224,14 @@ no_chars_at_all:
 non_empty_char_found:
 	; decremented current_text_index & wram_text_ptr until first non-space was found
 
+	lda current_text_index
+	cmp #(PAGE_TEXT_SIZE - 1)
+	bne not_last_char
+		; is last character
+		inc current_text_index
+
+not_last_char:
+
 	inc current_wram_text_ptr_lo ; increment wram back by one so it's one ahead (-> it's the pointer to the next char)
 
 	rts
