@@ -1,12 +1,18 @@
 lda #0
 sta $0
 
-;;; EXAMPLE TEST
-; lda #$FF
-; sta zp_temp_0
-; lda #$05
-; sta zp_temp_1
-; increment_zp_16 #3, zp_temp_0, zp_temp_1
-; val_eq_literal zp_temp_0, $02
-; val_eq_literal zp_temp_1, $06 ; $05FF + 3 should be $0602
-; val16_eq_literal zp_temp_0, zp_temp_1, $0602
+lda #12
+jsr keyboard_idx_to_nametable_pos_T2
+val16_eq_literal zp_temp_1, zp_temp_2, $02C5
+
+lda #20
+jsr keyboard_idx_to_nametable_pos_T2
+val16_eq_literal zp_temp_1, zp_temp_2, $02D5
+
+lda #44
+jsr keyboard_idx_to_nametable_pos_T2
+val16_eq_literal zp_temp_1, zp_temp_2, $038A
+
+lda #41
+jsr keyboard_idx_to_nametable_pos_T2
+val16_eq_literal zp_temp_1, zp_temp_2, $0353
