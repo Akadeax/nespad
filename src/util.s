@@ -409,6 +409,7 @@ endProc:
 .endproc
 
 .proc keyboard_idx_to_nametable_pos_T2 ;assumes A is keyboard index returns via lo byte zp_temp_1 and hi byte zp_temp_2
+	lda screen_keyboard_index
 	sta zp_temp_0
 	lda #<KEYBOARD_NAMETABLE_BEGIN_OFFSET
 	sta zp_temp_1
@@ -489,4 +490,37 @@ endProc:
 		rts
 :
 	rts
+.endproc
+
+; Function to convert nametable index to x,y position
+.proc convert_nametable_index_to_XY_T2
+    
+    lda zp_temp_1
+    ; Calculate X position (lowest 5 bits of index)
+    and #$1F 
+	asl ;multiply by 8 to get the y pos
+	asl 
+	asl        
+    sta zp_temp_0    ;store y in temp 0
+
+    ;shift higher bits down to make room for the high byte
+    lda zp_temp_1
+    lsr         
+    lsr             
+    lsr
+    lsr
+    lsr
+	sta zp_temp_1
+	;prepare high byte to be merged with low byte
+	lda zp_temp_2
+	asl
+	asl
+	asl
+    ora zp_temp_1   ; Combine with high byte of index
+	asl ;multiply by 8 to get the x pos
+	asl
+	asl
+    sta zp_temp_1   ;store x in temp 1
+
+    rts              
 .endproc
