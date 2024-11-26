@@ -71,6 +71,23 @@ endloop:
 	jsr increment_nametable_ptr
 first:
 
+	lda #0
+	sta zp_temp_0
+	lda current_wram_text_ptr_hi
+	sta zp_temp_1
+
+
+
+	ldy #0
+	lda (zp_temp_0),y
+	beq end
+		lda current_text_index
+		bne end
+			inc current_text_index
+			jsr increment_nametable_ptr
+			inc current_wram_text_ptr_lo
+		
+end:
 	rts
 .endproc
 
