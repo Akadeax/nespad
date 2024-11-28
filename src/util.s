@@ -499,7 +499,7 @@ endProc:
     
     lda zp_temp_1
     ; Calculate X position (lowest 5 bits of index)
-    and #$1F 
+    and #%00011111 
 	asl ;multiply by 8 to get the y pos
 	asl 
 	asl        
