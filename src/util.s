@@ -500,10 +500,10 @@ endProc:
     lda zp_temp_1
     ; Calculate X position (lowest 5 bits of index)
     and #%00011111 
-	asl ;multiply by 8 to get the y pos
+	asl ;multiply by 8 to get the x pos
 	asl 
 	asl        
-    sta zp_temp_0    ;store y in temp 0
+    sta zp_temp_0    ;store x in temp 0
 
     ;shift higher bits down to make room for the high byte
     lda zp_temp_1
@@ -519,10 +519,56 @@ endProc:
 	asl
 	asl
     ora zp_temp_1   ; Combine with high byte of index
-	asl ;multiply by 8 to get the x pos
+	asl ;multiply by 8 to get the y pos
 	asl
 	asl
-    sta zp_temp_1   ;store x in temp 1
+    sta zp_temp_1   ;store y in temp 1
 
     rts              
 .endproc
+
+.macro draw_sprite_at_location_T2 x_pos, x_offset, x_is_subtracting, y_pos, y_offset, y_is_subtracting, sprite, spriteIdx
+	
+	lda #0
+	clc
+	adc spriteIdx ;spriteIdx *4 is the offset for the cpu_oam ptr
+	adc spriteIdx
+	adc spriteIdx
+	adc spriteIdx
+	sta zp_temp_2
+
+	lda y_pos
+	ldx y_is_subtracting
+	cpx #0
+	beq :+
+		sbc y_offset
+		jmp :++ 
+	:
+		adc y_offset
+	:
+	ldy zp_temp_2
+	sta CPU_OAM_PTR, y
+	lda zp_temp_2
+	adc #01
+	tay 
+	lda sprite 
+	sta CPU_OAM_PTR, y
+
+	lda x_pos
+	ldx x_is_subtracting
+	cpx #0
+	beq :+
+		sbc x_offset
+		jmp :++ 
+	:
+		adc x_offset
+	:
+	tax
+	lda zp_temp_2
+	adc #3
+	tay
+	txa
+	sta CPU_OAM_PTR, y
+
+.endmacro
+

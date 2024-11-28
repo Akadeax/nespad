@@ -121,7 +121,7 @@ end:
 	rts
 .endproc
 
-.proc draw_indicator_T1
+.proc draw_indicator_T1 ;LINTEXCLUDE
 	jsr clear_indicator_T1
 	jsr keyboard_idx_to_nametable_pos_T2
 	jsr convert_nametable_index_to_XY_T2
@@ -129,28 +129,31 @@ end:
 	cpx #screen_keyboard_index
 	bne :+ 
 		jsr draw_spacebar_Indicator
-		jmp endProc
+		rts
 :
 	lda KEYBOARD_IDX_SPACEBAR
 	cpx #screen_keyboard_index
 	bne :+ 
 		jsr draw_arrow_indicator
-		jmp endProc
+		rts
 :
 	lda KEYBOARD_IDX_PREV_PAGE
 	cpx #screen_keyboard_index
 	bne :+ 
 		jsr draw_arrow_indicator
-		jmp endProc
+		rts
 :
+	
+	lda zp_temp_0 
+	clc
+	sbc #08
+	sta zp_temp_0
 	lda zp_temp_1
-	sta CPU_OAM_PTR
-	ldy #1
-	lda #$08 ;basic sprite
-	sta CPU_OAM_PTR, y
-	ldy #3
-	lda zp_temp_0
-	sta CPU_OAM_PTR, y
+	clc
+	sbc #08
+	sta zp_temp_1 
+	;draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#01 ,zp_temp_1 ,#08 ,#00 ,#$08 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#00 ,#00 ,#$08 ,#1
 
 endProc:
 	rts
