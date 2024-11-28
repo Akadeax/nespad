@@ -386,6 +386,7 @@ skipJmp:
 :
 	;space for code for the special characters i guess, didnt know how to incorporate it with the current layout
 endProc:
+	clc
 	adc #1 ;offset for the empty character
 	;add current text type offset(first 2 bits of TextInfo)
 	sta zp_temp_1 ;store a in zp_temp_1 for bitwise logic

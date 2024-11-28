@@ -110,6 +110,7 @@ end:
 :
 
 	jsr keyboard_idx_to_pattern_idx_T1
+	ldy #0
 	sta (current_wram_text_ptr_lo), y
 
 	jsr increment_nametable_ptr
