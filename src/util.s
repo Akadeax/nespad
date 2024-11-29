@@ -103,9 +103,47 @@ poll_loop:
 	draw_segment preloadScreen1, $FF
 	draw_segment preloadScreen2, $FF
 
-	draw_segment normalKeyboard1, $FF
-	draw_segment normalKeyboard2, $C0
-
+	lda zp_text_info
+	and %00000011
+	cmp #0
+	bne NOT_NORMAL_TEXT
+		lda zp_text_info
+		and %00000100
+		bne :+
+			draw_segment normalKeyboard1, $FF
+			draw_segment normalKeyboard2, $C0
+			rts
+		:
+		draw_segment normalCapitalKeyboard1, $FF
+		draw_segment normalCapitalKeyboard2, $C0
+		rts
+	NOT_NORMAL_TEXT:
+	cmp #1
+	bne NOT_BOLD_TEXT
+		lda zp_text_info
+		and %00000100
+		bne :+
+			draw_segment boldKeyboard1, $FF
+			draw_segment boldKeyboard2, $C0
+			rts
+		:
+		draw_segment boldCapitalKeyboard1, $FF
+		draw_segment boldCapitalKeyboard2, $C0
+		rts
+	NOT_BOLD_TEXT:
+	cmp #2
+	bne NOT_ITALIC_TEXT
+		lda zp_text_info
+		and %00000100
+		bne :+
+			draw_segment italicKeyboard1, $FF
+			draw_segment italicKeyboard2, $C0
+			rts
+		:
+		draw_segment italicCapitalKeyboard1, $FF
+		draw_segment italicCapitalKeyboard2, $C0
+		rts
+	NOT_ITALIC_TEXT:
 .endproc
 
 
@@ -623,7 +661,7 @@ endProc:
 		rts
 	:
 	;if its lower than 44 subtract by 11, then skip
-	cmp #KEYBOARD_IDX_UNDERSCORE
+	cmp #KEYBOARD_IDX_UNDERSCORE+1
 	bpl :+
 		clc
 		sbc #10
