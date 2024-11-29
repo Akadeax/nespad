@@ -62,7 +62,7 @@
 	and #PAD_A
 	beq NOT_PAD_A_PRESSED
 		; A pressed
-		jsr type_current_key
+		jsr activate_selected_key
 		lda #1
 		sta a_held
 
@@ -91,7 +91,7 @@
 		jmp NOT_PAD_A_HELD
 
 	time_held_above_threshold:
-		jsr type_current_key
+		jsr activate_selected_key
 
 	NOT_PAD_A_HELD:
 

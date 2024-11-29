@@ -91,7 +91,26 @@ end:
 	rts
 .endproc
 
-.proc type_current_key
+
+
+.proc activate_selected_key
+	lda screen_keyboard_index
+	cmp #(KEYBOARD_CHARACTER_KEY_AMOUNT + 1) ; +1 because spacebar is also accounted for as letter key
+	bpl not_letter_key
+		; keyboard index is on letter key
+		jsr type_letter_key
+		jmp end_func
+not_letter_key:
+
+	jsr special_key_pressed
+
+end_func:
+	rts
+.endproc
+
+
+
+.proc type_letter_key
 	lda current_text_index
 	cmp #PAGE_TEXT_SIZE
 	bne :+
@@ -119,7 +138,131 @@ end:
 	inc current_text_index
 
 	rts
+
 .endproc
+
+
+
+.proc special_key_pressed
+	lda screen_keyboard_index
+	cmp #KEYBOARD_IDX_ITALIC
+	bne not_italic
+		jsr italic_pressed
+		jmp redraw
+not_italic:
+
+	lda screen_keyboard_index
+	cmp #KEYBOARD_IDX_BOLD
+	bne not_bold
+		jsr bold_pressed
+		jmp redraw
+not_bold:
+
+	lda screen_keyboard_index
+	cmp #KEYBOARD_IDX_SHIFT
+	bne not_capital
+		jsr capital_pressed
+		jmp redraw
+not_capital:
+
+	lda screen_keyboard_index
+	cmp #KEYBOARD_IDX_NEXT_PAGE
+	bne not_next_page
+		; next page pressed
+		lda current_page
+		cmp #(MAX_PAGE_AMOUNT - 1)
+		beq end_func ; if we're at the last page, don't inc or redraw
+
+		inc current_page
+		jmp redraw
+not_next_page:
+
+	lda screen_keyboard_index
+	cmp #KEYBOARD_IDX_PREV_PAGE
+	bne not_prev_page
+		; prev page pressed
+		lda current_page
+		beq end_func ; if we're at first page, don't dec or redraw
+
+		dec current_page
+		jmp redraw
+not_prev_page:
+
+redraw:
+	jsr redraw_current_page_T2
+end_func:
+	rts
+.endproc
+
+
+.proc italic_pressed
+	lda zp_text_info
+	and #%00000011 ; only care about the last 2 bits
+	cmp #KEYBOARD_INFO_ITALIC ; check if current text mode is italic
+	bne current_not_italic
+		; current text mode is italic already; disable it
+		lda zp_text_info
+		and #%11111100
+		sta zp_text_info
+		jmp end_func
+
+current_not_italic:
+	; current text mode is not italic yet; set it to it
+	lda zp_text_info
+	and #%11111100 ; clear last 2 bits (otherwise it might not override e.g. 11)
+	ora #KEYBOARD_INFO_ITALIC ; set the last 2 bits to italic
+	sta zp_text_info
+
+end_func:
+	rts
+.endproc
+
+
+
+.proc bold_pressed
+	lda zp_text_info
+	and #%00000011 ; only care about the last 2 bits
+	cmp #KEYBOARD_INFO_BOLD ; check if current text mode is bold
+	bne current_not_bold
+		; current text mode is bold already; disable it
+		lda zp_text_info
+		and #%11111100
+		sta zp_text_info
+		jmp end_func
+
+current_not_bold:
+	; current text mode is not bold yet; set it to it
+	lda zp_text_info
+	and #%11111100 ; clear last 2 bits (otherwise it might not override e.g. 11)
+	ora #KEYBOARD_INFO_BOLD ; set the last 2 bits to bold
+	sta zp_text_info
+
+end_func:
+	rts
+.endproc
+
+
+
+.proc capital_pressed
+	lda zp_text_info
+	and #%00000100
+	beq current_not_capital
+		; capital mode is currently already on; disable it
+		lda zp_text_info
+		and #%11111011 ; unset 3rd bit
+		sta zp_text_info
+		jmp end_func
+
+current_not_capital:
+	lda zp_text_info
+	ora #%00000100 ; set 3rd bit
+	sta zp_text_info
+
+end_func:
+	rts
+.endproc
+
+
 
 .proc draw_indicator_T1 ;LINTEXCLUDE
 	jsr clear_indicator_T1
@@ -158,6 +301,8 @@ endProc:
 	rts
 .endproc
 
+
+
 .proc draw_spacebar_Indicator ;LINTEXCLUDE
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#0
@@ -182,6 +327,8 @@ endProc:
 	rts
 .endproc
 
+
+
 .proc draw_arrow_indicator ;LINTEXCLUDE
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#0
@@ -198,6 +345,8 @@ endProc:
 	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7
 	rts
 .endproc
+
+
 
 .proc clear_indicator_T1
 	

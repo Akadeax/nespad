@@ -48,6 +48,8 @@ current_nametable_ptr_hi: .res 1
 a_held: .res 1
 a_time_held: .res 1
 
+zp_text_info: .res 1
+
 screen_keyboard_index:  .res 1
 .segment "ZEROPAGE"
 zp_temp_0: .res 1
@@ -60,8 +62,6 @@ zp_temp_6: .res 1
 zp_temp_7: .res 1
 zp_temp_8: .res 1
 zp_temp_9: .res 1
-
-zp_text_info: .res 1
 
 ; Sprite OAM Data area - copied to VRAM in NMI routine
 .segment "OAM"
