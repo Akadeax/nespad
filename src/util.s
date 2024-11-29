@@ -319,7 +319,7 @@ not_last_char:
 	cpx zp_temp_0
 	bmi :+ ;check if temp_1 is 21 or smaller
 		clc
-		sbc #8 ;remove the letters that have already been on the keyboard
+		sbc #7 ;remove the letters that have already been on the keyboard
 		jmp endProc
 :
 	jmp skipJmp
@@ -349,7 +349,7 @@ skipJmp:
 	cpx zp_temp_0
 	bmi :+ ;check if temp_1 is 21 or smaller
 		clc
-		sbc #17 ;remove the letters that have already been on the keyboard
+		sbc #16 ;remove the letters that have already been on the keyboard
 		jmp endProc
 :
 	;check if a = 33-41
@@ -375,7 +375,7 @@ skipJmp:
 	cpx zp_temp_0
 	bmi :+ ;check if temp_1 is 21 or smaller
 		clc
-		sbc #26 ;remove the letters that have already been on the keyboard
+		sbc #25 ;remove the letters that have already been on the keyboard
 		jmp endProc
 :
 	ldx #44
@@ -445,7 +445,7 @@ endProc:
 		lda #>KEYBOARD_NAMETABLE_SPACEBAR_POS_OFFSET
 		sta zp_temp_2
 		rts
-:
+ :
 	lda #KEYBOARD_IDX_SHIFT
 	cmp zp_temp_0
 	bne :+
@@ -454,7 +454,7 @@ endProc:
 		lda #>KEYBOARD_NAMETABLE_SHIFT_POS_OFFSET
 		sta zp_temp_2
 		rts
-:
+ :
 	lda #KEYBOARD_IDX_BOLD
 	cmp zp_temp_0
 	bne :+
@@ -463,7 +463,7 @@ endProc:
 		lda #>KEYBOARD_NAMETABLE_BOLD_POS_OFFSET
 		sta zp_temp_2
 		rts
-:
+ :
 	lda #KEYBOARD_IDX_ITALIC
 	cmp zp_temp_0
 	bne :+
@@ -472,7 +472,7 @@ endProc:
 		lda #>KEYBOARD_NAMETABLE_ITALIC_POS_OFFSET
 		sta zp_temp_2
 		rts
-:
+ :
 	lda #KEYBOARD_IDX_NEXT_PAGE
 	cmp zp_temp_0
 	bne :+
@@ -481,7 +481,7 @@ endProc:
 		lda #>KEYBOARD_NAMETABLE_NEXT_PAGE_POS_OFFSET
 		sta zp_temp_2
 		rts
-:
+ :
 	lda #KEYBOARD_IDX_PREV_PAGE
 	cmp zp_temp_0
 	bne :+
@@ -490,7 +490,7 @@ endProc:
 		lda #>KEYBOARD_NAMETABLE_PREV_PAGE_POS_OFFSET
 		sta zp_temp_2
 		rts
-:
+ :
 	rts
 .endproc
 
@@ -579,3 +579,60 @@ endProc:
 
 .endmacro
 
+.proc handle_down_button_press
+	;if the idx is lower than  33, add 11 and skip
+	;if its lower than 44, go to 44 and skip
+	;if its 44, skip
+	;if its 48, skip
+	;if its 49, skip
+	;if its lower than 48, add 2 and skip
+.endproc
+
+.proc handle_up_button_press
+	;if the current idx is lower than 12, skip
+	;if the current idx is 45 skip
+	;if the current idx is 46 skip
+	;if its lower than 44 subtract by 11, then skip
+	;if its 44, make it 40 then skip
+	;if its lower than 49, subtract by 2
+.endproc
+
+.proc handle_right_button_press
+	;if current idx is 44, skip
+	;if its 48, skip
+	;if its 46, skip
+
+	;special cases for control characters 
+
+	;if its 10, go to 45, then skip
+	;if its 21, go to 47, then skip
+	;if its 32, go to 49, then skip
+	;if its 43, go to 49, then skip
+
+	;if its 45, go to 46, then skip
+	;if its 47, go to 48, then skip
+	;if its 49, go to 48, then skip
+
+	;otherwise, increase it by 1, and skip
+
+
+.endproc
+
+.proc handle_left_button_press
+	;if current idx is 44, skip
+	;if its 0, skip
+	;if its 11, skip
+	;if its 22, skip
+	;if its 33, skip
+
+	;special cases for control characters 
+
+	;if its 45, go to 21, then skip
+	;if its 47, go to 32, then skip
+	;if its 49, go to 43, then skip
+
+	;if its 46, go to 45, then skip
+	;if its 48, go to 49, then skip
+
+	;otherwise, decrease it by 1
+.endproc
