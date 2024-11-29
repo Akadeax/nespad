@@ -580,59 +580,239 @@ endProc:
 .endmacro
 
 .proc handle_down_button_press
+	lda screen_keyboard_index
 	;if the idx is lower than  33, add 11 and skip
+	cmp #KEYBOARD_IDX_R
+	bpl :+
+		clc
+		adc #11
+		sta screen_keyboard_index
+		rts
+	:
 	;if its lower than 44, go to 44 and skip
+	cmp #KEYBOARD_IDX_UNDERSCORE
+	bpl :+
+		lda #KEYBOARD_IDX_SPACEBAR
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 44, skip
+	cmp #KEYBOARD_IDX_SPACEBAR
+	bne :+
+		rts
+	:
 	;if its 48, skip
+	cmp #KEYBOARD_IDX_PREV_PAGE
+	bne :+
+		rts
+	:
 	;if its 49, skip
+	cmp #KEYBOARD_IDX_SHIFT
+	bne :+
+		rts
+	:
 	;if its lower than 48, add 2 and skip
+	cmp #KEYBOARD_IDX_BOLD
+	bpl :+
+		clc
+		adc #2
+		sta screen_keyboard_index
+		rts
+	:
+	rts
 .endproc
 
 .proc handle_up_button_press
+	lda screen_keyboard_index
 	;if the current idx is lower than 12, skip
+	cmp #KEYBOARD_IDX_EXCLAMATION
+	bpl :+
+		rts
+	:
 	;if the current idx is 45 skip
+	cmp #KEYBOARD_IDX_ITALIC
+	bne :+
+		rts
+	:
 	;if the current idx is 46 skip
+	cmp #KEYBOARD_IDX_NEXT_PAGE
+	bne :+
+		rts
+	:
 	;if its lower than 44 subtract by 11, then skip
+	cmp #KEYBOARD_IDX_UNDERSCORE
+	bpl :+
+		clc
+		sbc #10
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 44, make it 40 then skip
+	cmp #KEYBOARD_IDX_SPACEBAR
+	bne :+
+		lda #40
+		sta screen_keyboard_index
+		rts
+	:
 	;if its lower than 49, subtract by 2
+	cmp #KEYBOARD_IDX_SHIFT
+	bpl :+
+		clc
+		sbc #1
+		sta screen_keyboard_index
+		rts
+	:
+	rts
 .endproc
 
 .proc handle_right_button_press
 	;if current idx is 44, skip
+	lda screen_keyboard_index
+	cmp #KEYBOARD_IDX_SPACEBAR
+	bne :+
+		rts
+	:
 	;if its 48, skip
+	cmp #KEYBOARD_IDX_NEXT_PAGE
+	bne :+
+		rts
+	:
 	;if its 46, skip
-
+	cmp #KEYBOARD_IDX_PREV_PAGE
+	bne :+
+		rts
+	:
 	;special cases for control characters 
 
 	;if its 10, go to 45, then skip
+	cmp #KEYBOARD_IDX_EXCLAMATION
+	bne :+
+		lda #KEYBOARD_IDX_ITALIC
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 21, go to 47, then skip
+	cmp #KEYBOARD_IDX_PERIOD
+	bne :+
+		lda #KEYBOARD_IDX_BOLD
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 32, go to 49, then skip
+	cmp #KEYBOARD_IDX_COLON
+	bne :+
+		lda #KEYBOARD_IDX_SHIFT
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 43, go to 49, then skip
+	cmp #KEYBOARD_IDX_UNDERSCORE
+	bne :+
+		lda #KEYBOARD_IDX_SHIFT
+		sta screen_keyboard_index
+		rts
+	:
 
 	;if its 45, go to 46, then skip
+	cmp #KEYBOARD_IDX_ITALIC
+	bne :+
+		lda #KEYBOARD_IDX_NEXT_PAGE
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 47, go to 48, then skip
+	cmp #KEYBOARD_IDX_BOLD
+	bne :+
+		lda #KEYBOARD_IDX_PREV_PAGE
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 49, go to 48, then skip
+	cmp #KEYBOARD_IDX_SHIFT
+	bne :+
+		lda #KEYBOARD_IDX_PREV_PAGE
+		sta screen_keyboard_index
+		rts
+	:
 
 	;otherwise, increase it by 1, and skip
-
-
+	tax
+	inx
+	txa
+	sta screen_keyboard_index
+	rts
 .endproc
 
 .proc handle_left_button_press
 	;if current idx is 44, skip
+	lda screen_keyboard_index
+	cmp #KEYBOARD_IDX_SPACEBAR
+	bne :+
+		rts
+	:
 	;if its 0, skip
+	cmp #KEYBOARD_IDX_0
+	bne :+
+		rts
+	:
 	;if its 11, skip
+	cmp #KEYBOARD_IDX_A
+	bne :+
+		rts
+	:
 	;if its 22, skip
+	cmp #KEYBOARD_IDX_I
+	bne :+
+		rts
+	:
 	;if its 33, skip
+	cmp #KEYBOARD_IDX_R
+	bne :+
+		rts
+	:
 
 	;special cases for control characters 
 
 	;if its 45, go to 21, then skip
+	cmp #KEYBOARD_IDX_ITALIC
+	bne :+
+		lda #KEYBOARD_IDX_PERIOD
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 47, go to 32, then skip
+	cmp #KEYBOARD_IDX_BOLD
+	bne :+
+		lda #KEYBOARD_IDX_COLON
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 49, go to 43, then skip
+	cmp #KEYBOARD_IDX_SHIFT
+	bne :+
+		lda #KEYBOARD_IDX_UNDERSCORE
+		sta screen_keyboard_index
+		rts
+	:
 
 	;if its 46, go to 45, then skip
+	cmp #KEYBOARD_IDX_NEXT_PAGE
+	bne :+
+		lda #KEYBOARD_IDX_ITALIC
+		sta screen_keyboard_index
+		rts
+	:
 	;if its 48, go to 49, then skip
-
+	cmp #KEYBOARD_IDX_PREV_PAGE
+	bne :+
+		lda #KEYBOARD_IDX_SHIFT
+		sta screen_keyboard_index
+		rts
+	:
 	;otherwise, decrease it by 1
+	tax
+	dex
+	txa
+	sta screen_keyboard_index
+	rts
 .endproc

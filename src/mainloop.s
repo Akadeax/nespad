@@ -26,6 +26,7 @@
 	and #PAD_UP
 	beq NOT_PAD_UP
 		; up pressed
+		jsr handle_up_button_press
 		jsr draw_indicator_T1
 
 	NOT_PAD_UP:
@@ -34,6 +35,7 @@
 	and #PAD_DOWN
 	beq NOT_PAD_DOWN
 		; down pressed
+		jsr handle_down_button_press
 		jsr draw_indicator_T1
 
 	NOT_PAD_DOWN:
@@ -42,7 +44,7 @@
 	and #PAD_LEFT
 	beq NOT_PAD_LEFT
 		; left pressed
-		dec screen_keyboard_index
+		jsr handle_left_button_press
 		jsr draw_indicator_T1
 
 	NOT_PAD_LEFT:
@@ -51,7 +53,7 @@
 	and #PAD_RIGHT
 	beq NOT_PAD_RIGHT
 		; right pressed
-		inc screen_keyboard_index
+		jsr handle_right_button_press
 		jsr draw_indicator_T1
 
 	NOT_PAD_RIGHT:
