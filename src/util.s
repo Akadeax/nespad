@@ -82,6 +82,7 @@ poll_loop:
  .endproc
 
 .macro draw_segment adress, amount
+	clc
 	ldx #0
 	:
 		lda adress,x
@@ -109,11 +110,11 @@ poll_loop:
 	bne NOT_NORMAL_TEXT
 		lda zp_text_info
 		and %00000100
-		bne :+
+		beq is_normal_capital
 			draw_segment normalKeyboard1, $FF
 			draw_segment normalKeyboard2, $C0
 			jmp endProc
-		:
+		is_normal_capital:
 		draw_segment normalCapitalKeyboard1, $FF
 		draw_segment normalCapitalKeyboard2, $C0
 		jmp endProc
@@ -122,11 +123,11 @@ poll_loop:
 	bne NOT_BOLD_TEXT
 		lda zp_text_info
 		and %00000100
-		bne :+
+		bne is_bold_capital
 			draw_segment boldKeyboard1, $FF
 			draw_segment boldKeyboard2, $C0
 			jmp endProc
-		:
+		is_bold_capital:
 		draw_segment boldCapitalKeyboard1, $FF
 		draw_segment boldCapitalKeyboard2, $C0
 		jmp endProc
@@ -135,11 +136,11 @@ poll_loop:
 	bne NOT_ITALIC_TEXT
 		lda zp_text_info
 		and %00000100
-		bne :+
+		bne is_italic_capital
 			draw_segment italicKeyboard1, $FF
 			draw_segment italicKeyboard2, $C0
 			jmp endProc
-		:
+		is_italic_capital:
 		draw_segment italicCapitalKeyboard1, $FF
 		draw_segment italicCapitalKeyboard2, $C0
 		jmp endProc
