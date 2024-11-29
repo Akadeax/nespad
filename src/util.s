@@ -82,6 +82,7 @@ poll_loop:
  .endproc
 
 .macro draw_segment adress, amount
+	clc
 	ldx #0
 	:
 		lda adress,x
@@ -95,7 +96,7 @@ poll_loop:
 
 .proc redraw_screen
 	jsr clear_nametable
-
+	lda PPU_STATUS
 	ldx #0 ; low byte idx
 	ldy #>NAME_TABLE_1
 	sty PPU_ADDR
@@ -109,11 +110,11 @@ poll_loop:
 	bne NOT_NORMAL_TEXT
 		lda zp_text_info
 		and %00000100
-		bne :+
+		beq is_normal_capital
 			draw_segment normalKeyboard1, $FF
 			draw_segment normalKeyboard2, $C0
 			jmp endProc
-		:
+		is_normal_capital:
 		draw_segment normalCapitalKeyboard1, $FF
 		draw_segment normalCapitalKeyboard2, $C0
 		jmp endProc
@@ -122,11 +123,11 @@ poll_loop:
 	bne NOT_BOLD_TEXT
 		lda zp_text_info
 		and %00000100
-		bne :+
+		bne is_bold_capital
 			draw_segment boldKeyboard1, $FF
 			draw_segment boldKeyboard2, $C0
 			jmp endProc
-		:
+		is_bold_capital:
 		draw_segment boldCapitalKeyboard1, $FF
 		draw_segment boldCapitalKeyboard2, $C0
 		jmp endProc
@@ -135,18 +136,64 @@ poll_loop:
 	bne NOT_ITALIC_TEXT
 		lda zp_text_info
 		and %00000100
-		bne :+
+		bne is_italic_capital
 			draw_segment italicKeyboard1, $FF
 			draw_segment italicKeyboard2, $C0
 			jmp endProc
-		:
+		is_italic_capital:
 		draw_segment italicCapitalKeyboard1, $FF
 		draw_segment italicCapitalKeyboard2, $C0
 		jmp endProc
 	NOT_ITALIC_TEXT:
 	endProc:
-		;render the text
-
+		;render the page number
+		lda PPU_STATUS
+		ldx #$96 ; low byte idx
+		ldy #$23
+		sty PPU_ADDR
+		stx PPU_ADDR
+		ldx current_page
+		cpx #10
+		bpl :+ ; if its lower than 10, render 0 as the first number
+			lda #$01 ;index of character 0
+			sta PPU_DATA
+			lda current_page
+			clc
+			adc #1
+			sta PPU_DATA
+			rts
+		:
+		cpx #20
+		bpl :+ ; if its lower than 10, render 0 as the first number
+			lda #$02 ;index of character 0
+			sta PPU_DATA
+			lda current_page
+			sec
+			sbc #9
+			sta PPU_DATA
+			rts
+		:
+		cpx #30
+		bpl :+ ; if its lower than 10, render 0 as the first number
+			lda #$03 ;index of character 0
+			sta PPU_DATA
+			lda current_page
+			sec
+			sbc #19
+			sta PPU_DATA
+			rts
+		:
+		cpx #40
+		bpl :+ ; if its lower than 10, render 0 as the first number
+			lda #$04 ;index of character 0
+			sta PPU_DATA
+			lda current_page
+			sec
+			sbc #29
+			sta PPU_DATA
+			rts
+		:
+		
 .endproc
 
 
