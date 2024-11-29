@@ -81,6 +81,18 @@ poll_loop:
  	rts
  .endproc
 
+.macro draw_segment adress, amount
+	ldx #0
+	:
+		lda adress,x
+		sta PPU_DATA
+		inx
+		cpx #amount
+		BCC :-
+		lda adress,x
+		sta PPU_DATA
+.endmacro
+
 .proc redraw_screen
 	jsr clear_nametable
 
@@ -88,44 +100,15 @@ poll_loop:
 	ldy #>NAME_TABLE_1
 	sty PPU_ADDR
 	stx PPU_ADDR
-	ldx #0
-	preLoadLoop1:
-		lda preloadScreen1,x
-		sta PPU_DATA
-		inx
-		cpx #$FF
-		BCC preLoadLoop1
-		lda preloadScreen1,x
-		sta PPU_DATA
-	ldx #0
-	preLoadLoop2:
-		lda preloadScreen2,x
-		sta PPU_DATA
-		inx
-		cpx #$FF
-		BCC preLoadLoop2
-		lda preloadScreen2,x
-		sta PPU_DATA
-	ldx #0
-	preLoadLoop3:
-		lda preloadScreen3,x
-		sta PPU_DATA
-		inx
-		cpx #$FF
-		BCC preLoadLoop3
-		lda preloadScreen3,x
-		sta PPU_DATA
-	ldx #0
-	preLoadLoop4:
-		lda preloadScreen4,x
-		sta PPU_DATA
-		inx
-		cpx #$C0
-		BCC preLoadLoop4
-		lda preloadScreen4,x
-		sta PPU_DATA
-	rts
+	draw_segment preloadScreen1, $FF
+	draw_segment preloadScreen2, $FF
+
+	draw_segment normalKeyboard1, $FF
+	draw_segment normalKeyboard2, $C0
+
 .endproc
+
+
 
 .macro increment_zp_16 amount, address_lo, address_hi
 	lda address_lo
@@ -590,7 +573,7 @@ endProc:
 		rts
 	:
 	;if its lower than 44, go to 44 and skip
-	cmp #KEYBOARD_IDX_UNDERSCORE
+	cmp #KEYBOARD_IDX_SPACEBAR
 	bpl :+
 		lda #KEYBOARD_IDX_SPACEBAR
 		sta screen_keyboard_index
@@ -612,7 +595,7 @@ endProc:
 		rts
 	:
 	;if its lower than 48, add 2 and skip
-	cmp #KEYBOARD_IDX_BOLD
+	cmp #KEYBOARD_IDX_PREV_PAGE
 	bpl :+
 		clc
 		adc #2
@@ -625,7 +608,7 @@ endProc:
 .proc handle_up_button_press
 	lda screen_keyboard_index
 	;if the current idx is lower than 12, skip
-	cmp #KEYBOARD_IDX_EXCLAMATION
+	cmp #KEYBOARD_IDX_A
 	bpl :+
 		rts
 	:
@@ -650,15 +633,15 @@ endProc:
 	;if its 44, make it 40 then skip
 	cmp #KEYBOARD_IDX_SPACEBAR
 	bne :+
-		lda #40
+		lda #38
 		sta screen_keyboard_index
 		rts
 	:
 	;if its lower than 49, subtract by 2
-	cmp #KEYBOARD_IDX_SHIFT
+	cmp #KEYBOARD_IDX_SHIFT + 1
 	bpl :+
-		clc
-		sbc #1
+		sec
+		sbc #2
 		sta screen_keyboard_index
 		rts
 	:
