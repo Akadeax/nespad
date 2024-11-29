@@ -252,7 +252,7 @@ italicCapitalKeyboard1:
 	.byte $00,$00,$df,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$dc,$f3,$dd,$d9,$d9,$e0,$00,$00
 italicCapitalKeyboard2:
 	.byte $00,$00,$de,$c1,$d8,$c2,$d8,$c3,$d8,$c4,$d8,$c5,$d8,$c6,$d8,$c7,$d8,$c8,$d8,$c9,$d8,$9b,$d8,$9c,$dd,$d9,$dc,$ee,$ef,$e1,$00,$00
-	.byte $00,$00,$df,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$dc,$f5,$d8,$fe,$ff,$e1,$00,$00
+	.byte $00,$00,$df,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$d7,$d9,$dc,$f4,$d8,$fe,$ff,$e1,$00,$00
 	.byte $00,$00,$de,$ca,$d8,$cb,$d8,$cc,$d8,$cd,$d8,$ce,$d8,$cf,$d8,$d0,$d8,$d1,$d8,$d2,$d8,$9d,$d8,$9e,$dd,$d9,$d7,$d9,$d9,$e0,$00,$00
 	.byte $00,$00,$df,$d9,$da,$d9,$da,$d9,$da,$db,$da,$d9,$da,$d9,$da,$d9,$da,$d9,$da,$db,$da,$db,$da,$d9,$da,$d9,$da,$db,$d9,$e0,$00,$00
 	.byte $00,$00,$de,$3a,$31,$3f,$3c,$2d,$30,$d8,$e7,$e8,$e8,$e8,$e8,$e8,$e8,$e8,$e9,$d8,$f6,$d8,$01,$02,$e6,$04,$03,$d8,$f7,$e1,$00,$00

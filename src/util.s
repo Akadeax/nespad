@@ -457,14 +457,14 @@ endProc:
 	sta zp_temp_1 ;store a in zp_temp_1 for bitwise logic
 	lda zp_text_info
 	and #%00000011
-	cmp #1
+	cmp #KEYBOARD_INFO_BOLD
 	bne :+ ; if its bold
 		lda zp_temp_1
 		clc
 		adc #70
 		rts
 :
-	cmp #2
+	cmp #KEYBOARD_INFO_ITALIC
 	bne :+ ;if its italic
 		lda zp_temp_1
 		clc

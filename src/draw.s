@@ -120,14 +120,6 @@ end_func:
 	bne :+
 	rts
 :
-
-
-	jsr keyboard_idx_to_pattern_idx_T1
-	cmp #(KEYBOARD_CHARACTER_KEY_AMOUNT + 1)
-	bmi :+
-	rts
-:
-
 	jsr keyboard_idx_to_pattern_idx_T1
 	ldy #0
 	sta (current_wram_text_ptr_lo), y
