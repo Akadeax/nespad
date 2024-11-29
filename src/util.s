@@ -112,11 +112,11 @@ poll_loop:
 		bne :+
 			draw_segment normalKeyboard1, $FF
 			draw_segment normalKeyboard2, $C0
-			rts
+			jmp endProc
 		:
 		draw_segment normalCapitalKeyboard1, $FF
 		draw_segment normalCapitalKeyboard2, $C0
-		rts
+		jmp endProc
 	NOT_NORMAL_TEXT:
 	cmp #1
 	bne NOT_BOLD_TEXT
@@ -125,11 +125,11 @@ poll_loop:
 		bne :+
 			draw_segment boldKeyboard1, $FF
 			draw_segment boldKeyboard2, $C0
-			rts
+			jmp endProc
 		:
 		draw_segment boldCapitalKeyboard1, $FF
 		draw_segment boldCapitalKeyboard2, $C0
-		rts
+		jmp endProc
 	NOT_BOLD_TEXT:
 	cmp #2
 	bne NOT_ITALIC_TEXT
@@ -138,12 +138,15 @@ poll_loop:
 		bne :+
 			draw_segment italicKeyboard1, $FF
 			draw_segment italicKeyboard2, $C0
-			rts
+			jmp endProc
 		:
 		draw_segment italicCapitalKeyboard1, $FF
 		draw_segment italicCapitalKeyboard2, $C0
-		rts
+		jmp endProc
 	NOT_ITALIC_TEXT:
+	endProc:
+		;render the text
+
 .endproc
 
 
