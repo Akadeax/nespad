@@ -96,7 +96,7 @@ poll_loop:
 
 .proc redraw_screen
 	jsr clear_nametable
-
+	lda PPU_STATUS
 	ldx #0 ; low byte idx
 	ldy #>NAME_TABLE_1
 	sty PPU_ADDR
@@ -146,8 +146,54 @@ poll_loop:
 		jmp endProc
 	NOT_ITALIC_TEXT:
 	endProc:
-		;render the text
-
+		;render the page number
+		lda PPU_STATUS
+		ldx #$96 ; low byte idx
+		ldy #$23
+		sty PPU_ADDR
+		stx PPU_ADDR
+		ldx current_page
+		cpx #10
+		bpl :+ ; if its lower than 10, render 0 as the first number
+			lda #$01 ;index of character 0
+			sta PPU_DATA
+			lda current_page
+			clc
+			adc #1
+			sta PPU_DATA
+			rts
+		:
+		cpx #20
+		bpl :+ ; if its lower than 10, render 0 as the first number
+			lda #$02 ;index of character 0
+			sta PPU_DATA
+			lda current_page
+			sec
+			sbc #9
+			sta PPU_DATA
+			rts
+		:
+		cpx #30
+		bpl :+ ; if its lower than 10, render 0 as the first number
+			lda #$03 ;index of character 0
+			sta PPU_DATA
+			lda current_page
+			sec
+			sbc #19
+			sta PPU_DATA
+			rts
+		:
+		cpx #40
+		bpl :+ ; if its lower than 10, render 0 as the first number
+			lda #$04 ;index of character 0
+			sta PPU_DATA
+			lda current_page
+			sec
+			sbc #29
+			sta PPU_DATA
+			rts
+		:
+		
 .endproc
 
 
