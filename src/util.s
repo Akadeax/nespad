@@ -105,12 +105,12 @@ poll_loop:
 	draw_segment preloadScreen2, $FF
 
 	lda zp_text_info
-	and %00000011
-	cmp #0
+	and #%00000011
+	cmp #KEYBOARD_INFO_NORMAL
 	bne NOT_NORMAL_TEXT
 		lda zp_text_info
-		and %00000100
-		beq is_normal_capital
+		and #%00000100
+		bne is_normal_capital
 			draw_segment normalKeyboard1, $FF
 			draw_segment normalKeyboard2, $C0
 			jmp endProc
@@ -119,10 +119,10 @@ poll_loop:
 		draw_segment normalCapitalKeyboard2, $C0
 		jmp endProc
 	NOT_NORMAL_TEXT:
-	cmp #1
+	cmp #KEYBOARD_INFO_BOLD
 	bne NOT_BOLD_TEXT
 		lda zp_text_info
-		and %00000100
+		and #%00000100
 		bne is_bold_capital
 			draw_segment boldKeyboard1, $FF
 			draw_segment boldKeyboard2, $C0
@@ -132,10 +132,10 @@ poll_loop:
 		draw_segment boldCapitalKeyboard2, $C0
 		jmp endProc
 	NOT_BOLD_TEXT:
-	cmp #2
+	cmp #KEYBOARD_INFO_ITALIC
 	bne NOT_ITALIC_TEXT
 		lda zp_text_info
-		and %00000100
+		and #%00000100
 		bne is_italic_capital
 			draw_segment italicKeyboard1, $FF
 			draw_segment italicKeyboard2, $C0
@@ -252,12 +252,6 @@ poll_loop:
 
 
 .proc increment_nametable_ptr
-; 	lda current_text_index
-; 	cmp #DISPLAY_LINE9_END
-; 	bne not_last_char
-; 		increment_zp_16 #3, current_nametable_ptr_lo, current_nametable_ptr_hi
-; 		jmp inc_end
-; not_last_char:
 
 	set_carry_if_eol current_text_index
 
