@@ -355,3 +355,26 @@ endProc:
 		bne clear_loop
 	rts
 .endproc
+
+
+
+.proc remove_last_character_on_page_T1
+	lda current_wram_text_ptr_lo
+	sta zp_temp_0
+
+	lda zp_temp_0
+	beq end_func
+	
+	dec zp_temp_0
+
+	lda current_wram_text_ptr_hi
+	sta zp_temp_1
+
+	lda #0
+	ldy #0
+	sta (zp_temp_0),y
+
+	jsr redraw_current_page_T2
+end_func:
+	rts
+.endproc

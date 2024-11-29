@@ -128,7 +128,7 @@
 	and #PAD_B
 	beq NOT_PAD_B
 		; B pressed
-		jsr redraw_current_page_T2
+		jsr remove_last_character_on_page_T1
 
 	NOT_PAD_B:
 
