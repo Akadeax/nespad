@@ -321,7 +321,7 @@ end_of_nametable_loop:
 	sta current_wram_text_ptr_lo
 	; increment wram_text_ptr by current_text_index so we can decrement it until we find something
 
-first_empty_char_loop:
+ first_empty_char_loop:
 	ldx current_text_index
 	beq	no_chars_at_all ; if text_index is 0, just take it; no characters on this page
 
@@ -333,13 +333,13 @@ first_empty_char_loop:
 	dec current_wram_text_ptr_lo
 	jmp first_empty_char_loop
 
-no_chars_at_all:
+ no_chars_at_all:
 	lda #0
 	sta current_text_index
 	lda #$FF
 	sta current_wram_text_ptr_lo
 
-non_empty_char_found:
+ non_empty_char_found:
 	; decremented current_text_index & wram_text_ptr until first non-space was found
 
 	lda current_text_index
@@ -348,7 +348,7 @@ non_empty_char_found:
 		; is last character
 		inc current_text_index
 
-not_last_char:
+ not_last_char:
 
 	inc current_wram_text_ptr_lo ; increment wram back by one so it's one ahead (-> it's the pointer to the next char)
 
@@ -359,7 +359,7 @@ not_last_char:
 .proc keyboard_idx_to_pattern_idx_T1 ;takes the A register as the keyboard index and outputs to the A register as well
 	lda screen_keyboard_index
 	sta zp_temp_0
-;check if keyboardIdx is 11-18, 22-30, 33-41
+ ;check if keyboardIdx is 11-18, 22-30, 33-41
 	ldx #10
 	cpx zp_temp_0
 	bpl betweenJmp ;check if temp_1 is smaller than 11
@@ -379,7 +379,7 @@ not_last_char:
 		:
 		lda zp_temp_1
 		jmp endProc
-:
+ :
 	;check if keyboardIdx = 19-21
 	ldx #21
 	cpx zp_temp_0
@@ -387,11 +387,11 @@ not_last_char:
 		clc
 		sbc #7 ;remove the letters that have already been on the keyboard
 		jmp endProc
-:
+ :
 	jmp skipJmp
-betweenJmp: ;error range error mimimimimimimi
+ betweenJmp: ;error range error mimimimimimimi
 	jmp endProc
-skipJmp:
+ skipJmp:
 	;check if a = 22-30
 	ldx #30
 	cpx zp_temp_0
@@ -409,7 +409,7 @@ skipJmp:
 		:
 		lda zp_temp_1
 		jmp endProc
-:
+ :
 	;check if keyboardIdx = 31-32
 	ldx #32
 	cpx zp_temp_0
@@ -417,7 +417,7 @@ skipJmp:
 		clc
 		sbc #16 ;remove the letters that have already been on the keyboard
 		jmp endProc
-:
+ :
 	;check if a = 33-41
 	ldx #41
 	cpx zp_temp_0
@@ -435,7 +435,7 @@ skipJmp:
 		:
 		lda zp_temp_1
 		jmp endProc
-:
+ :
 	;check if keyboardIdx = 42-43
 	ldx #43
 	cpx zp_temp_0
@@ -443,15 +443,15 @@ skipJmp:
 		clc
 		sbc #25 ;remove the letters that have already been on the keyboard
 		jmp endProc
-:
+ :
 	ldx #44
 	cpx zp_temp_0
 	bne :+ ;if keyboardIdx = 44(spaceBar)
 		lda #0
 		rts
-:
+ :
 	;space for code for the special characters i guess, didnt know how to incorporate it with the current layout
-endProc:
+ endProc:
 	clc
 	adc #1 ;offset for the empty character
 	;add current text type offset(first 2 bits of TextInfo)
@@ -464,14 +464,14 @@ endProc:
 		clc
 		adc #70
 		rts
-:
+ :
 	cmp #KEYBOARD_INFO_ITALIC
 	bne :+ ;if its italic
 		lda zp_temp_1
 		clc
 		adc #140
 		rts
-:
+ :
 	lda zp_temp_1
 	rts
 .endproc
@@ -502,7 +502,7 @@ endProc:
 			bpl endProc
 				increment_zp_16 #KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
 				jmp endProc
-endProc:
+ endProc:
 	lda #KEYBOARD_IDX_SPACEBAR
 	cmp zp_temp_0
 	bne :+
@@ -882,3 +882,13 @@ endProc:
 	sta screen_keyboard_index
 	rts
 .endproc
+
+.proc get_current_nametable_pointer_XY_T2 ;outputs x to zp_temp_0, and y to zp_temp_1
+	lda current_nametable_ptr_lo
+	sta zp_temp_1
+	lda current_nametable_ptr_hi
+	sta zp_temp_2
+	jsr convert_nametable_index_to_XY_T2
+	rts
+.endproc
+

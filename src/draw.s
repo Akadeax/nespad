@@ -88,6 +88,7 @@ first:
 			inc current_wram_text_ptr_lo
 		
 end:
+	jsr redraw_pointer
 	rts
 .endproc
 
@@ -99,6 +100,7 @@ end:
 	bpl not_letter_key
 		; keyboard index is on letter key
 		jsr type_letter_key
+		jsr redraw_pointer
 		jmp end_func
 not_letter_key:
 
@@ -280,14 +282,14 @@ end_func:
 :
 	
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#8
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#2
 	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#3
 	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4
 	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5
 	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6
-	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#77
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7
 
 endProc:
 	rts
@@ -297,7 +299,7 @@ endProc:
 
 .proc draw_spacebar_Indicator ;LINTEXCLUDE
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#18
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#2
 	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4
@@ -323,7 +325,7 @@ endProc:
 
 .proc draw_arrow_indicator ;LINTEXCLUDE
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#12
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#16 ,#01 ,#$01 ,#11
 	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#16 ,#01 ,#$03 ,#10
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1
@@ -342,7 +344,7 @@ endProc:
 
 .proc clear_indicator_T1
 	
-	ldy #0
+	ldy #4
 	lda #<CPU_OAM_PTR
 	sta zp_temp_0
 	lda #>CPU_OAM_PTR
@@ -376,5 +378,11 @@ endProc:
 
 	jsr redraw_current_page_T2
 end_func:
+	rts
+.endproc
+
+.proc redraw_pointer ;LINTEXCLUDE
+	jsr get_current_nametable_pointer_XY_T2
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#00 ,#00 ,#$0A ,#0
 	rts
 .endproc
