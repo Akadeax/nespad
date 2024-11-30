@@ -1,0 +1,1 @@
+"scripts/tests/NESTestExplorer.exe" "%MESEN_PATH% --testrunner %ROM_PATH% scripts/tests/tests_adapter.lua"
