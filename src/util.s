@@ -153,13 +153,14 @@ poll_loop:
 		sty PPU_ADDR
 		stx PPU_ADDR
 		ldx current_page
+		inx
 		cpx #10
 		bpl :+ ; if its lower than 10, render 0 as the first number
 			lda #$01 ;index of character 0
 			sta PPU_DATA
 			lda current_page
 			clc
-			adc #1
+			adc #2
 			sta PPU_DATA
 			rts
 		:
@@ -169,7 +170,7 @@ poll_loop:
 			sta PPU_DATA
 			lda current_page
 			sec
-			sbc #9
+			sbc #8
 			sta PPU_DATA
 			rts
 		:
@@ -179,7 +180,7 @@ poll_loop:
 			sta PPU_DATA
 			lda current_page
 			sec
-			sbc #19
+			sbc #18
 			sta PPU_DATA
 			rts
 		:
@@ -189,7 +190,7 @@ poll_loop:
 			sta PPU_DATA
 			lda current_page
 			sec
-			sbc #29
+			sbc #28
 			sta PPU_DATA
 			rts
 		:
