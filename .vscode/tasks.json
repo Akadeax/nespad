@@ -10,7 +10,37 @@
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			},
+			"options": {
+				"env": {
+					"ENABLE_TESTS": "false"
+				}
 			}
+		},
+		{
+			"label": "Make NES file (with tests)",
+			"type": "shell",
+			"command": "./build.bat",
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+			},
+			"options": {
+				"env": {
+					"ENABLE_TESTS": "true"
+				}
+			}
+		},
+		{
+			"label": "Run Tests",
+			"type": "shell",
+			"command": "./scripts/tests/run_tests.bat",
+			"problemMatcher": [],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"dependsOn": [ "Make NES file (with tests)" ]
 		}
 	]
 }

@@ -1,12 +1,13 @@
-@SET WORKSPACE_DIR=%~dp0
+@set ENV_FILE=.env
 
-@SET BUILD_DIR=build
-@SET SRC_DIR=src
+@if not exist "%ENV_FILE%" (
+    @echo ERROR: .env file not found. Aborting.
+    @exit /b 1
+)
 
-@SET MAIN=main
-@SET CFG=game.cfg
-@SET CHR=game.chr
-@SET OUT_NAME=Nespad
+@for /f "tokens=1,2 delims==" %%A in (%ENV_FILE%) do @set "%%A=%%B"
+
+@set WORKSPACE_DIR=%~dp0%
 
 @call scripts/cleanup.bat
 @if %errorlevel% neq 0 exit /b %errorlevel%
@@ -20,4 +21,4 @@
 @call scripts/link.bat
 @if %errorlevel% neq 0 exit /b %errorlevel%
 
-@echo Build successful, output to: %BUILD_DIR%\%OUT_NAME%.nes
+@echo Build successful, output to: %NES_BUILD_DIR%\%NES_OUT_NAME%.nes

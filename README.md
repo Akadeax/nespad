@@ -8,3 +8,6 @@ To build, run `build.bat` (`CTRL+SHIFT+B` in VSCode). This will output a `.nes` 
 to customize file & project name, change the variables in `build.bat`.
 
 If you wish to use Alchemy65 (an NES debugger), configure `.vscode/launch.json` to contain a correct `romPath`, `dbgPath`, and `program` (path to Mesen-X). For further instructions see [Alchemy65](https://github.com/AlchemicRaker/alchemy65)'s Readme.
+
+### Environment Setup
+to setup hooks, use `git config core.hooksPath .hooks`.

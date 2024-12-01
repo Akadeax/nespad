@@ -8,12 +8,13 @@
 			"type": "alchemy65",
 			"request": "launch",
 			"name": "Debug rom with mesen",
-			"romPath": "${workspaceFolder}/build/Nespad.nes",
-			"dbgPath": "${workspaceFolder}/build/Nespad.nes.dbg",
-			"program": "mesen",
+			"romPath": "${config:NES.romPath}",
+			"dbgPath": "${config:NES.dbgPath}",
+			"program": "${config:NES.program}",
 			"sourcePath": "${workspaceFolder}/",
 			"stopOnEntry": true,
-			"resetOnEntry": true
+			"resetOnEntry": true,
+			"preLaunchTask": "Make NES file"
 		}
 	]
 }

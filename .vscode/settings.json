@@ -1,0 +1,11 @@
+{
+    "NES.romPath": "${workspaceFolder}/build/Nespad.nes",
+    "NES.dbgPath": "${workspaceFolder}/build/Nespad.nes.dbg",
+    "NES.program": "mesen",
+
+    "NES.buildDir": "build",
+    "NES.srcDir": "src",
+    "NES.main": "main",
+    "NES.cfg": "game.cfg",
+    "NES.outName": "Nespad",
+}
