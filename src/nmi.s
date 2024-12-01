@@ -77,6 +77,11 @@ not_last_char:
 	ldy #0
 	lda (zp_temp_0),y
 
+	cmp #$FF ; FF is spacebar
+	bne not_spacebar
+		lda #0 ; FF is different on the nametable, but we want to just render it as empty
+not_spacebar:
+
 	sta PPU_DATA
 
 update_text_finished:
