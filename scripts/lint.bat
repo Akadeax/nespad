@@ -1,6 +1,6 @@
 @echo Linting...
 @echo on
-@"scripts/6502Linter.exe" "%SRC_DIR%/%MAIN%.s" "zp_temp_x"
+@"scripts/6502Linter.exe" "%NES_SRC_DIR%/%NES_MAIN%.s" "zp_temp_x"
 @echo off
 
 @IF ERRORLEVEL 1 GOTO failure
