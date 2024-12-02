@@ -7,7 +7,8 @@ LUA_BINDING_SEND_ADDR_0 = 2047
 LUA_VAL_SUCCESS     = 1
 LUA_VAL_FAILURE     = 2
 LUA_VAL_CATEGORY    = 3
-LUA_VAL_CLOSE       = 4
+LUA_VAL_CASE        = 4
+LUA_VAL_CLOSE       = 255
 
 ; =========================
 ; SETUP MACROS
@@ -30,6 +31,10 @@ LUA_VAL_CLOSE       = 4
 
 .macro __CATEGORY__ ; used as separator between test categories
     send_to_binding LUA_VAL_CATEGORY
+.endmacro
+
+.macro __CASE__
+    send_to_binding LUA_VAL_CASE
 .endmacro
 
 .macro end_tests ; tell lua binding to shut off TCP connection

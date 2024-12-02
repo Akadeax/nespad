@@ -10,5 +10,5 @@
 
 @set ROM_PATH=%WORKSPACE_DIR%\%NES_BUILD_DIR%\%NES_OUT_NAME%.nes
 
-"scripts/tests/NESTestExplorer.exe" "%NES_PROGRAM% --testrunner %ROM_PATH% scripts/tests/tests_adapter.lua"
+"scripts/tests/NESTestExplorer.exe" "%NES_PROGRAM% --testrunner %ROM_PATH% %WORKSPACE_DIR%/scripts/tests/tests_adapter.lua" "%WORKSPACE_DIR%/%TESTS_FILE%"
 @exit /b %ERRORLEVEL%

@@ -7,7 +7,7 @@ local LUA_BINDING_SEND_ADDR_0 = 2047
 function writeCallback(address, value)
     local output = emu.read(0, emu.memType.cpuDebug)
 
-    if output == 4 then
+    if output == 255 then
         emu.stop()
         return
     end

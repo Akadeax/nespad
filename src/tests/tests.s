@@ -2,8 +2,9 @@
 
 start_tests
 
-__CATEGORY__;Testing keyboard input
-__CATEGORY__;keyboard_test_1
+__CATEGORY__ ; Testing keyboard input
+__CASE__ ; keyboard_test_1
+
 lda #12
 sta screen_keyboard_index
 jsr keyboard_idx_to_nametable_pos_T2
@@ -17,9 +18,7 @@ sta zp_text_info
 jsr keyboard_idx_to_pattern_idx_T1
 TEST_a_eq_literal $2E
 
-
-
-__CATEGORY__;keyboard_test_2
+__CASE__ ; keyboard_test_2
 
 lda #20
 sta screen_keyboard_index
@@ -27,13 +26,13 @@ jsr keyboard_idx_to_nametable_pos_T2
 TEST_val16_eq_literal zp_temp_1, zp_temp_2, $02D5
 jsr convert_nametable_index_to_XY_T2
 TEST_val_eq_literal zp_temp_0, $A8
-TEST_val_eq_literal zp_temp_1, $B0
+TEST_val_eq_literal zp_temp_1, $B1
 lda #%00000101
 sta zp_text_info
 jsr keyboard_idx_to_pattern_idx_T1
 TEST_a_eq_literal $53
 
-__CATEGORY__;keyboard_test_3
+__CASE__ ; keyboard_test_3
 
 lda #41
 sta screen_keyboard_index
@@ -48,9 +47,7 @@ sta zp_text_info
 jsr keyboard_idx_to_pattern_idx_T1
 TEST_a_eq_literal $B8
 
-
-
-__CATEGORY__;keyboard_test_4
+__CASE__ ; keyboard_test_4
 
 lda #44
 sta screen_keyboard_index
@@ -58,15 +55,15 @@ jsr keyboard_idx_to_nametable_pos_T2
 TEST_val16_eq_literal zp_temp_1, zp_temp_2, $038A
 jsr convert_nametable_index_to_XY_T2
 TEST_val_eq_literal zp_temp_0, $50
-TEST_val_eq_literal zp_temp_1, $E0
+TEST_val_eq_literal zp_temp_1, $E2
 lda #%00000110
 sta zp_text_info
 jsr keyboard_idx_to_pattern_idx_T1
 TEST_a_eq_literal $FF
 
+__CATEGORY__ ; conversion tests
+__CASE__ ; if end of line
 
-__CATEGORY__;conversion tests
-__CATEGORY__;if end of line
 set_carry_if_eol #28
 TEST_carry_set
 set_carry_if_eol #50
@@ -75,8 +72,6 @@ set_carry_if_eol #224
 TEST_carry_set
 set_carry_if_eol #0
 TEST_carry_clear
-__CATEGORY__;
-
 
 
 end_tests
