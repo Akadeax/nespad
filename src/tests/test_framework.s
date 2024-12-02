@@ -48,7 +48,7 @@ LUA_VAL_CLOSE       = 4
 ; ============================
 ; TEST MACROS
 ; ============================
-.macro val_eq_literal address, literal
+.macro TEST_val_eq_literal address, literal
     lda address
     cmp #literal
     bne :+
@@ -60,7 +60,7 @@ LUA_VAL_CLOSE       = 4
 :
 .endmacro
 
-.macro val_neq_literal address, literal
+.macro TEST_val_neq_literal address, literal
     lda address
     cmp #literal
     beq :+
@@ -72,7 +72,7 @@ LUA_VAL_CLOSE       = 4
 :
 .endmacro
 
-.macro val16_eq_literal lo, hi, literal
+.macro TEST_val16_eq_literal lo, hi, literal
     lda lo
     cmp #<literal
     bne :+
@@ -88,7 +88,7 @@ LUA_VAL_CLOSE       = 4
 :
 .endmacro
 
-.macro a_eq_literal literal
+.macro TEST_a_eq_literal literal
     cmp #literal
     bne :+
 
@@ -99,7 +99,7 @@ LUA_VAL_CLOSE       = 4
 :
 .endmacro
 
-.macro x_eq_literal literal
+.macro TEST_x_eq_literal literal
     cpx #literal
     bne :+
 
@@ -110,10 +110,82 @@ LUA_VAL_CLOSE       = 4
 :
 .endmacro
 
-.macro y_eq_literal literal
+.macro TEST_y_eq_literal literal
     cpy #literal
     bne :+
 
+    send_to_binding LUA_VAL_SUCCESS
+    jmp :++
+:
+    send_to_binding LUA_VAL_FAILURE
+:
+.endmacro
+
+.macro TEST_carry_set
+    bcc :+
+    send_to_binding LUA_VAL_SUCCESS
+    jmp :++
+:
+    send_to_binding LUA_VAL_FAILURE
+:
+.endmacro
+
+.macro TEST_carry_clear
+    bcs :+
+    send_to_binding LUA_VAL_SUCCESS
+    jmp :++
+:
+    send_to_binding LUA_VAL_FAILURE
+:
+.endmacro
+
+.macro TEST_negative_set
+    bpl :+
+    send_to_binding LUA_VAL_SUCCESS
+    jmp :++
+:
+    send_to_binding LUA_VAL_FAILURE
+:
+.endmacro
+
+.macro TEST_negative_clear
+    bmi :+
+    send_to_binding LUA_VAL_SUCCESS
+    jmp :++
+:
+    send_to_binding LUA_VAL_FAILURE
+:
+.endmacro
+
+.macro TEST_overflow_set
+    bvc :+
+    send_to_binding LUA_VAL_SUCCESS
+    jmp :++
+:
+    send_to_binding LUA_VAL_FAILURE
+:
+.endmacro
+
+.macro TEST_overflow_clear
+    bvs :+
+    send_to_binding LUA_VAL_SUCCESS
+    jmp :++
+:
+    send_to_binding LUA_VAL_FAILURE
+:
+.endmacro
+
+.macro TEST_zero_set
+    bne :+
+    send_to_binding LUA_VAL_SUCCESS
+    jmp :++
+:
+    send_to_binding LUA_VAL_FAILURE
+:
+.endmacro
+
+.macro TEST_zero_clear
+    beq :+
     send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
