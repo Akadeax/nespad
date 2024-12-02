@@ -7,7 +7,7 @@ LUA_BINDING_SEND_ADDR_0 = 2047
 LUA_VAL_SUCCESS     = 1
 LUA_VAL_FAILURE     = 2
 LUA_VAL_CATEGORY    = 3
-LUA_VAL_CLOSE    = 4
+LUA_VAL_CLOSE       = 4
 
 ; =========================
 ; SETUP MACROS

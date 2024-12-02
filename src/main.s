@@ -78,7 +78,11 @@ palette: .res 32 ; current palette buffer
 ;***************************************
 ; Some useful functions
 .segment "CODE"
-.include "util.s"
+.include "utils/utils.s"
+.include "utils/nametable_utils.s"
+.include "utils/keyboard_utils.s"
+.include "utils/drawing_utils.s"
+.include "utils/input_utils.s"
 .include "draw.s"
 
 ;***************************************
