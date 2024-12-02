@@ -38,33 +38,6 @@ inc_end:
 	rts
 .endproc
 
-
-.macro get_nametable_pointer_T2 text_pointer ; dont call this often, it takes a lot of cycles (uses A,X and 16 bit temp)
-    lda #<DISPLAY_NAMETABLE_BASE_OFFSET
-    sta zp_temp_0
-    lda #>DISPLAY_NAMETABLE_BASE_OFFSET
-    sta zp_temp_1
-	; nametable base offset is now in the 16 bit temp
-
-    ldx #0 ; clear x; increment it towards the text_pointer
-loop_nametable_inc:
-    cpx text_pointer
-    beq end_of_nametable_loop ; if x didnt reach text pointer yet, loop
-    inx
-    stx zp_temp_2
-    set_carry_if_eol zp_temp_2 ; if the x register is at the end of a line, set the carry flag
-    bcc skip_big_nametable_jump ;if the carry flag is not set, you dont need to go to the next line
-    increment_zp_16 #35, zp_temp_0, zp_temp_1 ;increment the 16 bit temp by 35 to indicate going to the next line
-skip_big_nametable_jump:
-    increment_zp_16 #1, zp_temp_0, zp_temp_1 ; increment the 16 bit temp by 1 to indicate going to the next text location
-    jmp loop_nametable_inc
-end_of_nametable_loop:
-    lda zp_temp_0 ; store the 16 bit temp in the display nametable pointer
-    sta current_nametable_ptr_lo
-    lda zp_temp_1
-    sta current_nametable_ptr_hi
-.endmacro
-
 .macro reset_current_nametable_ptr
 	lda #<DISPLAY_NAMETABLE_BASE_OFFSET
 	sta current_nametable_ptr_lo

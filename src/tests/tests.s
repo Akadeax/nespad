@@ -73,5 +73,126 @@ TEST_carry_set
 set_carry_if_eol #0
 TEST_carry_clear
 
+__CASE__ ;increment nametable pointer test
+lda #28
+sta current_text_index
+lda #$20
+sta current_nametable_ptr_hi
+lda #$5d
+sta current_nametable_ptr_lo
+jsr increment_nametable_ptr
+TEST_val16_eq_literal current_nametable_ptr_lo, current_nametable_ptr_hi, $2082
+
+lda #178
+sta current_text_index
+lda #$21
+sta current_nametable_ptr_hi
+lda #$CA
+sta current_nametable_ptr_lo
+jsr increment_nametable_ptr
+TEST_val16_eq_literal current_nametable_ptr_lo, current_nametable_ptr_hi, $21CB
+
+lda #1
+sta current_text_index
+lda #$20
+sta current_nametable_ptr_hi
+lda #$00
+sta current_nametable_ptr_lo
+jsr increment_nametable_ptr
+TEST_val16_eq_literal current_nametable_ptr_lo, current_nametable_ptr_hi, $2001
+
+lda #224
+sta current_text_index
+lda #$22
+sta current_nametable_ptr_hi
+lda #$1D
+sta current_nametable_ptr_lo
+jsr increment_nametable_ptr
+TEST_val16_eq_literal current_nametable_ptr_lo, current_nametable_ptr_hi, $2242
+
+__CATEGORY__ ;input testing
+__CASE__ ;button down test
+lda #25
+sta screen_keyboard_index
+jsr handle_down_button_press
+TEST_val_eq_literal screen_keyboard_index, 36
+
+lda #36
+sta screen_keyboard_index
+jsr handle_down_button_press
+TEST_val_eq_literal screen_keyboard_index, 44
+
+lda #44
+sta screen_keyboard_index
+jsr handle_down_button_press
+TEST_val_eq_literal screen_keyboard_index, 44
+
+lda #47
+sta screen_keyboard_index
+jsr handle_down_button_press
+TEST_val_eq_literal screen_keyboard_index, 49
+
+__CASE__ ;button up test
+lda #25
+sta screen_keyboard_index
+jsr handle_up_button_press
+TEST_val_eq_literal screen_keyboard_index, 14
+
+lda #44
+sta screen_keyboard_index
+jsr handle_up_button_press
+TEST_val_eq_literal screen_keyboard_index, 38
+
+lda #9
+sta screen_keyboard_index
+jsr handle_up_button_press
+TEST_val_eq_literal screen_keyboard_index, 9
+
+lda #48
+sta screen_keyboard_index
+jsr handle_up_button_press
+TEST_val_eq_literal screen_keyboard_index, 46
+
+__CASE__ ;button left test
+lda #25
+sta screen_keyboard_index
+jsr handle_left_button_press
+TEST_val_eq_literal screen_keyboard_index, 24
+
+lda #36
+sta screen_keyboard_index
+jsr handle_left_button_press
+TEST_val_eq_literal screen_keyboard_index, 35
+
+lda #44
+sta screen_keyboard_index
+jsr handle_left_button_press
+TEST_val_eq_literal screen_keyboard_index, 44
+
+lda #47
+sta screen_keyboard_index
+jsr handle_left_button_press
+TEST_val_eq_literal screen_keyboard_index, 32
+
+__CASE__ ;button right test
+lda #25
+sta screen_keyboard_index
+jsr handle_right_button_press
+TEST_val_eq_literal screen_keyboard_index, 26
+
+lda #44
+sta screen_keyboard_index
+jsr handle_right_button_press
+TEST_val_eq_literal screen_keyboard_index, 44
+
+lda #9
+sta screen_keyboard_index
+jsr handle_right_button_press
+TEST_val_eq_literal screen_keyboard_index, 10
+
+lda #48
+sta screen_keyboard_index
+jsr handle_right_button_press
+TEST_val_eq_literal screen_keyboard_index, 48
 
 end_tests
