@@ -2,12 +2,12 @@ lda #0 ; mask VBlank interrupt
 sta $2000 ; this doesn't use a PPUCTRL constant because it might be different per project
 sei ; mask interrupt requests
 
-LUA_BINDING_CLOSE       = 2046
 LUA_BINDING_SEND_ADDR_0 = 2047
 
 LUA_VAL_SUCCESS     = 1
 LUA_VAL_FAILURE     = 2
 LUA_VAL_CATEGORY    = 3
+LUA_VAL_CLOSE    = 4
 
 ; =========================
 ; SETUP MACROS
@@ -33,8 +33,7 @@ LUA_VAL_CATEGORY    = 3
 .endmacro
 
 .macro end_tests ; tell lua binding to shut off TCP connection
-    lda #0
-    sta LUA_BINDING_CLOSE ; detected by lua binding, closes socket & ends test data
+    send_to_binding LUA_VAL_CLOSE
 .endmacro
 
 .macro send_to_binding value ; sends `value` to the lua binding
