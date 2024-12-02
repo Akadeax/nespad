@@ -26,7 +26,7 @@ jsr keyboard_idx_to_nametable_pos_T2
 TEST_val16_eq_literal zp_temp_1, zp_temp_2, $02D5
 jsr convert_nametable_index_to_XY_T2
 TEST_val_eq_literal zp_temp_0, $A8
-TEST_val_eq_literal zp_temp_1, $B1
+TEST_val_eq_literal zp_temp_1, $B0
 lda #%00000101
 sta zp_text_info
 jsr keyboard_idx_to_pattern_idx_T1
@@ -55,7 +55,7 @@ jsr keyboard_idx_to_nametable_pos_T2
 TEST_val16_eq_literal zp_temp_1, zp_temp_2, $038A
 jsr convert_nametable_index_to_XY_T2
 TEST_val_eq_literal zp_temp_0, $50
-TEST_val_eq_literal zp_temp_1, $E2
+TEST_val_eq_literal zp_temp_1, $E0
 lda #%00000110
 sta zp_text_info
 jsr keyboard_idx_to_pattern_idx_T1
