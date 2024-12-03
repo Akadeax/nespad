@@ -49,6 +49,13 @@
 	stx PPU_ADDR
 	draw_segment preloadScreen1, $FF
 	draw_segment preloadScreen2, $FF
+	lda notepad_state
+	and #%00001000
+	beq NOT_SPECIAL_KEYBOARD
+		draw_segment characterKeyboard1, $FF
+		draw_segment characterKeyboard2, $C0
+		rts
+	NOT_SPECIAL_KEYBOARD:
 
 	lda notepad_state
 	and #%00000011

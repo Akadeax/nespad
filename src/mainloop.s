@@ -101,11 +101,7 @@
 	and #PAD_SELECT
 	beq NOT_PAD_SELECT
 		; SELECT pressed
-		lda current_page
-		beq NOT_PAD_START ; if we're at first page, don't dec
-
-		dec current_page
-		jsr redraw_current_page_T2
+		jsr select_pressed
 
 
 
@@ -115,12 +111,6 @@
 	and #PAD_START
 	beq NOT_PAD_START
 		; START pressed
-		lda current_page
-		cmp #(MAX_PAGE_AMOUNT - 1)
-		beq NOT_PAD_START ; if we're at the last page, don't inc
-
-		inc current_page
-		jsr redraw_current_page_T2
 
 	NOT_PAD_START:
 

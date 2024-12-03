@@ -6,7 +6,7 @@
 	sta JOYPAD1
 	; read 8 bytes from the interface at $4016
 	ldx #8
-poll_loop:
+ poll_loop:
 	pha
 	lda JOYPAD1
 	; combine low two bits and store in carry bit
@@ -25,7 +25,7 @@ poll_loop:
 	lda screen_keyboard_index
 	;if the idx is lower than  33, add 11 and skip
 	cmp #KEYBOARD_IDX_R
-	bpl :+
+	bcs :+
 		clc
 		adc #11
 		sta screen_keyboard_index
@@ -33,7 +33,7 @@ poll_loop:
 	:
 	;if its lower than 44, go to 44 and skip
 	cmp #KEYBOARD_IDX_SPACEBAR
-	bpl :+
+	bcs :+
 		lda #KEYBOARD_IDX_SPACEBAR
 		sta screen_keyboard_index
 		rts
@@ -55,20 +55,33 @@ poll_loop:
 	:
 	;if its lower than 48, add 2 and skip
 	cmp #KEYBOARD_IDX_PREV_PAGE
-	bpl :+
+	bcs :+
 		clc
 		adc #2
 		sta screen_keyboard_index
 		rts
 	:
-	rts
+	;if it is lower than symbol start, skip
+	cmp #KEYBOARD_IDX_SYMBOL_START
+	bne :+
+		rts
+	:
+	;if it is lower than symbol end-9, add 9
+	cmp #KEYBOARD_IDX_SYMBOL_END-9+1
+	bcs :+
+		clc
+		adc #9
+		sta screen_keyboard_index
+		rts
+	:
+	rts 
 .endproc
 
 .proc handle_up_button_press
 	lda screen_keyboard_index
 	;if the current idx is lower than 12, skip
 	cmp #KEYBOARD_IDX_A
-	bpl :+
+	bcs :+
 		rts
 	:
 	;if the current idx is 45 skip
@@ -83,7 +96,7 @@ poll_loop:
 	:
 	;if its lower than 44 subtract by 11, then skip
 	cmp #KEYBOARD_IDX_UNDERSCORE+1
-	bpl :+
+	bcs :+
 		clc
 		sbc #10
 		sta screen_keyboard_index
@@ -98,12 +111,26 @@ poll_loop:
 	:
 	;if its lower than 49, subtract by 2
 	cmp #KEYBOARD_IDX_SHIFT + 1
-	bpl :+
+	bcs :+
 		sec
 		sbc #2
 		sta screen_keyboard_index
 		rts
 	:
+	;if its lower than 137, skip
+	cmp #KEYBOARD_IDX_SYMBOL_START + 8 + 1
+	bcs :+
+		rts
+	:
+	;if its lower than 174, subtract by 9
+	cmp #KEYBOARD_IDX_SYMBOL_END + 1
+	bcs :+
+		sec
+		sbc #9
+		sta screen_keyboard_index
+		rts
+	:
+
 	rts
 .endproc
 
@@ -121,6 +148,27 @@ poll_loop:
 	:
 	;if its 46, skip
 	cmp #KEYBOARD_IDX_PREV_PAGE
+	bne :+
+		rts
+	:
+	;if its the end of the special keyboard skip
+	cmp #KEYBOARD_IDX_SYMBOL_END
+	bne :+
+		rts
+	:
+	cmp #KEYBOARD_IDX_SYMBOL_END - 9
+	bne :+
+		rts
+	:
+	cmp #KEYBOARD_IDX_SYMBOL_END - 18
+	bne :+
+		rts
+	:
+	cmp #KEYBOARD_IDX_SYMBOL_END - 27
+	bne :+
+		rts
+	:
+	cmp #KEYBOARD_IDX_SYMBOL_END - 36
 	bne :+
 		rts
 	:
@@ -176,7 +224,13 @@ poll_loop:
 		sta screen_keyboard_index
 		rts
 	:
-
+	;if you are on the color disp, go to the start of the middle line
+	cmp #KEYBOARD_IDX_COLOR_DISP
+	bne :+
+		lda #KEYBOARD_IDX_SYMBOL_START + 18
+		sta screen_keyboard_index
+		rts
+	:
 	;otherwise, increase it by 1, and skip
 	tax
 	inx
@@ -212,7 +266,11 @@ poll_loop:
 	bne :+
 		rts
 	:
-
+	;if its the line indicator skip
+	cmp #KEYBOARD_IDX_LINE_COUNTER
+	bne :+
+		rts
+	:
 	;special cases for control characters 
 
 	;if its 45, go to 21, then skip
@@ -251,6 +309,37 @@ poll_loop:
 		sta screen_keyboard_index
 		rts
 	:
+	;if its any of the left most symbols on the special keyboard, go to color input
+	cmp #KEYBOARD_IDX_SYMBOL_START
+	bne :+
+		lda #KEYBOARD_IDX_COLOR_DISP
+		sta screen_keyboard_index
+		rts
+	:
+	cmp #KEYBOARD_IDX_SYMBOL_START + 9
+	bne :+
+		lda #KEYBOARD_IDX_COLOR_DISP
+		sta screen_keyboard_index
+		rts
+	:
+	cmp #KEYBOARD_IDX_SYMBOL_START + 18
+	bne :+
+		lda #KEYBOARD_IDX_COLOR_DISP
+		sta screen_keyboard_index
+		rts
+	:
+	cmp #KEYBOARD_IDX_SYMBOL_START + 27
+	bne :+
+		lda #KEYBOARD_IDX_COLOR_DISP
+		sta screen_keyboard_index
+		rts
+	:
+	cmp #KEYBOARD_IDX_SYMBOL_START + 36
+	bne :+
+		lda #KEYBOARD_IDX_COLOR_DISP
+		sta screen_keyboard_index
+		rts
+	:
 	;otherwise, decrease it by 1
 	tax
 	dex
@@ -267,11 +356,11 @@ poll_loop:
 		jsr type_letter_key
 		jsr redraw_pointer
 		jmp end_func
-not_letter_key:
+ not_letter_key:
 
 	jsr special_key_pressed
 
-end_func:
+ end_func:
 	rts
 .endproc
 
@@ -281,21 +370,21 @@ end_func:
 	bne not_italic
 		jsr italic_pressed
 		jmp redraw
-not_italic:
+ not_italic:
 
 	lda screen_keyboard_index
 	cmp #KEYBOARD_IDX_BOLD
 	bne not_bold
 		jsr bold_pressed
 		jmp redraw
-not_bold:
+ not_bold:
 
 	lda screen_keyboard_index
 	cmp #KEYBOARD_IDX_SHIFT
 	bne not_capital
 		jsr capital_pressed
 		jmp redraw
-not_capital:
+ not_capital:
 
 	lda screen_keyboard_index
 	cmp #KEYBOARD_IDX_NEXT_PAGE
@@ -307,7 +396,7 @@ not_capital:
 
 		inc current_page
 		jmp redraw
-not_next_page:
+ not_next_page:
 
 	lda screen_keyboard_index
 	cmp #KEYBOARD_IDX_PREV_PAGE
@@ -318,11 +407,11 @@ not_next_page:
 
 		dec current_page
 		jmp redraw
-not_prev_page:
+ not_prev_page:
 
-redraw:
+ redraw:
 	jsr redraw_current_page_T2
-end_func:
+ end_func:
 	rts
 .endproc
 
@@ -338,14 +427,14 @@ end_func:
 		sta notepad_state
 		jmp end_func
 
-current_not_italic:
+ current_not_italic:
 	; current text mode is not italic yet; set it to it
 	lda notepad_state
 	and #%11111100 ; clear last 2 bits (otherwise it might not override e.g. 11)
 	ora #KEYBOARD_INFO_ITALIC ; set the last 2 bits to italic
 	sta notepad_state
 
-end_func:
+ end_func:
 	rts
 .endproc
 
@@ -362,17 +451,16 @@ end_func:
 		sta notepad_state
 		jmp end_func
 
-current_not_bold:
+ current_not_bold:
 	; current text mode is not bold yet; set it to it
 	lda notepad_state
 	and #%11111100 ; clear last 2 bits (otherwise it might not override e.g. 11)
 	ora #KEYBOARD_INFO_BOLD ; set the last 2 bits to bold
 	sta notepad_state
 
-end_func:
+ end_func:
 	rts
 .endproc
-
 
 
 .proc capital_pressed
@@ -385,11 +473,27 @@ end_func:
 		sta notepad_state
 		jmp end_func
 
-current_not_capital:
+ current_not_capital:
 	lda notepad_state
 	ora #%00000100 ; set 3rd bit
 	sta notepad_state
 
-end_func:
+ end_func:
+	rts
+.endproc
+
+.proc select_pressed
+	lda notepad_state
+	eor #%00001000
+	sta notepad_state
+	and #%00001000
+	beq :+
+		lda #128
+		jmp :++
+	:
+		lda #0
+	:
+	sta screen_keyboard_index
+	jsr redraw_current_page_T2 
 	rts
 .endproc
