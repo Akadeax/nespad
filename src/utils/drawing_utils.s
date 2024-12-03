@@ -50,11 +50,11 @@
 	draw_segment preloadScreen1, $FF
 	draw_segment preloadScreen2, $FF
 
-	lda zp_text_info
+	lda notepad_state
 	and #%00000011
 	cmp #KEYBOARD_INFO_NORMAL
 	bne NOT_NORMAL_TEXT
-		lda zp_text_info
+		lda notepad_state
 		and #%00000100
 		bne is_normal_capital
 			draw_segment normalKeyboard1, $FF
@@ -67,7 +67,7 @@
 	NOT_NORMAL_TEXT:
 	cmp #KEYBOARD_INFO_BOLD
 	bne NOT_BOLD_TEXT
-		lda zp_text_info
+		lda notepad_state
 		and #%00000100
 		bne is_bold_capital
 			draw_segment boldKeyboard1, $FF
@@ -80,7 +80,7 @@
 	NOT_BOLD_TEXT:
 	cmp #KEYBOARD_INFO_ITALIC
 	bne NOT_ITALIC_TEXT
-		lda zp_text_info
+		lda notepad_state
 		and #%00000100
 		bne is_italic_capital
 			draw_segment italicKeyboard1, $FF

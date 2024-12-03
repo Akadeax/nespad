@@ -328,22 +328,22 @@ end_func:
 
 
 .proc italic_pressed
-	lda zp_text_info
+	lda notepad_state
 	and #%00000011 ; only care about the last 2 bits
 	cmp #KEYBOARD_INFO_ITALIC ; check if current text mode is italic
 	bne current_not_italic
 		; current text mode is italic already; disable it
-		lda zp_text_info
+		lda notepad_state
 		and #%11111100
-		sta zp_text_info
+		sta notepad_state
 		jmp end_func
 
 current_not_italic:
 	; current text mode is not italic yet; set it to it
-	lda zp_text_info
+	lda notepad_state
 	and #%11111100 ; clear last 2 bits (otherwise it might not override e.g. 11)
 	ora #KEYBOARD_INFO_ITALIC ; set the last 2 bits to italic
-	sta zp_text_info
+	sta notepad_state
 
 end_func:
 	rts
@@ -352,22 +352,22 @@ end_func:
 
 
 .proc bold_pressed
-	lda zp_text_info
+	lda notepad_state
 	and #%00000011 ; only care about the last 2 bits
 	cmp #KEYBOARD_INFO_BOLD ; check if current text mode is bold
 	bne current_not_bold
 		; current text mode is bold already; disable it
-		lda zp_text_info
+		lda notepad_state
 		and #%11111100
-		sta zp_text_info
+		sta notepad_state
 		jmp end_func
 
 current_not_bold:
 	; current text mode is not bold yet; set it to it
-	lda zp_text_info
+	lda notepad_state
 	and #%11111100 ; clear last 2 bits (otherwise it might not override e.g. 11)
 	ora #KEYBOARD_INFO_BOLD ; set the last 2 bits to bold
-	sta zp_text_info
+	sta notepad_state
 
 end_func:
 	rts
@@ -376,19 +376,19 @@ end_func:
 
 
 .proc capital_pressed
-	lda zp_text_info
+	lda notepad_state
 	and #%00000100
 	beq current_not_capital
 		; capital mode is currently already on; disable it
-		lda zp_text_info
+		lda notepad_state
 		and #%11111011 ; unset 3rd bit
-		sta zp_text_info
+		sta notepad_state
 		jmp end_func
 
 current_not_capital:
-	lda zp_text_info
+	lda notepad_state
 	ora #%00000100 ; set 3rd bit
-	sta zp_text_info
+	sta notepad_state
 
 end_func:
 	rts

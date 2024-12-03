@@ -11,7 +11,7 @@
 		clc
 		adc #7 ; add the amount of special characters left to come
 		sta zp_temp_1 ; store a in temp to do binary logic
-		lda zp_text_info
+		lda notepad_state
 		and #%00000100 ; check if the capitilisation bit is set
 		beq :+
 			lda zp_temp_1
@@ -41,7 +41,7 @@
 		clc
 		adc #4 ; add the amount of special characters left to come
 		sta zp_temp_1 ; store a in temp to do binary logic
-		lda zp_text_info
+		lda notepad_state
 		and #%00000100 ; check if the capitilisation bit is set
 		beq :+
 			lda zp_temp_1
@@ -67,7 +67,7 @@
 		clc
 		adc #2 ; add the amount of special characters left to come
 		sta zp_temp_1 ; store a in temp to do binary logic
-		lda zp_text_info
+		lda notepad_state
 		and #%00000100 ; check if the capitilisation bit is set
 		beq :+
 			lda zp_temp_1
@@ -98,7 +98,7 @@
 	adc #1 ;offset for the empty character
 	;add current text type offset(first 2 bits of TextInfo)
 	sta zp_temp_1 ;store a in zp_temp_1 for bitwise logic
-	lda zp_text_info
+	lda notepad_state
 	and #%00000011
 	cmp #KEYBOARD_INFO_BOLD
 	bne :+ ; if its bold

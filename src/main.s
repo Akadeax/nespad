@@ -48,7 +48,7 @@ current_nametable_ptr_hi: .res 1
 a_held: .res 1
 a_time_held: .res 1
 
-zp_text_info: .res 1
+notepad_state: .res 1
 
 screen_keyboard_index:  .res 1
 .segment "ZEROPAGE"

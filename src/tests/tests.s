@@ -14,7 +14,7 @@ TEST_val_eq_literal zp_temp_0, $28
 TEST_val_eq_literal zp_temp_1, $B0
 ;test for each of the keyboard states
 lda #%00000100
-sta zp_text_info
+sta notepad_state
 jsr keyboard_idx_to_pattern_idx_T1
 TEST_a_eq_literal $2E
 
@@ -28,7 +28,7 @@ jsr convert_nametable_index_to_XY_T2
 TEST_val_eq_literal zp_temp_0, $A8
 TEST_val_eq_literal zp_temp_1, $B0
 lda #%00000101
-sta zp_text_info
+sta notepad_state
 jsr keyboard_idx_to_pattern_idx_T1
 TEST_a_eq_literal $53
 
@@ -43,7 +43,7 @@ TEST_val_eq_literal zp_temp_0, $98
 TEST_val_eq_literal zp_temp_1, $D0
 
 lda #%00000010
-sta zp_text_info
+sta notepad_state
 jsr keyboard_idx_to_pattern_idx_T1
 TEST_a_eq_literal $B8
 
@@ -57,7 +57,7 @@ jsr convert_nametable_index_to_XY_T2
 TEST_val_eq_literal zp_temp_0, $50
 TEST_val_eq_literal zp_temp_1, $E0
 lda #%00000110
-sta zp_text_info
+sta notepad_state
 jsr keyboard_idx_to_pattern_idx_T1
 TEST_a_eq_literal $FF
 
