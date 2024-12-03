@@ -1,5 +1,10 @@
 .proc keyboard_idx_to_pattern_idx_T1 ;outputs to the A register
 	lda screen_keyboard_index
+	cmp #127
+	bcc :+
+		jsr symbol_keyboard_idx_to_pattern_idx
+		rts
+	:
 	sta zp_temp_0
  ;check if keyboardIdx is 11-18, 22-30, 33-41
 	ldx #10
@@ -118,8 +123,32 @@
 	rts
 .endproc
 
+.proc symbol_keyboard_idx_to_pattern_idx
+	lda screen_keyboard_index
+	cmp #KEYBOARD_IDX_LINE_COUNTER
+	bne :+
+		lda #0
+		rts
+	:
+	cmp #KEYBOARD_IDX_COLOR_DISP
+	bne :+
+		lda #0
+		rts
+	:
+	sec
+	sbc #130
+	clc
+	adc #211
+	rts
+.endproc
+
 .proc keyboard_idx_to_nametable_pos_T2 ;assumes A is keyboard index returns via lo byte zp_temp_1 and hi byte zp_temp_2
 	lda screen_keyboard_index
+	cmp #127
+	bcc :+
+		jsr symbol_keyboard_idx_to_nametable_pos_T2
+		rts
+	:
 	sta zp_temp_0
 	lda #<KEYBOARD_NAMETABLE_BEGIN_OFFSET
 	sta zp_temp_1
@@ -199,5 +228,58 @@
 		sta zp_temp_2
 		rts
  :
+	rts
+.endproc
+
+.proc symbol_keyboard_idx_to_nametable_pos_T2
+	lda screen_keyboard_index
+	sec
+	sbc #130
+	sta zp_temp_0
+	lda #<SPECIAL_KEYBOARD_NAMETABLE_BEGIN_OFFSET
+	sta zp_temp_1
+	lda #>SPECIAL_KEYBOARD_NAMETABLE_BEGIN_OFFSET
+	sta zp_temp_2
+
+	increment_zp_16 zp_temp_0, zp_temp_1, zp_temp_2
+	increment_zp_16 zp_temp_0, zp_temp_1, zp_temp_2
+		;if zp_temp_0 is greater than 10, add offset
+	lda #8
+	cmp zp_temp_0
+	bpl endProc
+		increment_zp_16 #SPECIAL_KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
+		;if zp_temp_0 is greater than 21, add offset
+		lda #17
+		cmp zp_temp_0
+		bpl endProc
+			increment_zp_16 #SPECIAL_KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
+			;if zp_temp_0 is greater than 32, add offset
+			lda #26
+			cmp zp_temp_0
+			bpl endProc
+				increment_zp_16 #SPECIAL_KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
+					lda #35
+					cmp zp_temp_0
+					bpl endProc
+						increment_zp_16 #SPECIAL_KEYBOARD_NAMETABLE_NEXTLINE_OFFSET, zp_temp_1, zp_temp_2
+						jmp endProc
+	endProc:
+		lda screen_keyboard_index
+		cmp #KEYBOARD_IDX_LINE_COUNTER
+		bne :+
+			lda #<SPECIAL_KEYBOARD_NAMETABLE_LINE_DISP_OFFSET
+			sta zp_temp_1
+			lda #>SPECIAL_KEYBOARD_NAMETABLE_LINE_DISP_OFFSET
+			sta zp_temp_2
+			rts
+	:
+		cmp #KEYBOARD_IDX_COLOR_DISP
+		bne :+
+			lda #<SPECIAL_KEYBOARD_NAMETABLE_COLOR_OFFSET
+			sta zp_temp_1
+			lda #>SPECIAL_KEYBOARD_NAMETABLE_COLOR_OFFSET
+			sta zp_temp_2
+			rts
+	:
 	rts
 .endproc

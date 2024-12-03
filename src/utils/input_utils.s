@@ -62,7 +62,7 @@
 		rts
 	:
 	;if it is lower than symbol start, skip
-	cmp #KEYBOARD_IDX_SYMBOL_START
+	cmp #KEYBOARD_IDX_SYMBOL_START-1
 	bne :+
 		rts
 	:
@@ -357,6 +357,12 @@
 		jsr redraw_pointer
 		jmp end_func
  not_letter_key:
+	cmp #KEYBOARD_IDX_SYMBOL_START
+	bcc :+
+		jsr type_letter_key
+		jsr redraw_pointer
+		jmp end_func
+	:
 
 	jsr special_key_pressed
 
@@ -495,5 +501,6 @@
 	:
 	sta screen_keyboard_index
 	jsr redraw_current_page_T2 
+	jsr draw_indicator_T1
 	rts
 .endproc
