@@ -47,56 +47,65 @@ inc_end:
 
 
 .proc set_pointers_to_last_character_of_current_page
-	lda #<WRAM_START
+	lda #0
 	sta current_wram_text_ptr_lo
+	sta current_text_index
+	; text_index and wram_lo are now on first character of page
+
 	lda #>WRAM_START
 	clc
 	adc current_page
 	sta current_wram_text_ptr_hi
-	; current_wram_text_ptr now holds the start of the current page in WRAM
+	; current_wram_text_ptr_hi now holds the hi of the current page in WRAM
 
-	;;; Step 2: find last non-space character, or 0 otherwise; set that to text_index
-	lda #(PAGE_TEXT_SIZE - 1)
-	sta current_text_index
-
-	lda current_wram_text_ptr_lo
-	clc
-	adc current_text_index
-	sta current_wram_text_ptr_lo
-	; increment wram_text_ptr by current_text_index so we can decrement it until we find something
-
- first_empty_char_loop:
-	ldx current_text_index
-	beq	no_chars_at_all ; if text_index is 0, just take it; no characters on this page
-
+find_first_empty_loop:
+	; check if there is a character at current index
 	ldy #0
-	lda (current_wram_text_ptr_lo), y
-	bne non_empty_char_found ; if current_wram_text_ptr is not spacebar ($00), we found what we were looking for
+	lda (current_wram_text_ptr_lo),y
 
-	dec current_text_index
-	dec current_wram_text_ptr_lo
-	jmp first_empty_char_loop
+	beq empty_char_found
 
- no_chars_at_all:
-	lda #0
-	sta current_text_index
-	lda #$FF
-	sta current_wram_text_ptr_lo
+	inc current_text_index
+	inc current_wram_text_ptr_lo
+	jsr increment_nametable_ptr
+	
+	jmp find_first_empty_loop
 
- non_empty_char_found:
-	; decremented current_text_index & wram_text_ptr until first non-space was found
+empty_char_found:
 
-	lda current_text_index
-	cmp #(PAGE_TEXT_SIZE - 1)
-	bne not_last_char
-		; is last character
-		inc current_text_index
 
- not_last_char:
-
-	inc current_wram_text_ptr_lo ; increment wram back by one so it's one ahead (-> it's the pointer to the next char)
-
+end_func:
 	rts
+;  first_empty_char_loop:
+; 	ldx current_text_index
+; 	beq	no_chars_at_all ; if text_index is 0, just take it; no characters on this page
+
+; 	ldy #0
+; 	lda (current_wram_text_ptr_lo), y
+; 	bne non_empty_char_found ; if current_wram_text_ptr is not spacebar ($00), we found what we were looking for
+
+; 	dec current_text_index
+; 	dec current_wram_text_ptr_lo
+; 	jmp first_empty_char_loop
+
+;  no_chars_at_all:
+; 	lda #0
+; 	sta current_text_index
+; 	lda #$FF
+; 	sta current_wram_text_ptr_lo
+
+;  non_empty_char_found:
+; 	; decremented current_text_index & wram_text_ptr until first non-space was found
+
+; 	lda current_text_index
+; 	cmp #(PAGE_TEXT_SIZE - 1)
+; 	bne not_last_char
+; 		; is last character
+; 		inc current_text_index
+
+;  not_last_char:
+
+; 	inc current_wram_text_ptr_lo ; increment wram back by one so it's one ahead (-> it's the pointer to the next char)
 .endproc
 
 

@@ -1,9 +1,7 @@
 .proc reset ;LINTEXCLUDE
-
-
-.ifdef TESTS
+; .ifdef TESTS
 	.include "tests/tests.s"
-.endif
+; .endif
 
 	lda PPU_STATUS
 	lda #0
@@ -81,5 +79,6 @@ wait_vblank2:
 	; - enable the NMI for graphical updates and jump to our main program
 	lda #%10000000
 	sta PPU_CONTROL
+	
 	jmp main
 .endproc

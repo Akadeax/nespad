@@ -195,4 +195,49 @@ sta screen_keyboard_index
 jsr handle_right_button_press
 TEST_val_eq_literal screen_keyboard_index, 48
 
+
+__CATEGORY__ ; Redraw Functions
+__CASE__ ; Set pointers to last character of page
+
+reset_current_nametable_ptr
+
+lda #0
+sta current_page
+lda #2 ; 1
+sta $6000
+lda #3 ; 2
+sta $6001
+lda #255 ; space
+sta $6002
+lda #4 ; 3
+sta $6003
+
+jsr set_pointers_to_last_character_of_current_page
+
+TEST_val_eq_literal current_text_index, 4
+TEST_val16_eq_literal current_wram_text_ptr_lo, current_wram_text_ptr_hi, $6004
+TEST_val16_eq_literal current_nametable_ptr_lo, current_nametable_ptr_hi, $2046
+
+; lda #0
+; sta current_wram_text_ptr_lo
+; lda #$60
+; sta current_wram_text_ptr_hi
+
+; lda #255 ; space
+; ldy #0
+; :
+; sta (current_wram_text_ptr_lo),y
+; iny
+; cpy #$20
+; bne :-
+
+; lda #2
+; sta $6020
+
+; jsr set_pointers_to_last_character_of_current_page
+; TEST_val_eq_literal current_text_index, $21
+; TEST_val16_eq_literal current_wram_text_ptr_lo, current_wram_text_ptr_hi, $6021
+; TEST_val16_eq_literal current_nametable_ptr_lo, current_nametable_ptr_hi, $2084
+
+
 end_tests

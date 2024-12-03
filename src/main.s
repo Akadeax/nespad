@@ -103,7 +103,7 @@ irq:
 
 ;***************************************
 .segment "CODE"
-.proc main
+.proc main ;LINTEXCLUDE
  	; main application - rendering is currently off
  	; clear 1st name table
  	jsr clear_nametable
