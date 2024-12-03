@@ -17,14 +17,37 @@
 	beq :+
 	cmp #DISPLAY_LINE8_END
 	beq :+
-	cmp #DISPLAY_LINE9_END ; this is here for no reason but if it's gone it breaks
+	; Is this used? Absolutely Not. Our text index value never even gets close to 255.
+	; Want to remove this check? Any line after the 8th breaks. Wish I could tell you why. Pray to your gods.
+	cmp #255
 	beq :+
 :
 .endmacro
 
 
-.proc increment_nametable_ptr
+.macro set_carry_if_sol text_index ; set carry if start of line
+	lda text_index
 
+	cmp #DISPLAY_LINE2_START
+	beq :+
+	cmp #DISPLAY_LINE3_START
+	beq :+
+	cmp #DISPLAY_LINE4_START
+	beq :+
+	cmp #DISPLAY_LINE5_START
+	beq :+
+	cmp #DISPLAY_LINE6_START
+	beq :+
+	cmp #DISPLAY_LINE7_START
+	beq :+
+	cmp #DISPLAY_LINE8_START
+	beq :+
+	cmp #DISPLAY_LINE9_START
+	beq :+
+:
+.endmacro
+
+.proc increment_nametable_ptr
 	set_carry_if_eol current_text_index
 
 	bcc single_increase
@@ -33,6 +56,24 @@
 	jmp inc_end
 single_increase:
     increment_zp_16 #1, current_nametable_ptr_lo, current_nametable_ptr_hi
+
+inc_end:
+	rts
+.endproc
+
+.proc decrement_nametable_ptr_T0
+	lda current_text_index
+	sta zp_temp_0
+	dec zp_temp_0
+
+	set_carry_if_eol zp_temp_0
+
+	bcc single_increase
+
+    decrement_zp_16 #(DISPLAY_SCREEN_WIDTH + DISPLAY_SIDE_MARGIN * 2 + 1), current_nametable_ptr_lo, current_nametable_ptr_hi
+	jmp inc_end
+single_increase:
+    decrement_zp_16 #1, current_nametable_ptr_lo, current_nametable_ptr_hi
 
 inc_end:
 	rts
@@ -65,9 +106,9 @@ find_first_empty_loop:
 
 	beq empty_char_found
 
+	jsr increment_nametable_ptr
 	inc current_text_index
 	inc current_wram_text_ptr_lo
-	jsr increment_nametable_ptr
 	
 	jmp find_first_empty_loop
 

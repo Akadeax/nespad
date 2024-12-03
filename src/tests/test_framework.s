@@ -16,41 +16,22 @@ LUA_VAL_CLOSE       = 255
 .macro start_tests ; prepares CPU for tests
     lda #0
     sta $0
-
-    clear_zp
-.endmacro
-
-.macro clear_zp
-    lda #0
-    ldx #0
-:
-    sta $0000,x
-    inx
-    bne :-
 .endmacro
 
 .macro __CATEGORY__ ; used as separator between test categories
-    send_to_binding LUA_VAL_CATEGORY
+    __send_to_binding LUA_VAL_CATEGORY
 .endmacro
 
 .macro __CASE__
-    send_to_binding LUA_VAL_CASE
+    __send_to_binding LUA_VAL_CASE
 .endmacro
 
 .macro end_tests ; tell lua binding to shut off TCP connection
-    send_to_binding LUA_VAL_CLOSE
+    __send_to_binding LUA_VAL_CLOSE
 .endmacro
 
-.macro send_to_binding value ; sends `value` to the lua binding
+.macro __send_to_binding value ; sends `value` to the lua binding
     lda #value
-    sta $0
-
-    lda #$0
-    sta LUA_BINDING_SEND_ADDR_0
-.endmacro
-
-.macro send_value_at_to_binding value
-    lda value
     sta $0
 
     lda #$0
@@ -65,10 +46,10 @@ LUA_VAL_CLOSE       = 255
     cmp #literal
     bne :+
 
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
@@ -77,10 +58,10 @@ LUA_VAL_CLOSE       = 255
     cmp #literal
     beq :+
 
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
@@ -93,10 +74,10 @@ LUA_VAL_CLOSE       = 255
     cmp #>literal
     bne :+
 
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
@@ -104,10 +85,10 @@ LUA_VAL_CLOSE       = 255
     cmp #literal
     bne :+
 
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
@@ -115,10 +96,10 @@ LUA_VAL_CLOSE       = 255
     cpx #literal
     bne :+
 
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
@@ -126,81 +107,81 @@ LUA_VAL_CLOSE       = 255
     cpy #literal
     bne :+
 
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
 .macro TEST_carry_set
     bcc :+
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
 .macro TEST_carry_clear
     bcs :+
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
 .macro TEST_negative_set
     bpl :+
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
 .macro TEST_negative_clear
     bmi :+
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
 .macro TEST_overflow_set
     bvc :+
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
 .macro TEST_overflow_clear
     bvs :+
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
 .macro TEST_zero_set
     bne :+
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro
 
 .macro TEST_zero_clear
     beq :+
-    send_to_binding LUA_VAL_SUCCESS
+    __send_to_binding LUA_VAL_SUCCESS
     jmp :++
 :
-    send_to_binding LUA_VAL_FAILURE
+    __send_to_binding LUA_VAL_FAILURE
 :
 .endmacro

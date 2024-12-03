@@ -1,8 +1,4 @@
 .proc reset ;LINTEXCLUDE
-; .ifdef TESTS
-	.include "tests/tests.s"
-; .endif
-
 	lda PPU_STATUS
 	lda #0
 	sta PPU_SCROLL
@@ -49,15 +45,7 @@ clear_ram:
 	inx
 	bne clear_ram
 
-
-; 	; clear first page of WRAM
-	lda #0
-	ldx #0
-clear_wram_p1:
-	sta $6000,x
-	inx
-	bne clear_wram_p1
-
+	jsr clear_wram_p1
 
 	; place all sprites offscreen at Y=255
 	lda #255

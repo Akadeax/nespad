@@ -119,6 +119,10 @@ paletteloop:
 
  	jsr ppu_update
 
+.ifdef TESTS
+	.include "tests/tests.s"
+.endif
+
 	jsr redraw_current_page_T2
 	jsr draw_indicator_T1
 	.include "mainloop.s"

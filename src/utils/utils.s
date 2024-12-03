@@ -56,3 +56,42 @@
 
 	:
 .endmacro
+
+
+.proc clear_wram_p1
+	lda #0
+	ldx #0
+clear_wram_p1:
+	sta $6000,x
+	inx
+	bne clear_wram_p1
+	
+	rts
+.endproc
+
+
+.macro push_pointers
+	lda current_text_index
+	pha 
+	lda current_wram_text_ptr_lo
+	pha 
+	lda current_wram_text_ptr_hi
+	pha 
+	lda current_nametable_ptr_lo
+	pha 
+	lda current_nametable_ptr_hi
+	pha 
+.endmacro
+
+.macro pop_pointers
+	pla 
+	sta current_nametable_ptr_hi
+	pla 
+	sta current_nametable_ptr_lo
+	pla 
+	sta current_wram_text_ptr_hi
+	pla 
+	sta current_wram_text_ptr_lo
+	pla 
+	sta current_text_index
+.endmacro
