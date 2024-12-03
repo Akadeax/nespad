@@ -49,6 +49,13 @@ LUA_VAL_CLOSE       = 255
     sta LUA_BINDING_SEND_ADDR_0
 .endmacro
 
+.macro send_value_at_to_binding value
+    lda value
+    sta $0
+
+    lda #$0
+    sta LUA_BINDING_SEND_ADDR_0
+.endmacro
 
 ; ============================
 ; TEST MACROS

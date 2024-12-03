@@ -199,6 +199,9 @@ TEST_val_eq_literal screen_keyboard_index, 48
 __CATEGORY__ ; Redraw Functions
 __CASE__ ; Set pointers to last character of page
 
+lda #0
+sta current_text_index
+
 reset_current_nametable_ptr
 
 lda #0
@@ -214,6 +217,7 @@ sta $6003
 
 jsr set_pointers_to_last_character_of_current_page
 
+; send_value_at_to_binding current_text_index
 TEST_val_eq_literal current_text_index, 4
 TEST_val16_eq_literal current_wram_text_ptr_lo, current_wram_text_ptr_hi, $6004
 TEST_val16_eq_literal current_nametable_ptr_lo, current_nametable_ptr_hi, $2046
