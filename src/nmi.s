@@ -64,15 +64,18 @@ not_last_char:
 	; wram_text_ptr - 1 is where we want to fetch text from;
 	; it points to the next character we want to write to, so we want to draw the one *before* that
 
-	; TODO: problem here, make decrement_nametable_ptr instead!
+	push_pointers
+
+	jsr decrement_nametable_ptr_T0
+	
 	lda PPU_STATUS
 	lda current_nametable_ptr_hi
 	sta PPU_ADDR
 	lda current_nametable_ptr_lo
-	sec
-	sbc #1
 	sta PPU_ADDR
 	; same with nametable_ptr, it points to the next one to draw to
+
+	pop_pointers
 
 	ldy #0
 	lda (zp_temp_0),y
