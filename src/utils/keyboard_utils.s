@@ -94,7 +94,7 @@
 	ldx #44
 	cpx zp_temp_0
 	bne :+ ;if keyboardIdx = 44(spaceBar)
-		lda #$FF ; spacebar is treated as $FF so it's not the same as "no character"
+		lda #$E7 ; spacebar is treated as $FF so it's not the same as "no character"
 		rts
  :
 	;space for code for the special characters i guess, didnt know how to incorporate it with the current layout
@@ -133,6 +133,11 @@
 	cmp #KEYBOARD_IDX_COLOR_DISP
 	bne :+
 		lda #0
+		rts
+	:
+	cmp #KEYBOARD_IDX_ITALIC_SYMBOL
+	bne :+
+		lda #$C1 ;capitalized I in italic font 
 		rts
 	:
 	sec

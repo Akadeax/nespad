@@ -24,9 +24,9 @@ draw_loop:
 	ldy #0
 	lda (current_wram_text_ptr_lo),y
 
-	cmp #$FF ; replace spacebar indicator ($FF) with empty render
+	cmp #$E7 ; replace spacebar indicator ($E7) with empty render
 	bne :+
-		; current char is $FF
+		; current char is $E7
 		lda #0
 :
 
