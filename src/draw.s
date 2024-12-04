@@ -73,19 +73,19 @@ draw_finished:
 	bne :+ 
 		jsr draw_spacebar_Indicator
 		rts
-:
+ :
 	lda #KEYBOARD_IDX_NEXT_PAGE
 	cmp screen_keyboard_index
 	bne :+ 
 		jsr draw_arrow_indicator
 		rts
-:
+ :
 	lda #KEYBOARD_IDX_PREV_PAGE
 	cmp screen_keyboard_index
 	bne :+ 
 		jsr draw_arrow_indicator
 		rts
-:
+ :
 	
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#8
@@ -97,11 +97,9 @@ draw_finished:
 	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6
 	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7
 
-endProc:
+ endProc:
 	rts
 .endproc
-
-
 
 .proc draw_spacebar_Indicator ;LINTEXCLUDE
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
@@ -127,8 +125,6 @@ endProc:
 	rts
 .endproc
 
-
-
 .proc draw_arrow_indicator ;LINTEXCLUDE
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#12
@@ -146,8 +142,6 @@ endProc:
 	rts
 .endproc
 
-
-
 .proc clear_indicator_T1
 	
 	ldy #4
@@ -163,8 +157,6 @@ endProc:
 		bne clear_loop
 	rts
 .endproc
-
-
 
 .proc remove_last_character_on_page_T1
 	lda current_wram_text_ptr_lo
@@ -183,12 +175,56 @@ endProc:
 	sta (zp_temp_0),y
 
 	jsr redraw_current_page_T2
-end_func:
+ end_func:
 	rts
 .endproc
 
 .proc redraw_pointer ;LINTEXCLUDE
 	jsr get_current_nametable_pointer_XY_T2
 	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#00 ,#00 ,#$0A ,#0
+	rts
+.endproc
+
+.proc draw_color_indicator_T5
+	lda #<SPECIAL_KEYBOARD_NAMETABLE_COLOR_OFFSET
+	sta zp_temp_1
+	lda #>SPECIAL_KEYBOARD_NAMETABLE_COLOR_OFFSET
+	sta zp_temp_2
+	jsr convert_nametable_index_to_XY_T2
+	lda zp_temp_0
+	sta zp_temp_5
+	lda zp_temp_1
+	ldy #84
+	sta CPU_OAM_PTR, y
+	
+	iny	
+	lda #$0b 
+	sta CPU_OAM_PTR, y
+
+	jsr get_color_from_selected_line_T2
+	ldy #86
+	lda zp_temp_0
+	sta CPU_OAM_PTR, y
+	iny
+	lda zp_temp_5
+	sta CPU_OAM_PTR, y
+	rts
+.endproc
+
+.proc clear_color_indicator
+	lda #0
+	ldy #84
+	sta CPU_OAM_PTR, y
+	
+	iny	
+	lda #0 
+	sta CPU_OAM_PTR, y
+
+	iny
+	lda #0
+	sta CPU_OAM_PTR, y
+	iny
+	lda #0
+	sta CPU_OAM_PTR, y
 	rts
 .endproc
