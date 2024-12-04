@@ -61,6 +61,19 @@
 		sta screen_keyboard_index
 		rts
 	:
+	;if its the line selection, try incrementing
+	cmp #KEYBOARD_IDX_LINE_COUNTER
+	bne :+
+		jsr decrement_selected_line_T0
+		jsr redraw_current_page_T2
+		rts
+	:
+	cmp #KEYBOARD_IDX_COLOR_DISP
+	bne :+
+		jsr decrement_color_T0
+		jsr redraw_current_page_T2
+		rts
+	:
 	;if it is lower than symbol start, skip
 	cmp #KEYBOARD_IDX_SYMBOL_START-1
 	bne :+
@@ -115,6 +128,19 @@
 		sec
 		sbc #2
 		sta screen_keyboard_index
+		rts
+	:
+	;if its the line selection, try incrementing
+	cmp #KEYBOARD_IDX_LINE_COUNTER
+	bne :+
+		jsr increment_selected_line_T0
+		jsr redraw_current_page_T2
+		rts
+	:
+	cmp #KEYBOARD_IDX_COLOR_DISP
+	bne :+
+		jsr increment_color_T0
+		jsr redraw_current_page_T2
 		rts
 	:
 	;if its lower than 137, skip

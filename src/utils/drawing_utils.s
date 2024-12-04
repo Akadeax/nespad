@@ -52,8 +52,7 @@
 	lda notepad_state
 	and #%00001000
 	beq NOT_SPECIAL_KEYBOARD
-		draw_segment characterKeyboard1, $FF
-		draw_segment characterKeyboard2, $C0
+		jsr redraw_symbol_keyboard_T0
 		rts
 	NOT_SPECIAL_KEYBOARD:
 
@@ -118,8 +117,8 @@
 			rts
 		:
 		cpx #20
-		bpl :+ ; if its lower than 10, render 0 as the first number
-			lda #$02 ;index of character 0
+		bpl :+ ; if its lower than 20, render 1 as the first number
+			lda #$02 ;index of character 1
 			sta PPU_DATA
 			lda current_page
 			sec
@@ -128,8 +127,8 @@
 			rts
 		:
 		cpx #30
-		bpl :+ ; if its lower than 10, render 0 as the first number
-			lda #$03 ;index of character 0
+		bpl :+ ; if its lower than 30, render 2 as the first number
+			lda #$03 ;index of character 2
 			sta PPU_DATA
 			lda current_page
 			sec
@@ -138,8 +137,8 @@
 			rts
 		:
 		cpx #40
-		bpl :+ ; if its lower than 10, render 0 as the first number
-			lda #$04 ;index of character 0
+		bpl :+ ; if its lower than 40, render 3 as the first number
+			lda #$04 ;index of character 3
 			sta PPU_DATA
 			lda current_page
 			sec
@@ -148,6 +147,27 @@
 			rts
 		:
 		
+.endproc
+
+.proc redraw_symbol_keyboard_T0 ;LINTEXCLUDE
+	draw_segment characterKeyboard1, $FF
+	draw_segment characterKeyboard2, $C0
+	;render the line number
+	jsr redraw_line_counter_T0
+	rts
+.endproc
+
+.proc redraw_line_counter_T0
+	lda PPU_STATUS
+	ldx #$04 ; low byte idx
+	ldy #$23
+	sty PPU_ADDR
+	stx PPU_ADDR
+	jsr get_selected_line_T0
+	lda zp_temp_0
+	adc #1
+	sta PPU_DATA
+	rts
 .endproc
 
 .macro draw_sprite_at_location_T2 x_pos, x_offset, x_is_subtracting, y_pos, y_offset, y_is_subtracting, sprite, spriteIdx ; for some fucken reason if you subtract it subtracts by offset +1, i clear the carry flag so got no fucken clue

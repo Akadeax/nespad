@@ -283,3 +283,146 @@
 	:
 	rts
 .endproc
+
+.proc get_selected_line_T0
+	lda notepad_state
+	and #%11110000
+	lsr
+	lsr
+	lsr
+	lsr
+	sta zp_temp_0
+	rts
+.endproc
+
+.proc increment_selected_line_T0
+	jsr get_selected_line_T0
+	lda #8
+	cmp zp_temp_0
+	beq endProc
+	inc zp_temp_0
+	lda zp_temp_0
+	asl
+	asl
+	asl
+	asl
+	sta zp_temp_0
+	lda notepad_state
+	and #%00001111
+	ora zp_temp_0
+	sta notepad_state
+ endProc:
+	rts
+.endproc
+
+.proc decrement_selected_line_T0
+	jsr get_selected_line_T0
+	lda #0
+	cmp zp_temp_0
+	beq endProc
+	dec zp_temp_0
+	lda zp_temp_0
+	asl
+	asl
+	asl
+	asl
+	sta zp_temp_0
+	lda notepad_state
+	and #%00001111
+	ora zp_temp_0
+	sta notepad_state
+ endProc:
+	rts
+.endproc
+
+.proc get_color_from_selected_line_T2
+	jsr get_selected_line_T0
+	lda #4;is the color in the first byte
+	cmp zp_temp_0
+	bcc :+++
+		lda current_wram_text_ptr_hi
+		sta zp_temp_1
+		lda #252
+		sta zp_temp_2
+		ldy #0
+		lda (zp_temp_1),y
+		ldx zp_temp_0
+		beq :++
+		:
+			lsr
+			lsr 
+			dex
+			cpx #0
+			bne :-
+		:
+		and %00000011
+		jmp endProc
+	:
+	lda #8; is the color in the second byte
+	cmp zp_temp_0
+	bcc :+++
+		dec zp_temp_0
+		dec zp_temp_0
+		dec zp_temp_0
+		dec zp_temp_0
+		lda current_wram_text_ptr_hi
+		sta zp_temp_1
+		lda #253
+		sta zp_temp_2
+		ldy #0
+		lda (zp_temp_1),y
+		ldx zp_temp_0
+		beq :++
+		:
+			lsr
+			lsr 
+			dex
+			cpx #0
+			bne :-
+		:
+		and %00000011
+		jmp endProc
+	:
+	lda current_wram_text_ptr_hi
+	sta zp_temp_1
+	lda #253
+	sta zp_temp_2
+	ldy #0
+	lda (zp_temp_1),y
+	and %00000011
+	endProc:
+	sta zp_temp_0
+	rts
+.endproc
+
+.proc set_color_from_selected_line_T3 ;LINTEXCLUDE
+;this is gonna be a rough one
+	rts
+.endproc
+
+.proc increment_color_T0
+	jsr get_color_from_selected_line_T2
+	lda zp_temp_0
+	eor %00000011
+	beq max
+		inc zp_temp_0
+		jmp endProc	
+	max:
+	lda #0
+	endProc:
+	jsr set_color_from_selected_line_T3
+	rts
+.endproc 
+
+.proc decrement_color_T0
+	jsr get_color_from_selected_line_T2
+	lda zp_temp_0
+	beq min
+		inc zp_temp_0
+		jmp endProc	
+	min:
+	lda #3
+	endProc:
+	jsr set_color_from_selected_line_T3
+	rts
+.endproc 
