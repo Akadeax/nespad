@@ -57,7 +57,7 @@ __CATEGORY__ ; Testing Keyboard Input
         lda #%00000110
         sta notepad_state
         jsr keyboard_idx_to_pattern_idx_T1
-        TEST_a_eq_literal $FF
+        TEST_a_eq_literal $E7
 
 __CATEGORY__ ; Conversion Tests
     __CASE__ ; If end of line
