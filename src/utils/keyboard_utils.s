@@ -337,13 +337,13 @@
 
 .proc get_color_from_selected_line_T2
 	jsr get_selected_line_T0
-	lda #4;is the color in the first byte
+	lda #4-1;is the color in the first byte
 	cmp zp_temp_0
 	bcc :+++
 		lda current_wram_text_ptr_hi
-		sta zp_temp_1
-		lda #252
 		sta zp_temp_2
+		lda #252
+		sta zp_temp_1
 		ldy #0
 		lda (zp_temp_1),y
 		ldx zp_temp_0
@@ -355,10 +355,10 @@
 			cpx #0
 			bne :-
 		:
-		and %00000011
+		and #%00000011
 		jmp endProc
 	:
-	lda #8; is the color in the second byte
+	lda #8-1; is the color in the second byte
 	cmp zp_temp_0
 	bcc :+++
 		dec zp_temp_0
@@ -366,9 +366,9 @@
 		dec zp_temp_0
 		dec zp_temp_0
 		lda current_wram_text_ptr_hi
-		sta zp_temp_1
-		lda #253
 		sta zp_temp_2
+		lda #253
+		sta zp_temp_1
 		ldy #0
 		lda (zp_temp_1),y
 		ldx zp_temp_0
@@ -380,37 +380,118 @@
 			cpx #0
 			bne :-
 		:
-		and %00000011
+		and #%00000011
 		jmp endProc
 	:
 	lda current_wram_text_ptr_hi
-	sta zp_temp_1
-	lda #253
 	sta zp_temp_2
+	lda #253
+	sta zp_temp_1
 	ldy #0
 	lda (zp_temp_1),y
-	and %00000011
+	and #%00000011
 	endProc:
 	sta zp_temp_0
 	rts
 .endproc
 
-.proc set_color_from_selected_line_T3 ;LINTEXCLUDE
-;this is gonna be a rough one
+.proc set_color_from_selected_line_T4
+	lda zp_temp_0
+	sta zp_temp_4
+	jsr get_selected_line_T0
+	lda zp_temp_0
+	sta zp_temp_3
+	lda zp_temp_4
+	sta zp_temp_0
+	lda #%11111100 ; binary and helper
+	sta zp_temp_4
+	lda #4-1;is the color in the first byte(-1 for > instead of >=)
+	cmp zp_temp_3
+	bcc :+++
+		ldx zp_temp_3
+		beq :++
+		:
+			lda zp_temp_0
+			asl
+			asl
+			sta zp_temp_0 
+			lda zp_temp_4
+			asl
+			asl
+			sta zp_temp_4
+			dex
+			cpx #0
+			bne :-
+		:
+		lda current_wram_text_ptr_hi
+		sta zp_temp_2
+		lda #252
+		sta zp_temp_1
+		ldy #0
+		lda (zp_temp_1),y
+		and zp_temp_4
+		eor zp_temp_0
+		sta (zp_temp_1),y
+		rts
+	:
+	lda #8-1; is the color in the second byte(-1 for > instead of >=)
+	cmp zp_temp_3
+	bcc endProc
+		dec zp_temp_3
+		dec zp_temp_3
+		dec zp_temp_3
+		dec zp_temp_3
+		ldx zp_temp_3
+		beq :++
+		:
+			lda zp_temp_0
+			asl
+			asl
+			sta zp_temp_0 
+			lda zp_temp_4
+			asl
+			asl
+			sta zp_temp_4
+			dex
+			cpx #0
+			bne :-
+		:
+		lda current_wram_text_ptr_hi
+		sta zp_temp_2
+		lda #253
+		sta zp_temp_1
+		ldy #0
+		lda (zp_temp_1),y
+		and zp_temp_4
+		eor zp_temp_0
+		sta (zp_temp_1),y
+		rts
+	endProc:
+	lda current_wram_text_ptr_hi
+	sta zp_temp_2
+	lda #254
+	sta zp_temp_1
+	ldy #0
+	lda (zp_temp_1),y
+	and zp_temp_4
+	eor zp_temp_0
+	sta (zp_temp_1),y
 	rts
 .endproc
 
 .proc increment_color_T0
 	jsr get_color_from_selected_line_T2
 	lda zp_temp_0
-	eor %00000011
+	cmp #3
 	beq max
 		inc zp_temp_0
 		jmp endProc	
 	max:
 	lda #0
+	sta zp_temp_0
 	endProc:
-	jsr set_color_from_selected_line_T3
+	jsr set_color_from_selected_line_T4
+	jsr draw_color_indicator_T5
 	rts
 .endproc 
 
@@ -422,7 +503,9 @@
 		jmp endProc	
 	min:
 	lda #3
+	sta zp_temp_0
 	endProc:
-	jsr set_color_from_selected_line_T3
+	jsr set_color_from_selected_line_T4
+	jsr draw_color_indicator_T5
 	rts
 .endproc 

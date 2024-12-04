@@ -66,6 +66,7 @@
 	bne :+
 		jsr decrement_selected_line_T0
 		jsr redraw_current_page_T2
+		jsr draw_color_indicator_T5
 		rts
 	:
 	cmp #KEYBOARD_IDX_COLOR_DISP
@@ -135,6 +136,7 @@
 	bne :+
 		jsr increment_selected_line_T0
 		jsr redraw_current_page_T2
+		jsr draw_color_indicator_T5
 		rts
 	:
 	cmp #KEYBOARD_IDX_COLOR_DISP
@@ -520,9 +522,11 @@
 	sta notepad_state
 	and #%00001000
 	beq :+
+		jsr draw_color_indicator_T5
 		lda #128
 		jmp :++
 	:
+		jsr clear_color_indicator
 		lda #0
 	:
 	sta screen_keyboard_index
