@@ -147,85 +147,85 @@ __CATEGORY__ ; Input Testing
     __CASE__ ; Button down test
         lda #25
         sta screen_keyboard_index
-        jsr handle_down_button_press
+        jsr handle_down_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 36
 
         lda #36
         sta screen_keyboard_index
-        jsr handle_down_button_press
+        jsr handle_down_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 44
 
         lda #44
         sta screen_keyboard_index
-        jsr handle_down_button_press
+        jsr handle_down_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 44
 
         lda #47
         sta screen_keyboard_index
-        jsr handle_down_button_press
+        jsr handle_down_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 49
 
     __CASE__ ; Button up test
         lda #25
         sta screen_keyboard_index
-        jsr handle_up_button_press
+        jsr handle_up_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 14
 
         lda #44
         sta screen_keyboard_index
-        jsr handle_up_button_press
+        jsr handle_up_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 38
 
         lda #9
         sta screen_keyboard_index
-        jsr handle_up_button_press
+        jsr handle_up_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 9
 
         lda #48
         sta screen_keyboard_index
-        jsr handle_up_button_press
+        jsr handle_up_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 46
 
     __CASE__ ; Button left test
         lda #25
         sta screen_keyboard_index
-        jsr handle_left_button_press
+        jsr handle_left_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 24
 
         lda #36
         sta screen_keyboard_index
-        jsr handle_left_button_press
+        jsr handle_left_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 35
 
         lda #44
         sta screen_keyboard_index
-        jsr handle_left_button_press
+        jsr handle_left_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 44
 
         lda #47
         sta screen_keyboard_index
-        jsr handle_left_button_press
+        jsr handle_left_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 32
 
     __CASE__ ; Button right test
         lda #25
         sta screen_keyboard_index
-        jsr handle_right_button_press
+        jsr handle_right_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 26
 
         lda #44
         sta screen_keyboard_index
-        jsr handle_right_button_press
+        jsr handle_right_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 44
 
         lda #9
         sta screen_keyboard_index
-        jsr handle_right_button_press
+        jsr handle_right_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 10
 
         lda #48
         sta screen_keyboard_index
-        jsr handle_right_button_press
+        jsr handle_right_button_press_T2
         TEST_val_eq_literal screen_keyboard_index, 48
 
 

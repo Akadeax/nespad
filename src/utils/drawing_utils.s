@@ -170,7 +170,7 @@
 	rts
 .endproc
 
-.macro draw_sprite_at_location_T2 x_pos, x_offset, x_is_subtracting, y_pos, y_offset, y_is_subtracting, sprite, spriteIdx ; for some fucken reason if you subtract it subtracts by offset +1, i clear the carry flag so got no fucken clue
+.macro draw_sprite_at_location_T2 x_pos, x_offset, x_is_subtracting, y_pos, y_offset, y_is_subtracting, sprite, spriteIdx, attribute ; for some fucken reason if you subtract it subtracts by offset +1, i clear the carry flag so got no fucken clue
 	
 	lda #0
 	clc
@@ -199,6 +199,13 @@
 	adc #01
 	tay 
 	lda sprite 
+	sta CPU_OAM_PTR, y
+
+	lda zp_temp_2
+	clc
+	adc #02
+	tay 
+	lda attribute 
 	sta CPU_OAM_PTR, y
 
 	lda x_pos

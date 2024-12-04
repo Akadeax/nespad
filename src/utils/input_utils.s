@@ -21,7 +21,7 @@
 	sta OutAddr
 .endmacro
 
-.proc handle_down_button_press
+.proc handle_down_button_press_T2
 	lda screen_keyboard_index
 	;if the idx is lower than  33, add 11 and skip
 	cmp #KEYBOARD_IDX_R
@@ -64,17 +64,22 @@
 	;if its the line selection, try incrementing
 	cmp #KEYBOARD_IDX_LINE_COUNTER
 	bne :+
-		jsr decrement_selected_line_T0
+		jsr increment_selected_line_T0
 		jsr redraw_current_page_T2
 		jsr draw_color_indicator_T5
+		jsr draw_selected_line_indicator
 		rts
 	:
 	cmp #KEYBOARD_IDX_COLOR_DISP
 	bne :+
 		jsr decrement_color_T0
 		jsr redraw_current_page_T2
+		jsr draw_selected_line_indicator
 		rts
 	:
+	sta zp_temp_2
+	jsr clear_line_indicator_T1
+	lda zp_temp_2
 	;if it is lower than symbol start, skip
 	cmp #KEYBOARD_IDX_SYMBOL_START-1
 	bne :+
@@ -91,7 +96,7 @@
 	rts 
 .endproc
 
-.proc handle_up_button_press
+.proc handle_up_button_press_T2
 	lda screen_keyboard_index
 	;if the current idx is lower than 12, skip
 	cmp #KEYBOARD_IDX_A
@@ -131,20 +136,25 @@
 		sta screen_keyboard_index
 		rts
 	:
-	;if its the line selection, try incrementing
+	;if its the line selection, try decrementing
 	cmp #KEYBOARD_IDX_LINE_COUNTER
 	bne :+
-		jsr increment_selected_line_T0
+		jsr decrement_selected_line_T0
 		jsr redraw_current_page_T2
 		jsr draw_color_indicator_T5
+		jsr draw_selected_line_indicator
 		rts
 	:
 	cmp #KEYBOARD_IDX_COLOR_DISP
 	bne :+
 		jsr increment_color_T0
 		jsr redraw_current_page_T2
+		jsr draw_selected_line_indicator
 		rts
 	:
+	sta zp_temp_2
+	jsr clear_line_indicator_T1
+	lda zp_temp_2
 	;if its lower than 137, skip
 	cmp #KEYBOARD_IDX_SYMBOL_START + 8 + 1
 	bcs :+
@@ -162,7 +172,7 @@
 	rts
 .endproc
 
-.proc handle_right_button_press
+.proc handle_right_button_press_T2
 	;if current idx is 44, skip
 	lda screen_keyboard_index
 	cmp #KEYBOARD_IDX_SPACEBAR
@@ -257,9 +267,24 @@
 	bne :+
 		lda #KEYBOARD_IDX_SYMBOL_START + 18
 		sta screen_keyboard_index
+		jsr clear_line_indicator_T1
 		rts
 	:
-	;otherwise, increase it by 1, and skip
+
+	cmp #KEYBOARD_IDX_LINE_COUNTER
+	bcc :+
+	cmp #KEYBOARD_IDX_COLOR_DISP + 1
+	bcs :+
+		tax
+		inx
+		txa
+		sta screen_keyboard_index
+		jsr draw_selected_line_indicator
+		rts
+	:
+	sta zp_temp_2
+	jsr clear_line_indicator_T1
+	lda zp_temp_2
 	tax
 	inx
 	txa
@@ -267,7 +292,7 @@
 	rts
 .endproc
 
-.proc handle_left_button_press
+.proc handle_left_button_press_T2
 	;if current idx is 44, skip
 	lda screen_keyboard_index
 	cmp #KEYBOARD_IDX_SPACEBAR
@@ -342,33 +367,52 @@
 	bne :+
 		lda #KEYBOARD_IDX_COLOR_DISP
 		sta screen_keyboard_index
+		jsr draw_selected_line_indicator
 		rts
 	:
 	cmp #KEYBOARD_IDX_SYMBOL_START + 9
 	bne :+
 		lda #KEYBOARD_IDX_COLOR_DISP
 		sta screen_keyboard_index
+		jsr draw_selected_line_indicator
 		rts
 	:
 	cmp #KEYBOARD_IDX_SYMBOL_START + 18
 	bne :+
 		lda #KEYBOARD_IDX_COLOR_DISP
 		sta screen_keyboard_index
+		jsr draw_selected_line_indicator
 		rts
 	:
 	cmp #KEYBOARD_IDX_SYMBOL_START + 27
 	bne :+
 		lda #KEYBOARD_IDX_COLOR_DISP
 		sta screen_keyboard_index
+		jsr draw_selected_line_indicator
 		rts
 	:
 	cmp #KEYBOARD_IDX_SYMBOL_START + 36
 	bne :+
 		lda #KEYBOARD_IDX_COLOR_DISP
 		sta screen_keyboard_index
+		jsr draw_selected_line_indicator
 		rts
 	:
-	;otherwise, decrease it by 1
+	
+	cmp #KEYBOARD_IDX_LINE_COUNTER
+	bcc :+
+	cmp #KEYBOARD_IDX_COLOR_DISP + 1
+	bcs :+
+		tax
+		dex
+		txa
+		sta screen_keyboard_index
+		jsr draw_selected_line_indicator
+		rts
+	:
+	sta zp_temp_2
+	jsr clear_line_indicator_T1
+	lda zp_temp_2
 	tax
 	dex
 	txa
@@ -523,10 +567,12 @@
 	and #%00001000
 	beq :+
 		jsr draw_color_indicator_T5
+		jsr draw_selected_line_indicator
 		lda #128
 		jmp :++
 	:
 		jsr clear_color_indicator
+		jsr clear_line_indicator_T1
 		lda #0
 	:
 	sta screen_keyboard_index

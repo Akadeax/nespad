@@ -88,14 +88,14 @@ draw_finished:
  :
 	
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#8
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#2
-	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#3
-	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4
-	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5
-	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6
-	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#8 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#2 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#3 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7 ,#0
 
  endProc:
 	rts
@@ -103,42 +103,42 @@ draw_finished:
 
 .proc draw_spacebar_Indicator ;LINTEXCLUDE
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#18
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#2
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7
-
-	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#3
-	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5
-	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#8
-	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#9
-	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#10
-	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#11
-	draw_sprite_at_location_T2 zp_temp_0 ,#48 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#12
-	draw_sprite_at_location_T2 zp_temp_0 ,#48 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#13
-	draw_sprite_at_location_T2 zp_temp_0 ,#56 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#14
-	draw_sprite_at_location_T2 zp_temp_0 ,#56 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#15
-	draw_sprite_at_location_T2 zp_temp_0 ,#64 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#16
-	draw_sprite_at_location_T2 zp_temp_0 ,#64 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#17
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#18 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#2  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7  ,#0
+ 
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#3  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#8  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#9  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#10 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#11 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#48 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#12 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#48 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#13 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#56 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#14 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#56 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#15 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#64 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#16 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#64 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#17 ,#0
 	rts
 .endproc
 
 .proc draw_arrow_indicator ;LINTEXCLUDE
 	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#12
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#16 ,#01 ,#$01 ,#11
-	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#16 ,#01 ,#$03 ,#10
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1
-	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$04 ,#2
-	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#16 ,#01 ,#$02 ,#3
-	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#16 ,#01 ,#$02 ,#9
-	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5
-	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#6
-	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#8
-	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$05 ,#4
-	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#12 ,#0 
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#16 ,#01 ,#$01 ,#11 ,#0 
+	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#16 ,#01 ,#$03 ,#10 ,#0 
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$04 ,#2  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#16 ,#01 ,#$02 ,#3  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#16 ,#01 ,#$02 ,#9  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#6  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#8  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$05 ,#4  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7  ,#0
 	rts
 .endproc
 
@@ -181,7 +181,7 @@ draw_finished:
 
 .proc redraw_pointer ;LINTEXCLUDE
 	jsr get_current_nametable_pointer_XY_T2
-	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#00 ,#00 ,#$0A ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#00 ,#00 ,#$0A ,#0,#0
 	rts
 .endproc
 
@@ -228,5 +228,57 @@ draw_finished:
 	iny
 	lda #0
 	sta CPU_OAM_PTR, y
+	rts
+.endproc
+
+.proc draw_selected_line_indicator ;LINTEXCLUDE
+	jsr get_color_from_selected_line_T2
+	lda zp_temp_0
+	sta zp_temp_3
+	jsr get_selected_line_T0
+	lda #<DISPLAY_NAMETABLE_BASE_OFFSET
+	sta zp_temp_1
+	lda #>DISPLAY_NAMETABLE_BASE_OFFSET
+	sta zp_temp_2
+	lda zp_temp_0
+	beq :+++ ;seems like one to many, dw there is a label in the macro
+	:
+		increment_zp_16 #64,zp_temp_1, zp_temp_2
+		dec zp_temp_0
+		bne :--
+	:
+	jsr convert_nametable_index_to_XY_T2
+	;	x var,x offset, is x subtracting, y var, y offset, is y subtracting, sprite, index
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#22 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#23 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#24 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#224 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#25 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#224 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#26 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#224 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#27 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#28 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#29 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#30 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#31 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#208 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#32 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#208 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#33 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#216 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#34 ,zp_temp_3
+	draw_sprite_at_location_T2 zp_temp_0 ,#216 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#35 ,zp_temp_3
+	rts
+
+.endproc
+
+.proc clear_line_indicator_T1
+	
+	ldy #88
+	lda #<CPU_OAM_PTR
+	sta zp_temp_0
+	lda #>CPU_OAM_PTR
+	sta zp_temp_1
+	lda #0
+	clear_loop:
+		sta (zp_temp_0), y
+		iny
+		cpy #160
+		bne clear_loop
 	rts
 .endproc
