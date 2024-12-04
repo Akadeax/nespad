@@ -193,6 +193,8 @@ draw_finished:
 	jsr convert_nametable_index_to_XY_T2
 	lda zp_temp_0
 	sta zp_temp_5
+	
+	dec zp_temp_1 ;center it a bit more
 	lda zp_temp_1
 	ldy #84
 	sta CPU_OAM_PTR, y

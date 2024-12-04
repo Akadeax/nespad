@@ -385,7 +385,7 @@
 	:
 	lda current_wram_text_ptr_hi
 	sta zp_temp_2
-	lda #253
+	lda #254
 	sta zp_temp_1
 	ldy #0
 	lda (zp_temp_1),y
@@ -416,8 +416,9 @@
 			asl
 			sta zp_temp_0 
 			lda zp_temp_4
-			asl
-			asl
+			sec
+			rol
+			rol
 			sta zp_temp_4
 			dex
 			cpx #0
@@ -449,8 +450,9 @@
 			asl
 			sta zp_temp_0 
 			lda zp_temp_4
-			asl
-			asl
+			sec
+			rol
+			rol
 			sta zp_temp_4
 			dex
 			cpx #0
@@ -499,7 +501,7 @@
 	jsr get_color_from_selected_line_T2
 	lda zp_temp_0
 	beq min
-		inc zp_temp_0
+		dec zp_temp_0
 		jmp endProc	
 	min:
 	lda #3
