@@ -106,11 +106,14 @@ find_first_empty_loop:
 
 	beq empty_char_found
 
-	; TODO: This is overlooping all the way to FF if the data bytes at the end of the page are filled! fix!
 	jsr increment_nametable_ptr
 	inc current_text_index
 	inc current_wram_text_ptr_lo
 	
+	lda current_text_index
+	cmp #PAGE_TEXT_SIZE
+	beq empty_char_found ; if page is full, return last char
+
 	jmp find_first_empty_loop
 
 empty_char_found:
@@ -183,13 +186,17 @@ loop:
 	jsr attribute_row_to_color_T5
 
 	lda zp_temp_0
+	and #%11001100
+	sta PPU_DATA
+	lda zp_temp_0
 	sta PPU_DATA
 	sta PPU_DATA
 	sta PPU_DATA
 	sta PPU_DATA
 	sta PPU_DATA
 	sta PPU_DATA
-	sta PPU_DATA
+	lda zp_temp_0
+	and #%00110011
 	sta PPU_DATA
 
 	inc zp_temp_6
