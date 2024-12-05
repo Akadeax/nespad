@@ -340,8 +340,13 @@
 	rts
 .endproc
 
-.proc get_color_from_selected_line_T2
+.proc get_color_from_selected_line_T2 ;LINTEXCLUDE
 	jsr get_selected_line_T0
+	jsr get_color_from_line_T2
+	rts
+.endproc
+
+.proc get_color_from_line_T2 ;takes zp_temp_0 as input of line
 	lda #4-1;is the color in the first byte
 	cmp zp_temp_0
 	bcc :+++
