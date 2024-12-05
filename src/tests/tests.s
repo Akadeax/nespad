@@ -624,5 +624,6 @@ __CATEGORY__ ;color changing tests
         jsr decrement_color_T0
         ldy #0
         lda TEST_COLOR_INFO_PTR,y
-        TEST_a_eq_literal 0       
+        TEST_a_eq_literal 0
+
 end_tests

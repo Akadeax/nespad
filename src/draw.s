@@ -39,6 +39,8 @@ draw_finished:
 
 	pop_pointers
 
+	jsr draw_current_page_attribute_T5
+
 	jsr redraw_pointer
 	rts
 .endproc

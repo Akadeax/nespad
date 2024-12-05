@@ -88,7 +88,6 @@ not_spacebar:
 	sta PPU_DATA
 
 update_text_finished:
-
 	lda #%10001000
 	sta PPU_CONTROL
 

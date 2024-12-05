@@ -106,6 +106,7 @@ find_first_empty_loop:
 
 	beq empty_char_found
 
+	; TODO: This is overlooping all the way to FF if the data bytes at the end of the page are filled! fix!
 	jsr increment_nametable_ptr
 	inc current_text_index
 	inc current_wram_text_ptr_lo
@@ -117,36 +118,6 @@ empty_char_found:
 
 end_func:
 	rts
-;  first_empty_char_loop:
-; 	ldx current_text_index
-; 	beq	no_chars_at_all ; if text_index is 0, just take it; no characters on this page
-
-; 	ldy #0
-; 	lda (current_wram_text_ptr_lo), y
-; 	bne non_empty_char_found ; if current_wram_text_ptr is not spacebar ($00), we found what we were looking for
-
-; 	dec current_text_index
-; 	dec current_wram_text_ptr_lo
-; 	jmp first_empty_char_loop
-
-;  no_chars_at_all:
-; 	lda #0
-; 	sta current_text_index
-; 	lda #$FF
-; 	sta current_wram_text_ptr_lo
-
-;  non_empty_char_found:
-; 	; decremented current_text_index & wram_text_ptr until first non-space was found
-
-; 	lda current_text_index
-; 	cmp #(PAGE_TEXT_SIZE - 1)
-; 	bne not_last_char
-; 		; is last character
-; 		inc current_text_index
-
-;  not_last_char:
-
-; 	inc current_wram_text_ptr_lo ; increment wram back by one so it's one ahead (-> it's the pointer to the next char)
 .endproc
 
 
@@ -191,5 +162,141 @@ end_func:
 	lda current_nametable_ptr_hi
 	sta zp_temp_2
 	jsr convert_nametable_index_to_XY_T2
+	rts
+.endproc
+
+
+; only call while ppu is off!
+.proc draw_current_page_attribute_T5 ;LINTEXCLUDE
+	lda #0
+	sta zp_temp_6 ; 6 is our attribute row loop index
+
+	lda PPU_STATUS
+	lda #>ATTR_TABLE_1
+	sta PPU_ADDR
+	lda #<ATTR_TABLE_1
+	sta PPU_ADDR
+
+loop:
+	lda zp_temp_6
+	sta zp_temp_0
+	jsr attribute_row_to_color_T5
+
+	lda zp_temp_0
+	sta PPU_DATA
+	sta PPU_DATA
+	sta PPU_DATA
+	sta PPU_DATA
+	sta PPU_DATA
+	sta PPU_DATA
+	sta PPU_DATA
+	sta PPU_DATA
+
+	inc zp_temp_6
+
+	lda zp_temp_6
+	cmp #5
+	bne loop
+
+loop_end:
+	rts
+.endproc
+
+
+; take zp_temp_0 as attribute table row; return correct color byte for the entire attribute line in zp_temp_0
+.proc attribute_row_to_color_T5 ;LINTEXCLUDE
+	ldx zp_temp_0
+	; x now holds attribute table row
+
+	lda #$FF
+	sta zp_temp_3 ; temp4 stores line number to fetch color for
+
+loop:
+	cpx #0
+	beq loop_end
+
+	dex
+	inc zp_temp_3
+	inc zp_temp_3
+	jmp loop
+
+loop_end:
+	; this attribute chunk consists of:
+	; top row: line number zp_temp_3
+	; bottom row: line number zp_temp_3 + 1
+	; for attribute row 0, this will be FF & 0 due to the top row of the first attribute row not having text.
+	; attribute row 1 will be 1 & 2, row 2 will be 3 & 4, etc.
+	; based on zp_temp_3, we can now fetch the color from those stored line numbers
+
+	lda zp_temp_3
+	cmp #$FF
+	bne :+
+		; zp_temp_3 is $FF, make exception for top half of first row
+		lda #0
+		sta zp_temp_4
+		jmp :++
+:
+	; if it's not $FF, just fetch the color from end-of-page memory
+	lda zp_temp_3
+	sta zp_temp_0
+	jsr get_color_from_line_T2
+	lda zp_temp_0
+	sta zp_temp_4
+
+:
+	; the color for the top row of this chunk is now in zp_temp_4
+
+	lda zp_temp_3
+	clc
+	adc #1
+	sta zp_temp_0
+	jsr get_color_from_line_T2
+	lda zp_temp_0
+	sta zp_temp_5
+	; the color for the bottom row of this chunk is now in zp_temp_5
+
+	; now we can replicate the bits to fill our output
+	lda zp_temp_4
+	sta zp_temp_0
+	jsr replicate_bits_01_to_0123_T0
+	lda zp_temp_0
+	sta zp_temp_4
+	; zp_temp_4 now holds the color byte for the top row
+
+	lda zp_temp_5
+	sta zp_temp_0
+	jsr replicate_bits_01_to_4567_T0
+	lda zp_temp_0
+	sta zp_temp_5
+	; zp_temp_5 now holds the color byte for the top row
+
+	; we can combine top & bottom to get the full attribute chunk byte
+	lda zp_temp_5
+	ora zp_temp_4
+	sta zp_temp_0
+	; zp_temp_0 now holds the combined attribute data
+	rts
+.endproc
+
+
+.proc replicate_bits_01_to_4567_T0
+	jsr replicate_bits_01_to_0123_T0
+	lda zp_temp_0
+	asl 
+	asl 
+	asl 
+	asl 
+	sta zp_temp_0
+	; now zp_temp_0 is xyxy0000
+	rts
+.endproc
+
+.proc replicate_bits_01_to_0123_T0
+	lda zp_temp_0
+	asl 
+	asl 
+	ora zp_temp_0
+	sta zp_temp_0
+	; now zp_temp_0 is 0000xyxy
 	rts
 .endproc
