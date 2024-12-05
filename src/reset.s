@@ -22,7 +22,7 @@ wait_vblank:
 	bit PPU_STATUS
 	bpl wait_vblank
 
-		lda PPU_STATUS
+	lda PPU_STATUS
 	lda #0
 	sta PPU_SCROLL
 	sta PPU_SCROLL
@@ -45,7 +45,8 @@ clear_ram:
 	inx
 	bne clear_ram
 
-	jsr clear_wram_p1
+	; handy for debugging if a clean page is needed
+	; jsr clear_wram_p1
 
 	; place all sprites offscreen at Y=255
 	lda #255

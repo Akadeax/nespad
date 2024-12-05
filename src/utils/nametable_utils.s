@@ -206,6 +206,24 @@ loop:
 	bne loop
 
 loop_end:
+
+	; write color of last line to rest of the screen
+	lda zp_temp_0
+	and #%11110000
+	sta zp_temp_6
+	lsr 
+	lsr 
+	lsr 
+	lsr 
+	ora zp_temp_6
+
+	ldx #24
+
+keyboard_color_loop:
+	sta PPU_DATA
+	dex
+	bne keyboard_color_loop
+
 	rts
 .endproc
 
