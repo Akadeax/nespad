@@ -303,8 +303,7 @@ __CATEGORY__ ; Redraw Functions
 
 
 __CATEGORY__ ;selected line tests
-
-        __CASE__ ;get line indicator
+    __CASE__ ;get line indicator
         lda #%01110000
         sta notepad_state
         jsr get_selected_line_T0
@@ -624,6 +623,5 @@ __CATEGORY__ ;color changing tests
         jsr decrement_color_T0
         ldy #0
         lda TEST_COLOR_INFO_PTR,y
-        TEST_a_eq_literal 0
-
+        TEST_a_eq_literal 0       
 end_tests
