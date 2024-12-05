@@ -485,7 +485,9 @@
 		; prev page pressed
 		lda current_page
 		beq end_func ; if we're at first page, don't dec or redraw
-
+		lda notepad_state
+		and #%00001111
+		sta notepad_state
 		dec current_page
 		jmp redraw
  not_prev_page:
