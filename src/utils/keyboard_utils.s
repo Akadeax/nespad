@@ -405,13 +405,18 @@
 	rts
 .endproc
 
-.proc set_color_from_selected_line_T4
+.proc set_color_from_selected_line_T4 ;LINTEXCLUDE
 	lda zp_temp_0
-	sta zp_temp_4
+	sta zp_temp_1
 	jsr get_selected_line_T0
-	lda zp_temp_0
+	jsr set_color_from_line_T4
+	rts
+.endproc
+
+.proc set_color_from_line_T4
+	lda zp_temp_0 ; line you are writing to
 	sta zp_temp_3
-	lda zp_temp_4
+	lda zp_temp_1 ;color ur writing
 	sta zp_temp_0
 	lda #%11111100 ; binary and helper
 	sta zp_temp_4
@@ -489,8 +494,8 @@
 	eor zp_temp_0
 	sta (zp_temp_1),y
 	rts
-.endproc
 
+.endproc
 .proc increment_color_T0
 	jsr get_color_from_selected_line_T2
 	lda zp_temp_0

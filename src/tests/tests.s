@@ -395,88 +395,88 @@ __CATEGORY__ ;selected line tests
 
 __CATEGORY__ ;color changing tests
     TEST_COLOR_INFO_PTR = $60FC
-    __CASE__ ;get color from selected line pointer 1
+    __CASE__ ;get color from line pointer 1
         lda #%00110110
         ldy #0
         sta TEST_COLOR_INFO_PTR,y
-        lda #%00000000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #0
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000010
 
         lda #%00110110
         ldy #0
         sta TEST_COLOR_INFO_PTR,y
-        lda #%00010000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #1
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000001
 
         lda #%00110110
         ldy #0
         sta TEST_COLOR_INFO_PTR,y
-        lda #%00100000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #2
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000011
 
         lda #%00110110
         ldy #0
         sta TEST_COLOR_INFO_PTR,y
-        lda #%00110000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #3
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000000
-    __CASE__ ;get color from selected line pointer 2
+    __CASE__ ;get color from line pointer 2
         lda #%00110110
         ldy #1
         sta TEST_COLOR_INFO_PTR,y
-        lda #%01000000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #4
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000010
 
         lda #%00110110
         ldy #1
         sta TEST_COLOR_INFO_PTR,y
-        lda #%01010000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #5
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000001
 
         lda #%00110110
         ldy #1
         sta TEST_COLOR_INFO_PTR,y
-        lda #%00100000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #6
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000011
 
         lda #%00110110
         ldy #1
         sta TEST_COLOR_INFO_PTR,y
-        lda #%01110000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #7
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000000
-    __CASE__ ;get color from selected line pointer 3
+    __CASE__ ;get color from line pointer 3
         lda #%00000011
         ldy #2
         sta TEST_COLOR_INFO_PTR,y
-        lda #%10000000
-        sta notepad_state
-        jsr get_color_from_selected_line_T2
+        lda #8
+        sta zp_temp_0
+        jsr get_color_from_line_T2
         TEST_val_eq_literal zp_temp_0, %00000011
 
-    __CASE__ ;set color from selected line pointer 1
+    __CASE__ ;set color from line pointer 1
         lda #%00110110
         ldy #0
         sta TEST_COLOR_INFO_PTR,y
         lda #%01
+        sta zp_temp_1
+        lda #0
         sta zp_temp_0
-        lda #%00000000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #0
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %00110101
@@ -485,10 +485,10 @@ __CATEGORY__ ;color changing tests
         ldy #0
         sta TEST_COLOR_INFO_PTR,y
         lda #%00
+        sta zp_temp_1
+        lda #1
         sta zp_temp_0
-        lda #%00010000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #0
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %00110010
@@ -497,10 +497,10 @@ __CATEGORY__ ;color changing tests
         ldy #0
         sta TEST_COLOR_INFO_PTR,y
         lda #%10
+        sta zp_temp_1
+        lda #2
         sta zp_temp_0
-        lda #%00100000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #0
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %00100110
@@ -509,22 +509,22 @@ __CATEGORY__ ;color changing tests
         ldy #0
         sta TEST_COLOR_INFO_PTR,y
         lda #%11
+        sta zp_temp_1
+        lda #3
         sta zp_temp_0
-        lda #%00110000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #0
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %11110110
-    __CASE__ ;set color from selected line pointer 2
+    __CASE__ ;set color from line pointer 2
         lda #%00110110
         ldy #1
         sta TEST_COLOR_INFO_PTR,y
         lda #%01
+        sta zp_temp_1
+        lda #4
         sta zp_temp_0
-        lda #%01000000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #1
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %00110101
@@ -533,10 +533,10 @@ __CATEGORY__ ;color changing tests
         ldy #1
         sta TEST_COLOR_INFO_PTR,y
         lda #%00
+        sta zp_temp_1
+        lda #5
         sta zp_temp_0
-        lda #%01010000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #1
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %00110010
@@ -545,10 +545,10 @@ __CATEGORY__ ;color changing tests
         ldy #1
         sta TEST_COLOR_INFO_PTR,y
         lda #%10
+        sta zp_temp_1
+        lda #6
         sta zp_temp_0
-        lda #%01100000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #1
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %00100110
@@ -557,23 +557,23 @@ __CATEGORY__ ;color changing tests
         ldy #1
         sta TEST_COLOR_INFO_PTR,y
         lda #%11
+        sta zp_temp_1
+        lda #7
         sta zp_temp_0
-        lda #%01110000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #1
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %11110110
 
-    __CASE__ ;set color from selected line pointer 3
+    __CASE__ ;set color from line pointer 3
         lda #%00110110
         ldy #2
         sta TEST_COLOR_INFO_PTR,y
         lda #%01
+        sta zp_temp_1
+        lda #8
         sta zp_temp_0
-        lda #%10000000
-        sta notepad_state
-        jsr set_color_from_selected_line_T4
+        jsr set_color_from_line_T4
         ldy #2
         lda TEST_COLOR_INFO_PTR,y
         TEST_a_eq_literal %00110101
