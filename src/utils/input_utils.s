@@ -471,6 +471,9 @@
 		lda current_page
 		cmp #(MAX_PAGE_AMOUNT - 1)
 		beq end_func ; if we're at the last page, don't inc or redraw
+		lda notepad_state
+		and #%00001111
+		sta notepad_state
 
 		inc current_page
 		jmp redraw
