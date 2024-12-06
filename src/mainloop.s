@@ -99,7 +99,7 @@
 	and #PAD_B
 	beq NOT_PAD_B_PRESSED
 		; A pressed
-		jsr remove_last_character_on_page_T1
+		jsr remove_last_character_on_page_without_reload_T1
 		lda #1
 		sta b_held
 
@@ -109,8 +109,8 @@
 	and #PAD_B
 	beq NOT_PAD_B_RELEASED
 		; A released
-		lda #0
 		jsr redraw_current_page_T2
+		lda #0
 		sta b_held
 		sta b_time_held
 
@@ -129,7 +129,15 @@
 		jmp NOT_PAD_B_HELD
 
 	time_b_held_above_threshold:
-		jsr remove_last_character_on_page_without_reload_T1
+		inc b_time_held
+		lda b_time_held
+		and #%00000111
+		cmp #0
+		beq :+
+			jsr remove_last_character_on_page_without_reload_T1
+			jmp NOT_PAD_B_HELD
+		:
+			jsr remove_last_character_on_page_T1
 	NOT_PAD_B_HELD:
 
 	lda input_pressed_this_frame
