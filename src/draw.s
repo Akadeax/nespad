@@ -181,6 +181,27 @@ draw_finished:
 	rts
 .endproc
 
+.proc remove_last_character_on_page_without_reload_T1
+	lda current_wram_text_ptr_lo
+	sta zp_temp_0
+
+	lda zp_temp_0
+	beq end_func
+	
+	dec zp_temp_0
+
+	lda current_wram_text_ptr_hi
+	sta zp_temp_1
+
+	lda #0
+	ldy #0
+	sta (zp_temp_0),y
+	dec current_wram_text_ptr_lo
+	dec current_text_index
+ end_func:
+	rts
+.endproc
+
 .proc redraw_pointer ;LINTEXCLUDE
 	jsr get_current_nametable_pointer_XY_T2
 	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#00 ,#00 ,#$0A ,#0,#0

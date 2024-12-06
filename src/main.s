@@ -48,6 +48,9 @@ current_nametable_ptr_hi: .res 1
 a_held: .res 1
 a_time_held: .res 1
 
+b_held: .res 1
+b_time_held: .res 1
+
 notepad_state: .res 1
 
 screen_keyboard_index:  .res 1
