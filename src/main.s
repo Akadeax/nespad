@@ -46,10 +46,14 @@ current_nametable_ptr_lo: .res 1 ; pointer keeping up with text_index, but in na
 current_nametable_ptr_hi: .res 1
 
 a_time_held: .res 1
-
 b_time_held: .res 1
-
 start_time_held: .res 1
+down_time_held: .res 1
+up_time_held: .res 1
+left_time_held: .res 1
+right_time_held: .res 1
+
+frame_counter: .res 1 ;doesnt really count frames but can be used for stuff that needs to happen every 10 frames ect ect
 
 notepad_state: .res 1
 

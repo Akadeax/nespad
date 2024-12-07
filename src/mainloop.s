@@ -8,6 +8,8 @@
  	lda #1
  	sta nmi_ready
 
+	inc frame_counter
+
  	; read the gamepad
  	poll_gamepad current_input
 
@@ -24,39 +26,172 @@
     ; do input handling stuff here
 	lda input_pressed_this_frame
 	and #PAD_UP
-	beq NOT_PAD_UP
-		; up pressed
+	beq NOT_PAD_UP_PRESSED
+		; UP pressed
 		jsr handle_up_button_press_T2
 		jsr draw_indicator_T1
+		lda #1
+		sta up_time_held
 
-	NOT_PAD_UP:
+	NOT_PAD_UP_PRESSED:
+
+	lda input_released_this_frame
+	and #PAD_UP
+	beq NOT_PAD_UP_RELEASED
+		; UP released
+		lda #0
+		sta up_time_held
+
+	NOT_PAD_UP_RELEASED:
+
+	lda current_input
+	and #PAD_UP
+	beq NOT_PAD_UP_HELD
+		; UP held
+		lda up_time_held
+		cmp #15
+		bpl time_up_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
+
+	time_up_held_below_threshold:
+		inc up_time_held
+		jmp NOT_PAD_UP_HELD
+
+	time_up_held_above_threshold:
+		; UP hold acivated
+		lda frame_counter
+		and #%00000011
+		bne NOT_PAD_UP_HELD
+		jsr handle_up_button_press_T2
+		jsr draw_indicator_T1
+	NOT_PAD_UP_HELD:
 
 	lda input_pressed_this_frame
 	and #PAD_DOWN
-	beq NOT_PAD_DOWN
-		; down pressed
+	beq NOT_PAD_DOWN_PRESSED
+		; DOWN pressed
 		jsr handle_down_button_press_T2
 		jsr draw_indicator_T1
+		lda #1
+		sta down_time_held
 
-	NOT_PAD_DOWN:
+	NOT_PAD_DOWN_PRESSED:
+
+	lda input_released_this_frame
+	and #PAD_DOWN
+	beq NOT_PAD_DOWN_RELEASED
+		; DOWN released
+		lda #0
+		sta down_time_held
+
+	NOT_PAD_DOWN_RELEASED:
+
+	lda current_input
+	and #PAD_DOWN
+	beq NOT_PAD_DOWN_HELD
+		; DOWN held
+		lda down_time_held
+		cmp #15
+		bpl time_down_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
+
+	time_down_held_below_threshold:
+		inc down_time_held
+		jmp NOT_PAD_DOWN_HELD
+
+	time_down_held_above_threshold:
+		; DOWN hold acivated
+		lda frame_counter
+		and #%00000011
+		bne NOT_PAD_DOWN_HELD
+		jsr handle_down_button_press_T2
+		jsr draw_indicator_T1
+	NOT_PAD_DOWN_HELD:
+
 
 	lda input_pressed_this_frame
 	and #PAD_LEFT
-	beq NOT_PAD_LEFT
-		; left pressed
+	beq NOT_PAD_LEFT_PRESSED
+		; LEFT pressed
+		jsr handle_left_button_press_T2
+		jsr draw_indicator_T1
+		
+		lda #1
+		sta left_time_held
+
+	NOT_PAD_LEFT_PRESSED:
+
+	lda input_released_this_frame
+	and #PAD_LEFT
+	beq NOT_PAD_LEFT_RELEASED
+		; LEFT released
+		lda #0
+		sta left_time_held
+
+	NOT_PAD_LEFT_RELEASED:
+
+	lda current_input
+	and #PAD_LEFT
+	beq NOT_PAD_LEFT_HELD
+		; LEFT held
+		lda left_time_held
+		cmp #15
+		bpl time_left_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
+
+	time_left_held_below_threshold:
+		inc left_time_held
+		jmp NOT_PAD_LEFT_HELD
+
+	time_left_held_above_threshold:
+		; LEFT hold acivated
+		lda frame_counter
+		and #%00000011
+		bne NOT_PAD_LEFT_HELD
+
 		jsr handle_left_button_press_T2
 		jsr draw_indicator_T1
 
-	NOT_PAD_LEFT:
+	NOT_PAD_LEFT_HELD:
 
 	lda input_pressed_this_frame
 	and #PAD_RIGHT
-	beq NOT_PAD_RIGHT
-		; right pressed
+	beq NOT_PAD_RIGHT_PRESSED
+		; RIGHT pressed
 		jsr handle_right_button_press_T2
 		jsr draw_indicator_T1
+		lda #1
+		sta right_time_held
 
-	NOT_PAD_RIGHT:
+	NOT_PAD_RIGHT_PRESSED:
+
+	lda input_released_this_frame
+	and #PAD_RIGHT
+	beq NOT_PAD_RIGHT_RELEASED
+		; RIGHT released
+		lda #0
+		sta right_time_held
+
+	NOT_PAD_RIGHT_RELEASED:
+
+	lda current_input
+	and #PAD_RIGHT
+	beq NOT_PAD_RIGHT_HELD
+		; RIGHT held
+		lda right_time_held
+		cmp #15
+		bpl time_right_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
+
+	time_right_held_below_threshold:
+		inc right_time_held
+		jmp NOT_PAD_RIGHT_HELD
+
+	time_right_held_above_threshold:
+
+		lda frame_counter
+		and #%00000011
+		bne NOT_PAD_RIGHT_HELD
+
+		jsr handle_right_button_press_T2
+		jsr draw_indicator_T1
+	NOT_PAD_RIGHT_HELD:
 
 	lda input_pressed_this_frame
 	and #PAD_A
