@@ -98,7 +98,7 @@
 		lda input_pressed_this_frame
 	and #PAD_B
 	beq NOT_PAD_B_PRESSED
-		; A pressed
+		; B pressed
 		jsr remove_last_character_on_page_without_reload_T1
 		lda #1
 		sta b_held
@@ -108,7 +108,7 @@
 	lda input_released_this_frame
 	and #PAD_B
 	beq NOT_PAD_B_RELEASED
-		; A released
+		; B released
 		jsr redraw_current_page_T2
 		lda #0
 		sta b_held
@@ -119,25 +119,19 @@
 	lda current_input
 	and #PAD_B
 	beq NOT_PAD_B_HELD
-		; A held
+		; B held
 		lda b_time_held
-		cmp #50
-		bpl time_b_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
+		cmp #100
+		bcs time_b_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
 
 	time_b_held_below_threshold:
 		inc b_time_held
 		jmp NOT_PAD_B_HELD
 
 	time_b_held_above_threshold:
-		inc b_time_held
-		lda b_time_held
-		and #%00000111
-		cmp #0
-		beq :+
-			jsr remove_last_character_on_page_without_reload_T1
-			jmp NOT_PAD_B_HELD
-		:
-			jsr remove_last_character_on_page_T1
+		jsr clear_current_page_T1
+		lda #0
+		sta b_time_held
 	NOT_PAD_B_HELD:
 
 	lda input_pressed_this_frame

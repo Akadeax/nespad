@@ -181,6 +181,8 @@ draw_finished:
 	rts
 .endproc
 
+
+
 .proc remove_last_character_on_page_without_reload_T1
 	lda current_wram_text_ptr_lo
 	sta zp_temp_0

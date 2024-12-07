@@ -65,9 +65,27 @@ clear_wram_p1:
 	sta $6000,x
 	inx
 	bne clear_wram_p1
-	
+	jsr redraw_current_page_T2
 	rts
 .endproc
+
+.proc clear_current_page_T1
+	lda current_page
+	clc
+	adc #$60
+	sta zp_temp_1
+	lda #0
+	sta zp_temp_0
+	ldy #0
+:
+	sta (zp_temp_0),y
+	iny
+	bne :-
+
+	jsr redraw_current_page_T2
+	rts
+.endproc
+
 
 
 .macro push_pointers
