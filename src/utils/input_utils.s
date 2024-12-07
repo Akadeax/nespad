@@ -65,7 +65,7 @@
 	cmp #KEYBOARD_IDX_LINE_COUNTER
 	bne :+
 		jsr increment_selected_line_T0
-		jsr redraw_current_page_T2
+		jsr redraw_current_page_T5
 		jsr draw_color_indicator_T5
 		jsr draw_selected_line_indicator
 		rts
@@ -73,7 +73,7 @@
 	cmp #KEYBOARD_IDX_COLOR_DISP
 	bne :+
 		jsr decrement_color_T0
-		jsr redraw_current_page_T2
+		jsr redraw_current_page_T5
 		jsr draw_selected_line_indicator
 		rts
 	:
@@ -140,7 +140,7 @@
 	cmp #KEYBOARD_IDX_LINE_COUNTER
 	bne :+
 		jsr decrement_selected_line_T0
-		jsr redraw_current_page_T2
+		jsr redraw_current_page_T5
 		jsr draw_color_indicator_T5
 		jsr draw_selected_line_indicator
 		rts
@@ -148,7 +148,7 @@
 	cmp #KEYBOARD_IDX_COLOR_DISP
 	bne :+
 		jsr increment_color_T0
-		jsr redraw_current_page_T2
+		jsr redraw_current_page_T5
 		jsr draw_selected_line_indicator
 		rts
 	:
@@ -493,7 +493,7 @@
  not_prev_page:
 
  redraw:
-	jsr redraw_current_page_T2
+	jsr redraw_current_page_T5
  end_func:
 	rts
 .endproc
@@ -581,7 +581,7 @@
 		lda #0
 	:
 	sta screen_keyboard_index
-	jsr redraw_current_page_T2 
+	jsr redraw_current_page_T5 
 	jsr draw_indicator_T1
 	rts
 .endproc

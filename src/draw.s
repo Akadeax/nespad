@@ -1,4 +1,4 @@
-.proc redraw_current_page_T2 ;LINTEXCLUDE
+.proc redraw_current_page_T5 ;LINTEXCLUDE
 	jsr ppu_off
 	; accessing VRAM is now safe
 	jsr redraw_screen
@@ -176,7 +176,7 @@ draw_finished:
 	ldy #0
 	sta (zp_temp_0),y
 
-	jsr redraw_current_page_T2
+	jsr redraw_current_page_T5
  end_func:
 	rts
 .endproc

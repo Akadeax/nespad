@@ -45,11 +45,11 @@ current_wram_text_ptr_hi: .res 1
 current_nametable_ptr_lo: .res 1 ; pointer keeping up with text_index, but in nametable memory
 current_nametable_ptr_hi: .res 1
 
-a_held: .res 1
 a_time_held: .res 1
 
-b_held: .res 1
 b_time_held: .res 1
+
+start_time_held: .res 1
 
 notepad_state: .res 1
 
@@ -126,7 +126,7 @@ paletteloop:
 	.include "tests/tests.s"
 .endif
 
-	jsr redraw_current_page_T2
+	jsr redraw_current_page_T5
 	jsr draw_indicator_T1
 	.include "mainloop.s"
 .endproc

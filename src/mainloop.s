@@ -64,7 +64,7 @@
 		; A pressed
 		jsr activate_selected_key
 		lda #1
-		sta a_held
+		sta a_time_held
 
 	NOT_PAD_A_PRESSED:
 
@@ -73,7 +73,6 @@
 	beq NOT_PAD_A_RELEASED
 		; A released
 		lda #0
-		sta a_held
 		sta a_time_held
 
 	NOT_PAD_A_RELEASED:
@@ -95,13 +94,13 @@
 
 	NOT_PAD_A_HELD:
 
-		lda input_pressed_this_frame
+	lda input_pressed_this_frame
 	and #PAD_B
 	beq NOT_PAD_B_PRESSED
 		; B pressed
 		jsr remove_last_character_on_page_without_reload_T1
 		lda #1
-		sta b_held
+		sta b_time_held
 
 	NOT_PAD_B_PRESSED:
 
@@ -109,9 +108,8 @@
 	and #PAD_B
 	beq NOT_PAD_B_RELEASED
 		; B released
-		jsr redraw_current_page_T2
+		jsr redraw_current_page_T5
 		lda #0
-		sta b_held
 		sta b_time_held
 
 	NOT_PAD_B_RELEASED:
@@ -141,11 +139,44 @@
 		jsr select_pressed
 	NOT_PAD_SELECT:
 
+
 	lda input_pressed_this_frame
 	and #PAD_START
-	beq NOT_PAD_START
-		; START pressed
-	NOT_PAD_START:
+	beq NOT_PAD_START_PRESSED
+		; B pressed
+
+		lda #1
+		sta start_time_held
+
+	NOT_PAD_START_PRESSED:
+
+
+	lda input_released_this_frame
+	and #PAD_START
+	beq NOT_PAD_START_RELEASED
+		; SELECT released
+		lda #0
+		sta start_time_held
+
+	NOT_PAD_START_RELEASED:
+
+	lda current_input
+	and #PAD_START
+	beq NOT_PAD_START_HELD
+		; B held
+		lda start_time_held
+		cmp #255
+		beq time_start_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
+
+	time_start_held_below_threshold:
+		inc start_time_held
+		jmp NOT_PAD_START_HELD
+
+	time_start_held_above_threshold:
+		jsr clear_wram_T3
+		lda #0
+		sta start_time_held
+	NOT_PAD_START_HELD:
 
 
  	lda current_input
