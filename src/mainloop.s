@@ -111,6 +111,16 @@
 	and #PAD_LEFT
 	beq NOT_PAD_LEFT_PRESSED
 		; LEFT pressed
+
+		;;; TODO Remove
+		lda screen_keyboard_index
+		cmp #KEYBOARD_IDX_SPACEBAR
+		bne :+
+			; on spacebar; left pressed
+			jsr move_cursor_left
+			jmp NOT_PAD_LEFT_PRESSED
+:
+
 		jsr handle_left_button_press_T2
 		jsr draw_indicator_T1
 		
@@ -155,6 +165,15 @@
 	and #PAD_RIGHT
 	beq NOT_PAD_RIGHT_PRESSED
 		; RIGHT pressed
+		;;; TODO Remove
+		lda screen_keyboard_index
+		cmp #KEYBOARD_IDX_SPACEBAR
+		bne :+
+			; on spacebar; right pressed
+			jsr move_cursor_right
+			jmp NOT_PAD_RIGHT_PRESSED
+	:
+
 		jsr handle_right_button_press_T2
 		jsr draw_indicator_T1
 		lda #1

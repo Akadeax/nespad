@@ -53,9 +53,10 @@ up_time_held: .res 1
 left_time_held: .res 1
 right_time_held: .res 1
 
-frame_counter: .res 1 ;doesnt really count frames but can be used for stuff that needs to happen every 10 frames ect ect
+frame_counter: .res 1 ; doesn't really count frames but can be used for stuff that needs to happen every 10 frames etc.
 
 notepad_state: .res 1
+key_delete_flag: .res 1
 
 screen_keyboard_index:  .res 1
 .segment "ZEROPAGE"
