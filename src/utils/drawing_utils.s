@@ -55,6 +55,8 @@
 		jsr redraw_symbol_keyboard_T0
 		rts
 	NOT_SPECIAL_KEYBOARD:
+	
+
 
 	lda notepad_state
 	and #%00000011

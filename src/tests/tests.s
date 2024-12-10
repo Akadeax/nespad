@@ -50,9 +50,9 @@ __CATEGORY__ ; Testing Keyboard Input
         lda #44
         sta screen_keyboard_index
         jsr keyboard_idx_to_nametable_pos_T2
-        TEST_val16_eq_literal zp_temp_1, zp_temp_2, $038A
+        TEST_val16_eq_literal zp_temp_1, zp_temp_2, $038C
         jsr convert_nametable_index_to_XY_T2
-        TEST_val_eq_literal zp_temp_0, $50
+        TEST_val_eq_literal zp_temp_0, $60
         TEST_val_eq_literal zp_temp_1, $E0
         lda #%00000110
         sta notepad_state

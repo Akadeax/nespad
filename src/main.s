@@ -133,6 +133,7 @@ paletteloop:
 
 	jsr redraw_current_page_T5
 	jsr draw_indicator_T1
+	jsr draw_direction_arrows_T3
 	.include "mainloop.s"
 .endproc
 

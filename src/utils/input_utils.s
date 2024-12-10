@@ -476,7 +476,9 @@
 		sta notepad_state
 
 		inc current_page
-		jmp redraw
+		jsr redraw_current_page_T5
+		jsr draw_direction_arrows_T3
+		rts
  not_next_page:
 
 	lda screen_keyboard_index
@@ -489,7 +491,9 @@
 		and #%00001111
 		sta notepad_state
 		dec current_page
-		jmp redraw
+		jsr redraw_current_page_T5
+		jsr draw_direction_arrows_T3
+		rts
  not_prev_page:
 
  redraw:
@@ -571,6 +575,7 @@
 	sta notepad_state
 	and #%00001000
 	beq :+
+		jsr clear_direction_arrows_T1
 		jsr draw_color_indicator_T5
 		jsr draw_selected_line_indicator
 		lda #128
@@ -578,6 +583,7 @@
 	:
 		jsr clear_color_indicator
 		jsr clear_line_indicator_T1
+		jsr draw_direction_arrows_T3
 		lda #0
 	:
 	sta screen_keyboard_index

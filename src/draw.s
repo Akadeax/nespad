@@ -305,3 +305,42 @@ draw_finished:
 		bne clear_loop
 	rts
 .endproc
+
+.proc draw_direction_arrows_T3
+	lda #9
+	sta zp_temp_0
+	jsr get_color_from_line_T2
+	lda zp_temp_0
+	sta zp_temp_3
+
+	lda #<KEYBOARD_NAMETABLE_ARROW_LEFT
+	sta zp_temp_1
+	lda #>KEYBOARD_NAMETABLE_ARROW_LEFT
+	sta zp_temp_2
+	jsr convert_nametable_index_to_XY_T2
+	lda zp_temp_0
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#00 ,#00 ,#$0C ,#51 ,zp_temp_3
+
+	lda #<KEYBOARD_NAMETABLE_ARROW_RIGHT
+	sta zp_temp_1
+	lda #>KEYBOARD_NAMETABLE_ARROW_RIGHT
+	sta zp_temp_2
+	jsr convert_nametable_index_to_XY_T2
+	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#00 ,#00 ,#$0D ,#50 ,zp_temp_3
+	rts
+.endproc
+
+.proc clear_direction_arrows_T1
+	ldy #200
+	lda #<CPU_OAM_PTR
+	sta zp_temp_0
+	lda #>CPU_OAM_PTR
+	sta zp_temp_1
+	lda #0
+	clear_loop:
+		sta (zp_temp_0), y
+		iny
+		cpy #8
+		bne clear_loop
+	rts
+.endProc

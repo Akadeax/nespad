@@ -342,6 +342,7 @@
 
 .proc get_color_from_selected_line_T2 ;LINTEXCLUDE
 	jsr get_selected_line_T0
+
 	jsr get_color_from_line_T2
 	rts
 .endproc
