@@ -4,7 +4,7 @@ Nespad is a text editor developed for the Nintendo Entertainment System (1983), 
 
 
 ## Feature List
-Supported features
+Supported features:
 - An on-screen keyboard, with a separate symbol keyboard accessible
 - Writing in normal, **bold**, and *italic* text; all of them either capital or lowercase
 - 32 pages of text
