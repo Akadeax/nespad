@@ -59,6 +59,11 @@ notepad_state: .res 1
 key_delete_flag: .res 1
 
 screen_keyboard_index:  .res 1
+
+a_sound_frame_countdown: .res 1
+b_sound_frame_countdown: .res 1
+
+
 .segment "ZEROPAGE"
 zp_temp_0: .res 1
 zp_temp_1: .res 1
@@ -91,6 +96,7 @@ palette: .res 32 ; current palette buffer
 .include "utils/keyboard_utils.s"
 .include "utils/drawing_utils.s"
 .include "utils/input_utils.s"
+.include "utils/sound_utils.s"
 .include "draw.s"
 
 ;***************************************

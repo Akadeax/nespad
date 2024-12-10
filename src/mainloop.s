@@ -10,6 +10,7 @@
 
 	inc frame_counter
 
+	
  	; read the gamepad
  	poll_gamepad current_input
 
@@ -217,6 +218,8 @@
 	beq NOT_PAD_A_PRESSED
 		; A pressed
 		jsr activate_selected_key
+		lda #5
+		sta a_sound_frame_countdown
 		lda #1
 		sta a_time_held
 
@@ -247,7 +250,8 @@
 		lda frame_counter
 		and #%00000010
 		bne NOT_PAD_A_HELD
-
+		lda #5
+		sta a_sound_frame_countdown
 		jsr activate_selected_key
 
 	NOT_PAD_A_HELD:
@@ -257,6 +261,8 @@
 	beq NOT_PAD_B_PRESSED
 		; B pressed
 		jsr remove_last_character_on_page_without_reload
+		lda #4
+		sta b_sound_frame_countdown
 		lda #1
 		sta b_time_held
 	NOT_PAD_B_PRESSED:
@@ -284,6 +290,8 @@
 		jmp NOT_PAD_B_HELD
 
 	time_b_held_above_threshold:
+		lda #4
+		sta b_sound_frame_countdown
 		lda frame_counter
 		and #%00000010
 		bne NOT_PAD_B_HELD
@@ -339,5 +347,6 @@
 
  	lda current_input
     sta last_frame_input
+	jsr handle_sound
 
  	jmp mainloop

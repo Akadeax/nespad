@@ -9,8 +9,12 @@
 	sta PPU_CONTROL	; disable NMI
 	sta PPU_MASK	; disable rendering
 	sta APU_DM_CONTROL	; disable DMC IRQ
+	; Initialize APU 
 	lda #$40
 	sta JOYPAD2		; disable APU frame IRQ
+	LDX #$FF 
+	STX $4015 ; Disable all channels 
+
 
 	cld			; disable decimal mode
 	ldx #$FF
@@ -18,6 +22,7 @@
 
 	; wait for first vBlank
 	bit PPU_STATUS
+
 wait_vblank:
 	bit PPU_STATUS
 	bpl wait_vblank
