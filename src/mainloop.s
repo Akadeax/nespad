@@ -225,6 +225,10 @@
 		jmp NOT_PAD_A_HELD
 
 	time_a_held_above_threshold:
+		lda frame_counter
+		and #%00000010
+		bne NOT_PAD_A_HELD
+
 		jsr activate_selected_key
 
 	NOT_PAD_A_HELD:
@@ -233,7 +237,7 @@
 	and #PAD_B
 	beq NOT_PAD_B_PRESSED
 		; B pressed
-		jsr remove_last_character_on_page_without_reload_T1
+		jsr remove_last_character_on_page_without_reload
 		lda #1
 		sta b_time_held
 
@@ -243,7 +247,7 @@
 	and #PAD_B
 	beq NOT_PAD_B_RELEASED
 		; B released
-		jsr redraw_current_page_T5
+		
 		lda #0
 		sta b_time_held
 
@@ -254,7 +258,7 @@
 	beq NOT_PAD_B_HELD
 		; B held
 		lda b_time_held
-		cmp #100
+		cmp #50
 		bcs time_b_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
 
 	time_b_held_below_threshold:
@@ -262,9 +266,11 @@
 		jmp NOT_PAD_B_HELD
 
 	time_b_held_above_threshold:
-		jsr clear_current_page_T1
-		lda #0
-		sta b_time_held
+		lda frame_counter
+		and #%00000010
+		bne NOT_PAD_B_HELD
+
+		jsr remove_last_character_on_page_without_reload
 	NOT_PAD_B_HELD:
 
 	lda input_pressed_this_frame

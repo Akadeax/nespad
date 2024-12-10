@@ -183,23 +183,20 @@ draw_finished:
 
 
 
-.proc remove_last_character_on_page_without_reload_T1
-	lda current_wram_text_ptr_lo
-	sta zp_temp_0
-
-	lda zp_temp_0
+.proc remove_last_character_on_page_without_reload
+	lda current_text_index
 	beq end_func
 	
-	dec zp_temp_0
-
-	lda current_wram_text_ptr_hi
-	sta zp_temp_1
+	jsr decrement_nametable_ptr_T0
+	dec current_wram_text_ptr_lo
+	dec current_text_index
 
 	lda #0
 	ldy #0
-	sta (zp_temp_0),y
-	dec current_wram_text_ptr_lo
-	dec current_text_index
+	sta (current_wram_text_ptr_lo),y
+
+	jsr redraw_pointer
+
  end_func:
 	rts
 .endproc

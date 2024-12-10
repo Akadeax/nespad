@@ -42,9 +42,12 @@ loop:
 	cpx #32
 	bcc loop
 
-	; if first char, don't draw yet
+	; save pointers so we can do processing to them without damaging them
+	push_pointers
+
+	; if first char, only support deletion, not drawing
 	lda current_text_index
-	beq update_text_finished
+	beq delete_next_char
 
 	lda current_nametable_ptr_hi
 	cmp #>$2282 ; $2282 is the wrong last character position
@@ -64,7 +67,7 @@ not_last_char:
 	; wram_text_ptr - 1 is where we want to fetch text from;
 	; it points to the next character we want to write to, so we want to draw the one *before* that
 
-	push_pointers
+
 
 	jsr decrement_nametable_ptr_T0
 	
@@ -75,8 +78,7 @@ not_last_char:
 	sta PPU_ADDR
 	; same with nametable_ptr, it points to the next one to draw to
 
-	pop_pointers
-
+	
 	ldy #0
 	lda (zp_temp_0),y
 
@@ -84,10 +86,34 @@ not_last_char:
 	bne not_spacebar
 		lda #0 ; E7 is different on the nametable, but we want to just render it as empty
 not_spacebar:
+	sta PPU_DATA
 
+delete_next_char:
+	lda current_text_index
+	cmp #PAGE_TEXT_SIZE
+	beq update_text_finished
+
+	lda current_text_index
+	beq not_dec
+		; text_index is not 0
+		dec current_text_index
+		jsr increment_nametable_ptr
+not_dec:
+
+	lda PPU_STATUS
+	lda current_nametable_ptr_hi
+	sta PPU_ADDR
+	lda current_nametable_ptr_lo
+	sta PPU_ADDR
+
+	lda #0
 	sta PPU_DATA
 
 update_text_finished:
+	; reset pointers after drawing
+	pop_pointers
+
+	; reset control & scroll
 	lda #%10001000
 	sta PPU_CONTROL
 

@@ -8,6 +8,7 @@
 @GOTO endbuild
 
 :failure
+@echo:
 @echo Linting error!
 
 :endbuild
