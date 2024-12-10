@@ -108,9 +108,9 @@ draw_finished:
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#18 ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1  ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#2  ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4  ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6  ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#40 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#40 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#40 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7  ,#0
  
 	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#3  ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5  ,#0
@@ -118,12 +118,10 @@ draw_finished:
 	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#9  ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#10 ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#11 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#48 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#12 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#48 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#13 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#56 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#14 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#56 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#15 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#64 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#16 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#64 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#17 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#24 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#12 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#24 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#13 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#32 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#14 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#32 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#15 ,#0
 	rts
 .endproc
 
@@ -182,27 +180,6 @@ draw_finished:
 .endproc
 
 
-
-.proc remove_last_character_on_page_without_reload_T1
-	lda current_wram_text_ptr_lo
-	sta zp_temp_0
-
-	lda zp_temp_0
-	beq end_func
-	
-	dec zp_temp_0
-
-	lda current_wram_text_ptr_hi
-	sta zp_temp_1
-
-	lda #0
-	ldy #0
-	sta (zp_temp_0),y
-	dec current_wram_text_ptr_lo
-	dec current_text_index
- end_func:
-	rts
-.endproc
 
 .proc redraw_pointer ;LINTEXCLUDE
 	jsr get_current_nametable_pointer_XY_T2

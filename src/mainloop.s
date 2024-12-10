@@ -233,46 +233,12 @@
 	and #PAD_B
 	beq NOT_PAD_B_PRESSED
 		; B pressed
-		jsr remove_last_character_on_page_without_reload_T1
+		jsr remove_last_character_on_page_T1
 		lda #1
 		sta b_time_held
-
 	NOT_PAD_B_PRESSED:
 
-	lda input_released_this_frame
-	and #PAD_B
-	beq NOT_PAD_B_RELEASED
-		; B released
-		jsr redraw_current_page_T5
-		lda #0
-		sta b_time_held
-
-	NOT_PAD_B_RELEASED:
-
-	lda current_input
-	and #PAD_B
-	beq NOT_PAD_B_HELD
-		; B held
-		lda b_time_held
-		cmp #100
-		bcs time_b_held_above_threshold ; if a_time_held > threshold, call type; otherwise just increment it
-
-	time_b_held_below_threshold:
-		inc b_time_held
-		jmp NOT_PAD_B_HELD
-
-	time_b_held_above_threshold:
-		jsr clear_current_page_T1
-		lda #0
-		sta b_time_held
-	NOT_PAD_B_HELD:
-
-	lda input_pressed_this_frame
-	and #PAD_SELECT
-	beq NOT_PAD_SELECT
-		; SELECT pressed
-		jsr select_pressed
-	NOT_PAD_SELECT:
+	
 
 
 	lda input_pressed_this_frame
@@ -313,6 +279,12 @@
 		sta start_time_held
 	NOT_PAD_START_HELD:
 
+	lda input_pressed_this_frame
+	and #PAD_SELECT
+	beq NOT_PAD_SELECT
+		; SELECT pressed
+		jsr select_pressed
+	NOT_PAD_SELECT:
 
  	lda current_input
     sta last_frame_input
