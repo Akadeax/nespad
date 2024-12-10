@@ -65,7 +65,7 @@ clear_wram_p1:
 	sta $6000,x
 	inx
 	bne clear_wram_p1
-	jsr redraw_current_page_T5
+	
 	rts
 .endproc
 
