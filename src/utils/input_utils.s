@@ -585,3 +585,41 @@
 	jsr draw_indicator_T1
 	rts
 .endproc
+
+
+.proc move_cursor_left
+	lda current_text_index
+	beq end_func
+
+	jsr decrement_nametable_ptr_T0
+	dec current_text_index
+	dec current_wram_text_ptr_lo
+
+	jsr redraw_pointer
+
+end_func:
+	rts
+.endproc
+
+
+.proc move_cursor_right
+	lda current_text_index
+	cmp #PAGE_TEXT_SIZE
+	beq end_func
+
+	ldy #0
+	lda (current_wram_text_ptr_lo),y
+	bne :+
+		lda #SPACEBAR_SUBSTITUTE
+		sta (current_wram_text_ptr_lo),y
+	:
+
+	jsr increment_nametable_ptr
+	inc current_text_index
+	inc current_wram_text_ptr_lo
+
+	jsr redraw_pointer
+
+end_func:
+	rts
+.endproc

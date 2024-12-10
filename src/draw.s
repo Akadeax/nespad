@@ -24,7 +24,7 @@ draw_loop:
 	ldy #0
 	lda (current_wram_text_ptr_lo),y
 
-	cmp #$E7 ; replace spacebar indicator ($E7) with empty render
+	cmp #SPACEBAR_SUBSTITUTE ; replace spacebar indicator ($E7) with empty render
 	bne :+
 		; current char is $E7
 		lda #0
@@ -194,6 +194,9 @@ draw_finished:
 	sta (current_wram_text_ptr_lo),y
 
 	jsr redraw_pointer
+
+	lda #1
+	sta key_delete_flag
 
  end_func:
 	rts

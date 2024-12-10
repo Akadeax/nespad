@@ -94,7 +94,7 @@
 	ldx #44
 	cpx zp_temp_0
 	bne :+ ;if keyboardIdx = 44(spaceBar)
-		lda #$E7 ; spacebar is treated as $FF so it's not the same as "no character"
+		lda #SPACEBAR_SUBSTITUTE ; spacebar is treated as $FF so it's not the same as "no character"
 		rts
  :
 	;space for code for the special characters i guess, didnt know how to incorporate it with the current layout

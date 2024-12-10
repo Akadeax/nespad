@@ -82,13 +82,20 @@ not_last_char:
 	ldy #0
 	lda (zp_temp_0),y
 
-	cmp #$E7 ; E7 is spacebar
+	cmp #SPACEBAR_SUBSTITUTE ; E7 is spacebar
 	bne not_spacebar
 		lda #0 ; E7 is different on the nametable, but we want to just render it as empty
 not_spacebar:
 	sta PPU_DATA
 
 delete_next_char:
+
+	lda key_delete_flag
+	beq update_text_finished
+
+	lda #0
+	sta key_delete_flag
+
 	lda current_text_index
 	cmp #PAGE_TEXT_SIZE
 	beq update_text_finished
