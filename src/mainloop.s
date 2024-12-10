@@ -240,7 +240,6 @@
 		jsr remove_last_character_on_page_without_reload
 		lda #1
 		sta b_time_held
-
 	NOT_PAD_B_PRESSED:
 
 	lda input_released_this_frame
@@ -318,7 +317,6 @@
 		lda #0
 		sta start_time_held
 	NOT_PAD_START_HELD:
-
 
  	lda current_input
     sta last_frame_input

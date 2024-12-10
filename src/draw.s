@@ -108,9 +108,9 @@ draw_finished:
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#07 ,#00 ,#$06 ,#18 ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#00 ,#01 ,#$04 ,#1  ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#07 ,#01 ,zp_temp_1 ,#08 ,#01 ,#$01 ,#2  ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4  ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6  ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#72 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#40 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$03 ,#4  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#40 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$08 ,#6  ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#40 ,#00 ,zp_temp_1 ,#00 ,#01 ,#$05 ,#7  ,#0
  
 	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#3  ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#00 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#5  ,#0
@@ -118,12 +118,10 @@ draw_finished:
 	draw_sprite_at_location_T2 zp_temp_0 ,#08 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#9  ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#10 ,#0
 	draw_sprite_at_location_T2 zp_temp_0 ,#16 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#11 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#48 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#12 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#48 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#13 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#56 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#14 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#56 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#15 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#64 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#16 ,#0
-	draw_sprite_at_location_T2 zp_temp_0 ,#64 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#17 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#24 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#12 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#24 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#13 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#32 ,#00 ,zp_temp_1 ,#08 ,#01 ,#$02 ,#14 ,#0
+	draw_sprite_at_location_T2 zp_temp_0 ,#32 ,#00 ,zp_temp_1 ,#07 ,#00 ,#$07 ,#15 ,#0
 	rts
 .endproc
 
