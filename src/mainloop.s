@@ -27,27 +27,27 @@
     ; do input handling stuff here
 	lda input_pressed_this_frame
 	and #PAD_UP
-	beq NOT_PAD_UP_PRESSED
+	beq not_pad_up_pressed
 		; UP pressed
 		jsr handle_up_button_press_T2
 		jsr draw_indicator_T1
 		lda #1
 		sta up_time_held
 
-	NOT_PAD_UP_PRESSED:
+	not_pad_up_pressed:
 
 	lda input_released_this_frame
 	and #PAD_UP
-	beq NOT_PAD_UP_RELEASED
+	beq not_pad_up_released
 		; UP released
 		lda #0
 		sta up_time_held
 
-	NOT_PAD_UP_RELEASED:
+	not_pad_up_released:
 
 	lda current_input
 	and #PAD_UP
-	beq NOT_PAD_UP_HELD
+	beq not_pad_up_held
 		; UP held
 		lda up_time_held
 		cmp #15
@@ -55,40 +55,40 @@
 
 	time_up_held_below_threshold:
 		inc up_time_held
-		jmp NOT_PAD_UP_HELD
+		jmp not_pad_up_held
 
 	time_up_held_above_threshold:
 		; UP hold acivated
 		lda frame_counter
 		and #%00000011
-		bne NOT_PAD_UP_HELD
+		bne not_pad_up_held
 		jsr handle_up_button_press_T2
 		jsr draw_indicator_T1
-	NOT_PAD_UP_HELD:
+	not_pad_up_held:
 
 	lda input_pressed_this_frame
-	and #PAD_DOWN
-	beq NOT_PAD_DOWN_PRESSED
+	and #pad_down
+	beq not_pad_down_pressed
 		; DOWN pressed
 		jsr handle_down_button_press_T2
 		jsr draw_indicator_T1
 		lda #1
 		sta down_time_held
 
-	NOT_PAD_DOWN_PRESSED:
+	not_pad_down_pressed:
 
 	lda input_released_this_frame
-	and #PAD_DOWN
-	beq NOT_PAD_DOWN_RELEASED
+	and #pad_down
+	beq not_pad_down_released
 		; DOWN released
 		lda #0
 		sta down_time_held
 
-	NOT_PAD_DOWN_RELEASED:
+	not_pad_down_released:
 
 	lda current_input
-	and #PAD_DOWN
-	beq NOT_PAD_DOWN_HELD
+	and #pad_down
+	beq not_pad_down_held
 		; DOWN held
 		lda down_time_held
 		cmp #15
@@ -96,30 +96,29 @@
 
 	time_down_held_below_threshold:
 		inc down_time_held
-		jmp NOT_PAD_DOWN_HELD
+		jmp not_pad_down_held
 
 	time_down_held_above_threshold:
 		; DOWN hold acivated
 		lda frame_counter
 		and #%00000011
-		bne NOT_PAD_DOWN_HELD
+		bne not_pad_down_held
 		jsr handle_down_button_press_T2
 		jsr draw_indicator_T1
-	NOT_PAD_DOWN_HELD:
+	not_pad_down_held:
 
 
 	lda input_pressed_this_frame
-	and #PAD_LEFT
-	beq NOT_PAD_LEFT_PRESSED
+	and #pad_left
+	beq not_pad_left_pressed
 		; LEFT pressed
 
-		;;; TODO Remove
 		lda screen_keyboard_index
 		cmp #KEYBOARD_IDX_SPACEBAR
 		bne :+
 			; on spacebar; left pressed
 			jsr move_cursor_left
-			jmp NOT_PAD_LEFT_PRESSED
+			jmp not_pad_left_pressed
 :
 
 		jsr handle_left_button_press_T2
@@ -128,20 +127,20 @@
 		lda #1
 		sta left_time_held
 
-	NOT_PAD_LEFT_PRESSED:
+	not_pad_left_pressed:
 
 	lda input_released_this_frame
-	and #PAD_LEFT
-	beq NOT_PAD_LEFT_RELEASED
+	and #pad_left
+	beq not_pad_left_released
 		; LEFT released
 		lda #0
 		sta left_time_held
 
-	NOT_PAD_LEFT_RELEASED:
+	not_pad_left_released:
 
 	lda current_input
-	and #PAD_LEFT
-	beq NOT_PAD_LEFT_HELD
+	and #pad_left
+	beq not_pad_left_held
 		; LEFT held
 		lda left_time_held
 		cmp #15
@@ -149,30 +148,38 @@
 
 	time_left_held_below_threshold:
 		inc left_time_held
-		jmp NOT_PAD_LEFT_HELD
+		jmp not_pad_left_held
 
 	time_left_held_above_threshold:
+
+
 		; LEFT hold acivated
 		lda frame_counter
 		and #%00000011
-		bne NOT_PAD_LEFT_HELD
+		bne not_pad_left_held
 
+		lda screen_keyboard_index
+		cmp #KEYBOARD_IDX_SPACEBAR
+		bne :+
+			; on spacebar; left pressed
+			jsr move_cursor_left
+			jmp not_pad_left_held
+:
 		jsr handle_left_button_press_T2
 		jsr draw_indicator_T1
 
-	NOT_PAD_LEFT_HELD:
+	not_pad_left_held:
 
 	lda input_pressed_this_frame
 	and #PAD_RIGHT
-	beq NOT_PAD_RIGHT_PRESSED
+	beq not_pad_right_pressed
 		; RIGHT pressed
-		;;; TODO Remove
 		lda screen_keyboard_index
 		cmp #KEYBOARD_IDX_SPACEBAR
 		bne :+
 			; on spacebar; right pressed
 			jsr move_cursor_right
-			jmp NOT_PAD_RIGHT_PRESSED
+			jmp not_pad_right_pressed
 	:
 
 		jsr handle_right_button_press_T2
@@ -180,20 +187,20 @@
 		lda #1
 		sta right_time_held
 
-	NOT_PAD_RIGHT_PRESSED:
+	not_pad_right_pressed:
 
 	lda input_released_this_frame
 	and #PAD_RIGHT
-	beq NOT_PAD_RIGHT_RELEASED
+	beq not_pad_right_released
 		; RIGHT released
 		lda #0
 		sta right_time_held
 
-	NOT_PAD_RIGHT_RELEASED:
+	not_pad_right_released:
 
 	lda current_input
 	and #PAD_RIGHT
-	beq NOT_PAD_RIGHT_HELD
+	beq not_pad_right_held
 		; RIGHT held
 		lda right_time_held
 		cmp #15
@@ -201,21 +208,30 @@
 
 	time_right_held_below_threshold:
 		inc right_time_held
-		jmp NOT_PAD_RIGHT_HELD
+		jmp not_pad_right_held
 
 	time_right_held_above_threshold:
 
+
 		lda frame_counter
 		and #%00000011
-		bne NOT_PAD_RIGHT_HELD
+		bne not_pad_right_held
+		
+		lda screen_keyboard_index
+		cmp #KEYBOARD_IDX_SPACEBAR
+		bne :+
+			; on spacebar; right pressed
+			jsr move_cursor_right
+			jmp not_pad_right_held
+	:
 
 		jsr handle_right_button_press_T2
 		jsr draw_indicator_T1
-	NOT_PAD_RIGHT_HELD:
+	not_pad_right_held:
 
 	lda input_pressed_this_frame
 	and #PAD_A
-	beq NOT_PAD_A_PRESSED
+	beq not_pad_A_pressed
 		; A pressed
 		jsr activate_selected_key
 		lda #5
@@ -223,20 +239,20 @@
 		lda #1
 		sta a_time_held
 
-	NOT_PAD_A_PRESSED:
+	not_pad_A_pressed:
 
 	lda input_released_this_frame
 	and #PAD_A
-	beq NOT_PAD_A_RELEASED
+	beq not_pad_A_released
 		; A released
 		lda #0
 		sta a_time_held
 
-	NOT_PAD_A_RELEASED:
+	not_pad_A_released:
 
 	lda current_input
 	and #PAD_A
-	beq NOT_PAD_A_HELD
+	beq not_pad_A_held
 		; A held
 		lda a_time_held
 		cmp #50
@@ -244,42 +260,42 @@
 
 	time_a_held_below_threshold:
 		inc a_time_held
-		jmp NOT_PAD_A_HELD
+		jmp not_pad_A_held
 
 	time_a_held_above_threshold:
 		lda frame_counter
 		and #%00000010
-		bne NOT_PAD_A_HELD
+		bne not_pad_A_held
 		lda #5
 		sta a_sound_frame_countdown
 		jsr activate_selected_key
 
-	NOT_PAD_A_HELD:
+	not_pad_A_held:
 
 	lda input_pressed_this_frame
 	and #PAD_B
-	beq NOT_PAD_B_PRESSED
+	beq not_pad_B_pressed
 		; B pressed
 		jsr remove_last_character_on_page_without_reload
 		lda #4
 		sta b_sound_frame_countdown
 		lda #1
 		sta b_time_held
-	NOT_PAD_B_PRESSED:
+	not_pad_B_pressed:
 
 	lda input_released_this_frame
 	and #PAD_B
-	beq NOT_PAD_B_RELEASED
+	beq not_pad_B_released
 		; B released
 		
 		lda #0
 		sta b_time_held
 
-	NOT_PAD_B_RELEASED:
+	not_pad_B_released:
 
 	lda current_input
 	and #PAD_B
-	beq NOT_PAD_B_HELD
+	beq not_pad_B_held
 		; B held
 		lda b_time_held
 		cmp #50
@@ -287,49 +303,49 @@
 
 	time_b_held_below_threshold:
 		inc b_time_held
-		jmp NOT_PAD_B_HELD
+		jmp not_pad_B_held
 
 	time_b_held_above_threshold:
 		lda #4
 		sta b_sound_frame_countdown
 		lda frame_counter
 		and #%00000010
-		bne NOT_PAD_B_HELD
+		bne not_pad_B_held
 
 		jsr remove_last_character_on_page_without_reload
-	NOT_PAD_B_HELD:
+	not_pad_B_held:
 
 	lda input_pressed_this_frame
 	and #PAD_SELECT
-	beq NOT_PAD_SELECT
+	beq not_pad_SELECT
 		; SELECT pressed
 		jsr select_pressed
-	NOT_PAD_SELECT:
+	not_pad_SELECT:
 
 
 	lda input_pressed_this_frame
 	and #PAD_START
-	beq NOT_PAD_START_PRESSED
+	beq not_pad_start_pressed
 		; B pressed
 
 		lda #1
 		sta start_time_held
 
-	NOT_PAD_START_PRESSED:
+	not_pad_start_pressed:
 
 
 	lda input_released_this_frame
 	and #PAD_START
-	beq NOT_PAD_START_RELEASED
+	beq not_pad_start_released
 		; SELECT released
 		lda #0
 		sta start_time_held
 
-	NOT_PAD_START_RELEASED:
+	not_pad_start_released:
 
 	lda current_input
 	and #PAD_START
-	beq NOT_PAD_START_HELD
+	beq not_pad_start_held
 		; B held
 		lda start_time_held
 		cmp #255
@@ -337,13 +353,13 @@
 
 	time_start_held_below_threshold:
 		inc start_time_held
-		jmp NOT_PAD_START_HELD
+		jmp not_pad_start_held
 
 	time_start_held_above_threshold:
 		jsr clear_wram_T3
 		lda #0
 		sta start_time_held
-	NOT_PAD_START_HELD:
+	not_pad_start_held:
 
  	lda current_input
     sta last_frame_input

@@ -51,17 +51,17 @@
 	draw_segment preloadScreen2, $FF
 	lda notepad_state
 	and #%00001000
-	beq NOT_SPECIAL_KEYBOARD
+	beq not_special_keyboard
 		jsr redraw_symbol_keyboard_T0
 		rts
-	NOT_SPECIAL_KEYBOARD:
+	not_special_keyboard:
 	
 
 
 	lda notepad_state
 	and #%00000011
 	cmp #KEYBOARD_INFO_NORMAL
-	bne NOT_NORMAL_TEXT
+	bne not_normal_text
 		lda notepad_state
 		and #%00000100
 		bne is_normal_capital
@@ -72,9 +72,9 @@
 		draw_segment normalCapitalKeyboard1, $FF
 		draw_segment normalCapitalKeyboard2, $C0
 		jmp endProc
-	NOT_NORMAL_TEXT:
+	not_normal_text:
 	cmp #KEYBOARD_INFO_BOLD
-	bne NOT_BOLD_TEXT
+	bne not_bold_text
 		lda notepad_state
 		and #%00000100
 		bne is_bold_capital
@@ -85,9 +85,9 @@
 		draw_segment boldCapitalKeyboard1, $FF
 		draw_segment boldCapitalKeyboard2, $C0
 		jmp endProc
-	NOT_BOLD_TEXT:
+	not_bold_text:
 	cmp #KEYBOARD_INFO_ITALIC
-	bne NOT_ITALIC_TEXT
+	bne not_italic_text
 		lda notepad_state
 		and #%00000100
 		bne is_italic_capital
@@ -98,7 +98,7 @@
 		draw_segment italicCapitalKeyboard1, $FF
 		draw_segment italicCapitalKeyboard2, $C0
 		jmp endProc
-	NOT_ITALIC_TEXT:
+	not_italic_text:
 	endProc:
 		;render the page number
 		lda PPU_STATUS
