@@ -33,21 +33,14 @@
    
     ;first channel
     lda #$40
-    sta $4000 ; square channel - Volume and envelope 
-    lda #$35
-    sta $4002 ; square channel - Frequency register (low) 
-    lda #$25 ; Adjust this value for different noise pitches 
-    sta $4003 ; square channel - Frequency register (high) and length counter 
+    sta $400C ; square channel - Volume and envelope 
+    lda #$20
+    sta $400E ; square channel - Frequency register (low) 
+    lda #$EC ; Adjust this value for different noise pitches 
+    sta $400F ; square channel - Frequency register (high) and length counter 
 
-    ;second channel
-    lda #$40 
-    sta $4004 ; square channel 2 - Volume and envelope 
-    lda #$35
-    sta $4006 ; square channel 2 - Frequency register (low) 
-    lda #$10 ; Adjust this value for different noise pitches 
-    sta $4007 ; square channel 2 - Frequency register (high) and length counter 
 
-    lda #%00000011 
+    lda #%00001000 
     sta $4015 ; Enable square channel 
     endProc:
     rts

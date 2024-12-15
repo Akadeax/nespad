@@ -67,7 +67,7 @@
 	not_pad_up_held:
 
 	lda input_pressed_this_frame
-	and #pad_down
+	and #PAD_DOWN
 	beq not_pad_down_pressed
 		; DOWN pressed
 		jsr handle_down_button_press_T2
@@ -78,7 +78,7 @@
 	not_pad_down_pressed:
 
 	lda input_released_this_frame
-	and #pad_down
+	and #PAD_DOWN
 	beq not_pad_down_released
 		; DOWN released
 		lda #0
@@ -87,7 +87,7 @@
 	not_pad_down_released:
 
 	lda current_input
-	and #pad_down
+	and #PAD_DOWN
 	beq not_pad_down_held
 		; DOWN held
 		lda down_time_held
@@ -109,7 +109,7 @@
 
 
 	lda input_pressed_this_frame
-	and #pad_left
+	and #PAD_LEFT
 	beq not_pad_left_pressed
 		; LEFT pressed
 
@@ -130,7 +130,7 @@
 	not_pad_left_pressed:
 
 	lda input_released_this_frame
-	and #pad_left
+	and #PAD_LEFT
 	beq not_pad_left_released
 		; LEFT released
 		lda #0
@@ -139,7 +139,7 @@
 	not_pad_left_released:
 
 	lda current_input
-	and #pad_left
+	and #PAD_LEFT
 	beq not_pad_left_held
 		; LEFT held
 		lda left_time_held
