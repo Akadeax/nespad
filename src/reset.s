@@ -71,7 +71,7 @@ wait_vblank2:
 
 	; NES is initialized and ready to begin
 	; - enable the NMI for graphical updates and jump to our main program
-	lda #%10000001
+	lda #%10000000
 	sta PPU_CONTROL
 	
 	jmp main
